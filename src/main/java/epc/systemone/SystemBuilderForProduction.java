@@ -21,7 +21,7 @@ import epc.spider.record.storage.TimeStampIdGenerator;
  * @since 0.1
  *
  */
-public class SystemBuilderForProduction {
+public final class SystemBuilderForProduction {
 	private static SystemInitializeStatus status = NOT_STARTED;
 
 	private SystemBuilderForProduction() {
