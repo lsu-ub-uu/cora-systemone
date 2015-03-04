@@ -18,7 +18,6 @@ public class SystemBuilderForTest {
 				.setRecordInputBoundary(defineImplementingRecordInputBoundary());
 	}
 
-	// TODO: make sure this is synchronized well
 	private static RecordInputBoundary defineImplementingRecordInputBoundary() {
 		RecordStorageGateway recordStorage = TestDataRecordInMemoryStorage
 				.createRecordInMemoryStorageWithTestData();
