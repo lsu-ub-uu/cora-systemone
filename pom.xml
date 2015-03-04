@@ -8,14 +8,12 @@
 	<packaging>jar</packaging>
 
 	<name>System One</name>
-	<url>http://maven.apache.org</url>
 
 	<parent>
 		<groupId>epc.commons</groupId>
 		<artifactId>master-pom</artifactId>
 		<version>1.8-SNAPSHOT</version>
 	</parent>
-
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,6 +22,12 @@
 		<beefeater.version>0.1-SNAPSHOT</beefeater.version>
 		<spider.version>0.1-SNAPSHOT</spider.version>
 	</properties>
+
+	<scm>
+		<connection>scm:git:https://git.epc.ub.uu.se/epc/systemone.git</connection>
+		<developerConnection>scm:git:https://git.epc.ub.uu.se/epc/systemone.git</developerConnection>
+		<url>https://git.epc.ub.uu.se/epc/systemone.git</url>
+	</scm>
 
 	<repositories>
 		<repository>
