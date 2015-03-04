@@ -2,6 +2,10 @@ package epc.systemone;
 
 import static org.testng.Assert.assertEquals;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -9,6 +13,23 @@ import epc.spider.record.RecordHandler;
 import epc.spider.record.RecordInputBoundary;
 
 public class SystemBuilderForProductionTest {
+
+	@Test
+	public void testPrivateConstructor() throws Exception {
+		Constructor<SystemBuilderForProduction> constructor = SystemBuilderForProduction.class
+				.getDeclaredConstructor();
+		Assert.assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+	}
+	@Test(expectedExceptions = InvocationTargetException.class)
+	public void testPrivateConstructorInvoke() throws Exception {
+		Constructor<SystemBuilderForProduction> constructor = SystemBuilderForProduction.class
+				.getDeclaredConstructor();
+		Assert.assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+		constructor.setAccessible(true);
+		constructor.newInstance();
+	}
+
+
 	@Test
 	public void testSystemInit() {
 		SystemInitializeStatus startResult = SystemBuilderForProduction
