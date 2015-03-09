@@ -6,4 +6,6 @@ public interface SystemOneRecordInputBoundary {
 
 	DataGroup createRecord(String userId, String type, DataGroup record);
 
+	DataGroup readRecord(String userId, String type, String id);
+
 }

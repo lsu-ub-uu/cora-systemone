@@ -7,7 +7,7 @@ import epc.metadataformat.data.DataAtomic;
 import epc.metadataformat.data.DataGroup;
 import epc.systemone.SystemBuilderForTest;
 
-public class SystemOneRecordInputBoundaryTest {
+public class SystemOneRecordHandlerTest {
 	@Test
 	public void testCreateRecord() {
 		SystemBuilderForTest systemBuilderForTest = new SystemBuilderForTest();
@@ -17,8 +17,6 @@ public class SystemOneRecordInputBoundaryTest {
 		DataGroup record = new DataGroup("authority");
 		DataGroup recordOut = input.createRecord("userId", "type", record);
 
-		// DataGroup recordOut = input.createAndStoreRecord("userId",
-		// "type", record);
 
 		DataGroup recordInfo = (DataGroup) recordOut.getChildren().stream()
 				.filter(p -> p.getDataId().equals("recordInfo")).findFirst()
@@ -28,10 +26,17 @@ public class SystemOneRecordInputBoundaryTest {
 
 		Assert.assertNotNull(recordId.getValue(),
 				"A new record should have an id");
-
-		// DataGroup recordRead = recordHandler.readRecord("userId", "type",
-		// recordId.getValue());
-		// Assert.assertEquals(recordOut, recordRead,
-		// "Returned and read record should be the same");
+	}
+	
+	@Test
+	public void testReadRecord(){
+		SystemBuilderForTest systemBuilderForTest = new SystemBuilderForTest();
+		systemBuilderForTest.createAllDependenciesInSystemHolder();
+		
+		SystemOneRecordInputBoundary input = new SystemOneRecordHandler();
+		
+		DataGroup record = input.readRecord("userId", "place", "place:0001");
+		
+		Assert.assertNotNull(record);
 	}
 }
