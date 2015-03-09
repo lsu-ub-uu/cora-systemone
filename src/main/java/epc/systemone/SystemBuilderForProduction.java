@@ -3,8 +3,8 @@ package epc.systemone;
 import static epc.systemone.SystemInitializeStatus.ALREADY_STARTED;
 import static epc.systemone.SystemInitializeStatus.NOT_STARTED;
 import static epc.systemone.SystemInitializeStatus.STARTED_OK;
-import epc.beefeater.AuthorizationInputBoundary;
 import epc.beefeater.Authorizator;
+import epc.beefeater.AuthorizatorImp;
 import epc.spider.record.PermissionKeyCalculator;
 import epc.spider.record.RecordPermissionKeyCalculator;
 import epc.spider.record.SpiderRecordHandler;
@@ -43,7 +43,7 @@ public final class SystemBuilderForProduction {
 
 	private static SpiderRecordHandler defineImplementingSpiderRecordHandler() {
 		RecordStorageInMemory recordMemory = new RecordStorageInMemory();
-		AuthorizationInputBoundary authorization = new Authorizator();
+		Authorizator authorization = new AuthorizatorImp();
 		RecordIdGenerator idGenerator = new TimeStampIdGenerator();
 		PermissionKeyCalculator keyCalculator = new RecordPermissionKeyCalculator();
 		return SpiderRecordHandlerImp

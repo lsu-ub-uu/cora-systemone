@@ -1,7 +1,7 @@
 package epc.systemone;
 
-import epc.beefeater.AuthorizationInputBoundary;
 import epc.beefeater.Authorizator;
+import epc.beefeater.AuthorizatorImp;
 import epc.spider.record.PermissionKeyCalculator;
 import epc.spider.record.SpiderRecordHandlerImp;
 import epc.spider.record.SpiderRecordHandler;
@@ -21,7 +21,7 @@ public class SystemBuilderForTest {
 	private static SpiderRecordHandler defineImplementingSpiderRecordHandler() {
 		RecordStorage recordStorage = TestDataRecordInMemoryStorage
 				.createRecordStorageInMemoryWithTestData();
-		AuthorizationInputBoundary authorization = new Authorizator();
+		Authorizator authorization = new AuthorizatorImp();
 		RecordIdGenerator idGenerator = new TimeStampIdGenerator();
 		PermissionKeyCalculator keyCalculator = new RecordPermissionKeyCalculator();
 		return SpiderRecordHandlerImp.usingAuthorizationAndRecordStorageAndIdGeneratorAndKeyCalculator(
