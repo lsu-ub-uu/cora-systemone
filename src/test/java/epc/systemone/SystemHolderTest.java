@@ -28,7 +28,7 @@ public class SystemHolderTest {
 		SystemBuilderForTest systemBuilderForTest = new SystemBuilderForTest();
 		systemBuilderForTest.createAllDependenciesInSystemHolder();
 		
-		Assert.assertNotNull(SystemHolder.getRecordInputBoundary());
+		Assert.assertNotNull(SystemHolder.getSpiderRecordHandler());
 		
 	}
 	

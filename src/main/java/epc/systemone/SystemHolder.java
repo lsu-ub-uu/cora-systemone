@@ -1,24 +1,23 @@
 package epc.systemone;
 
-import epc.spider.record.RecordInputBoundary;
+import epc.spider.record.SpiderRecordHandler;
 
 public final class SystemHolder {
-	
-	private SystemHolder(){
-		//not called
+
+	private SystemHolder() {
+		// not called
 		throw new UnsupportedOperationException();
 	}
-	
-	private static RecordInputBoundary recordInputBoundary;
 
-	public static RecordInputBoundary getRecordInputBoundary() {
-		return recordInputBoundary;
+	private static SpiderRecordHandler spiderRecordHandler;
+
+	public static SpiderRecordHandler getSpiderRecordHandler() {
+		return spiderRecordHandler;
 
 	}
 
-	public static void setRecordInputBoundary(
-			RecordInputBoundary recordInputBoundaryIn) {
-		recordInputBoundary = recordInputBoundaryIn;
+	public static void setSpiderRecordHandler(SpiderRecordHandler spiderRecordHandlerIn) {
+		spiderRecordHandler = spiderRecordHandlerIn;
 	}
 
 }

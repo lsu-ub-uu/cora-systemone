@@ -9,8 +9,8 @@ import java.lang.reflect.Modifier;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import epc.spider.record.RecordHandler;
-import epc.spider.record.RecordInputBoundary;
+import epc.spider.record.SpiderRecordHandlerImp;
+import epc.spider.record.SpiderRecordHandler;
 
 public class SystemBuilderForProductionTest {
 
@@ -43,14 +43,14 @@ public class SystemBuilderForProductionTest {
 		assertEquals(startResult2, SystemInitializeStatus.ALREADY_STARTED,
 				"starting a second time should return ALREADY STARTED");
 
-		RecordInputBoundary recordInputBoundary = SystemHolder
-				.getRecordInputBoundary();
+		SpiderRecordHandler spiderRecordHandler = SystemHolder
+				.getSpiderRecordHandler();
 
-		Assert.assertNotNull(recordInputBoundary,
+		Assert.assertNotNull(spiderRecordHandler,
 				"RecordInputBoundry should be instansiated");
 
-		Assert.assertEquals(recordInputBoundary.getClass(),
-				RecordHandler.class,
+		Assert.assertEquals(spiderRecordHandler.getClass(),
+				SpiderRecordHandlerImp.class,
 				"The returned recordInputBoundary should be the same");
 	}
 }

@@ -13,8 +13,8 @@ public class SystemOneRecordHandlerTest {
 		SystemBuilderForTest systemBuilderForTest = new SystemBuilderForTest();
 		systemBuilderForTest.createAllDependenciesInSystemHolder();
 
-		SystemOneRecordInputBoundary input = new SystemOneRecordHandler();
-		DataGroup record = new DataGroup("authority");
+		SystemOneRecordHandler input = new SystemOneRecordHandlerImp();
+		DataGroup record = DataGroup.withDataId("authority");
 		DataGroup recordOut = input.createRecord("userId", "type", record);
 
 
@@ -33,7 +33,7 @@ public class SystemOneRecordHandlerTest {
 		SystemBuilderForTest systemBuilderForTest = new SystemBuilderForTest();
 		systemBuilderForTest.createAllDependenciesInSystemHolder();
 		
-		SystemOneRecordInputBoundary input = new SystemOneRecordHandler();
+		SystemOneRecordHandler input = new SystemOneRecordHandlerImp();
 		
 		DataGroup record = input.readRecord("userId", "place", "place:0001");
 		
