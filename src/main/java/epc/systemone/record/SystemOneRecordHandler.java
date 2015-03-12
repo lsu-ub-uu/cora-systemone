@@ -1,11 +1,11 @@
 package epc.systemone.record;
 
-import epc.metadataformat.data.DataGroup;
+import epc.spider.data.SpiderDataGroup;
 
 public interface SystemOneRecordHandler {
 
-	DataGroup createRecord(String userId, String type, DataGroup record);
+	SpiderDataGroup createRecord(String userId, String type, SpiderDataGroup record);
 
-	DataGroup readRecord(String userId, String type, String id);
+	SpiderDataGroup readRecord(String userId, String type, String id);
 
 }

@@ -1,25 +1,25 @@
 package epc.systemone.record;
 
-import epc.metadataformat.data.DataGroup;
+import epc.spider.data.SpiderDataGroup;
 import epc.spider.record.SpiderRecordHandler;
 import epc.systemone.SystemHolder;
 
 public class SystemOneRecordHandlerImp implements SystemOneRecordHandler {
 
 	@Override
-	public DataGroup createRecord(String userId, String type, DataGroup record) {
+	public SpiderDataGroup createRecord(String userId, String type, SpiderDataGroup record) {
 
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
-		DataGroup recordOut = spiderRecordHandler.createAndStoreRecord(userId, type, record);
+		SpiderDataGroup recordOut = spiderRecordHandler.createAndStoreRecord(userId, type, record);
 
 		return recordOut;
 
 	}
 
 	@Override
-	public DataGroup readRecord(String userId, String type, String id) {
+	public SpiderDataGroup readRecord(String userId, String type, String id) {
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
-		DataGroup recordOut = spiderRecordHandler.readRecord(userId, type, id);
+		SpiderDataGroup recordOut = spiderRecordHandler.readRecord(userId, type, id);
 
 		return recordOut;
 	}

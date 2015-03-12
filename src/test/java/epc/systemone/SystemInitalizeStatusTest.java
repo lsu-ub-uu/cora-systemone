@@ -6,7 +6,7 @@ public class SystemInitalizeStatusTest {
 	@Test
 	public void test() {
 		// This currently only helps to get test coverage of the enum.
-		SystemInitializeStatus.valueOf(SystemInitializeStatus.ALREADY_STARTED
-				.toString());
+		// small hack to get 100% coverage on enum
+		SystemInitializeStatus.valueOf(SystemInitializeStatus.ALREADY_STARTED.toString());
 	}
 }
