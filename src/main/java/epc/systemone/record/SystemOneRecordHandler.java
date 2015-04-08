@@ -8,4 +8,6 @@ public interface SystemOneRecordHandler {
 
 	SpiderDataGroup readRecord(String userId, String type, String id);
 
+	void deleteRecord(String userId, String type, String id);
+
 }

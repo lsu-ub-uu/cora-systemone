@@ -1,10 +1,13 @@
 package epc.systemone.record;
 
+import static org.testng.Assert.assertFalse;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import epc.spider.data.SpiderDataAtomic;
 import epc.spider.data.SpiderDataGroup;
+import epc.spider.record.storage.RecordNotFoundException;
 import epc.systemone.SystemBuilderForTest;
 
 public class SystemOneRecordHandlerTest {
@@ -35,5 +38,22 @@ public class SystemOneRecordHandlerTest {
 		SpiderDataGroup record = input.readRecord("userId", "place", "place:0001");
 
 		Assert.assertNotNull(record);
+	}
+
+	@Test
+	public void testDeleteRecord() {
+		SystemBuilderForTest systemBuilderForTest = new SystemBuilderForTest();
+		systemBuilderForTest.createAllDependenciesInSystemHolder();
+
+		SystemOneRecordHandler handler = new SystemOneRecordHandlerImp();
+
+		handler.deleteRecord("userId", "place", "place:0001");
+		boolean recordFound = true;
+		try {
+			handler.readRecord("userId", "place", "place:0001");
+		} catch (RecordNotFoundException e) {
+			recordFound = false;
+		}
+		assertFalse(recordFound);
 	}
 }

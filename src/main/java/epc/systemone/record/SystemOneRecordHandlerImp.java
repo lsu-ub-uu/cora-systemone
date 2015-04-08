@@ -24,4 +24,10 @@ public class SystemOneRecordHandlerImp implements SystemOneRecordHandler {
 		return recordOut;
 	}
 
+	@Override
+	public void deleteRecord(String userId, String type, String id) {
+		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
+		spiderRecordHandler.deleteRecord(userId, type, id);
+	}
+
 }
