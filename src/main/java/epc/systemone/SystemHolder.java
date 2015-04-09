@@ -16,7 +16,7 @@ public final class SystemHolder {
 
 	}
 
-	public static void setSpiderRecordHandler(SpiderRecordHandler spiderRecordHandlerIn) {
+	public static synchronized void setSpiderRecordHandler(SpiderRecordHandler spiderRecordHandlerIn) {
 		spiderRecordHandler = spiderRecordHandlerIn;
 	}
 

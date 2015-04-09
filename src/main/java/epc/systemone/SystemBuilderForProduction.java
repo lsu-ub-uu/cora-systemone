@@ -31,7 +31,7 @@ public final class SystemBuilderForProduction {
 		throw new UnsupportedOperationException();
 	}
 
-	public static SystemInitializeStatus createAllDependenciesInSystemHolder() {
+	public static synchronized SystemInitializeStatus createAllDependenciesInSystemHolder() {
 		if (NOT_STARTED.equals(status)) {
 			status = SystemInitializeStatus.STARTING;
 			SystemHolder.setSpiderRecordHandler(defineImplementingSpiderRecordHandler());

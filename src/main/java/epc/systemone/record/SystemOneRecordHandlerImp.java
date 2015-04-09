@@ -10,24 +10,27 @@ public class SystemOneRecordHandlerImp implements SystemOneRecordHandler {
 	public SpiderDataGroup createRecord(String userId, String type, SpiderDataGroup record) {
 
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
-		SpiderDataGroup recordOut = spiderRecordHandler.createAndStoreRecord(userId, type, record);
-
-		return recordOut;
+		return spiderRecordHandler.createAndStoreRecord(userId, type, record);
 
 	}
 
 	@Override
 	public SpiderDataGroup readRecord(String userId, String type, String id) {
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
-		SpiderDataGroup recordOut = spiderRecordHandler.readRecord(userId, type, id);
-
-		return recordOut;
+		return spiderRecordHandler.readRecord(userId, type, id);
 	}
 
 	@Override
 	public void deleteRecord(String userId, String type, String id) {
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
 		spiderRecordHandler.deleteRecord(userId, type, id);
+	}
+
+	@Override
+	public SpiderDataGroup updateRecord(String userId, String type, String id,
+			SpiderDataGroup record) {
+		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
+		return spiderRecordHandler.updateRecord(userId, type, id, record);
 	}
 
 }

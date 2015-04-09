@@ -10,4 +10,6 @@ public interface SystemOneRecordHandler {
 
 	void deleteRecord(String userId, String type, String id);
 
+	SpiderDataGroup updateRecord(String userId, String type, String id, SpiderDataGroup record);
+
 }
