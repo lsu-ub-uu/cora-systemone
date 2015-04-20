@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 
 import epc.spider.data.SpiderDataAtomic;
 import epc.spider.data.SpiderDataGroup;
+import epc.spider.data.SpiderDataRecord;
 import epc.spider.record.storage.RecordNotFoundException;
 import epc.systemone.SystemBuilderForTest;
 
@@ -19,9 +20,9 @@ public class SystemOneRecordHandlerTest {
 
 		SystemOneRecordHandler handler = new SystemOneRecordHandlerImp();
 		SpiderDataGroup record = SpiderDataGroup.withDataId("authority");
-		SpiderDataGroup recordOut = handler.createRecord("userId", "type", record);
-
-		SpiderDataGroup recordInfo = (SpiderDataGroup) recordOut.getChildren().stream()
+		SpiderDataRecord recordOut = handler.createRecord("userId", "type", record);
+		SpiderDataGroup groupOut = recordOut.getSpiderDataGroup();
+		SpiderDataGroup recordInfo = (SpiderDataGroup) groupOut.getChildren().stream()
 				.filter(p -> p.getDataId().equals("recordInfo")).findFirst().get();
 		SpiderDataAtomic recordId = (SpiderDataAtomic) recordInfo.getChildren().stream()
 				.filter(p -> p.getDataId().equals("id")).findFirst().get();
@@ -36,7 +37,7 @@ public class SystemOneRecordHandlerTest {
 
 		SystemOneRecordHandler handler = new SystemOneRecordHandlerImp();
 
-		SpiderDataGroup record = handler.readRecord("userId", "place", "place:0001");
+		SpiderDataRecord record = handler.readRecord("userId", "place", "place:0001");
 
 		Assert.assertNotNull(record);
 	}
@@ -64,12 +65,12 @@ public class SystemOneRecordHandlerTest {
 		systemBuilderForTest.createAllDependenciesInSystemHolder();
 		SystemOneRecordHandler handler = new SystemOneRecordHandlerImp();
 
-		SpiderDataGroup record = handler.readRecord("userId", "place", "place:0001");
+		SpiderDataRecord record = handler.readRecord("userId", "place", "place:0001");
+		SpiderDataGroup group = record.getSpiderDataGroup();
+		group.addChild(SpiderDataAtomic.withDataIdAndValue("atomicId", "atomicValue"));
 
-		record.addChild(SpiderDataAtomic.withDataIdAndValue("atomicId", "atomicValue"));
-
-		SpiderDataGroup recordUpdated = handler.updateRecord("userId", "place", "place:0001",
-				record);
+		SpiderDataRecord recordUpdated = handler.updateRecord("userId", "place", "place:0001",
+				group);
 		assertNotNull(recordUpdated);
 
 	}

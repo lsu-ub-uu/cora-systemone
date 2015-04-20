@@ -1,13 +1,14 @@
 package epc.systemone.record;
 
 import epc.spider.data.SpiderDataGroup;
+import epc.spider.data.SpiderDataRecord;
 import epc.spider.record.SpiderRecordHandler;
 import epc.systemone.SystemHolder;
 
 public class SystemOneRecordHandlerImp implements SystemOneRecordHandler {
 
 	@Override
-	public SpiderDataGroup createRecord(String userId, String type, SpiderDataGroup record) {
+	public SpiderDataRecord createRecord(String userId, String type, SpiderDataGroup record) {
 
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
 		return spiderRecordHandler.createAndStoreRecord(userId, type, record);
@@ -15,7 +16,7 @@ public class SystemOneRecordHandlerImp implements SystemOneRecordHandler {
 	}
 
 	@Override
-	public SpiderDataGroup readRecord(String userId, String type, String id) {
+	public SpiderDataRecord readRecord(String userId, String type, String id) {
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
 		return spiderRecordHandler.readRecord(userId, type, id);
 	}
@@ -27,7 +28,7 @@ public class SystemOneRecordHandlerImp implements SystemOneRecordHandler {
 	}
 
 	@Override
-	public SpiderDataGroup updateRecord(String userId, String type, String id,
+	public SpiderDataRecord updateRecord(String userId, String type, String id,
 			SpiderDataGroup record) {
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
 		return spiderRecordHandler.updateRecord(userId, type, id, record);

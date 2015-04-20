@@ -1,15 +1,16 @@
 package epc.systemone.record;
 
 import epc.spider.data.SpiderDataGroup;
+import epc.spider.data.SpiderDataRecord;
 
 public interface SystemOneRecordHandler {
 
-	SpiderDataGroup createRecord(String userId, String type, SpiderDataGroup record);
+	SpiderDataRecord createRecord(String userId, String type, SpiderDataGroup record);
 
-	SpiderDataGroup readRecord(String userId, String type, String id);
+	SpiderDataRecord readRecord(String userId, String type, String id);
 
 	void deleteRecord(String userId, String type, String id);
 
-	SpiderDataGroup updateRecord(String userId, String type, String id, SpiderDataGroup record);
+	SpiderDataRecord updateRecord(String userId, String type, String id, SpiderDataGroup record);
 
 }
