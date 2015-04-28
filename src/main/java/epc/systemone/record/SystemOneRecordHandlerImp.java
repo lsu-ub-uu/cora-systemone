@@ -2,6 +2,7 @@ package epc.systemone.record;
 
 import epc.spider.data.SpiderDataGroup;
 import epc.spider.data.SpiderDataRecord;
+import epc.spider.data.SpiderRecordList;
 import epc.spider.record.SpiderRecordHandler;
 import epc.systemone.SystemHolder;
 
@@ -32,6 +33,12 @@ public class SystemOneRecordHandlerImp implements SystemOneRecordHandler {
 			SpiderDataGroup record) {
 		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
 		return spiderRecordHandler.updateRecord(userId, type, id, record);
+	}
+
+	@Override
+	public SpiderRecordList readRecordList(String userId, String type) {
+		SpiderRecordHandler spiderRecordHandler = SystemHolder.getSpiderRecordHandler();
+		return spiderRecordHandler.readRecordList(userId, type);
 	}
 
 }

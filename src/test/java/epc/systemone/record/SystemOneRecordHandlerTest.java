@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import epc.spider.data.SpiderDataAtomic;
 import epc.spider.data.SpiderDataGroup;
 import epc.spider.data.SpiderDataRecord;
+import epc.spider.data.SpiderRecordList;
 import epc.spider.record.storage.RecordNotFoundException;
 import epc.systemone.SystemBuilderForTest;
 
@@ -28,6 +29,18 @@ public class SystemOneRecordHandlerTest {
 				.filter(p -> p.getDataId().equals("id")).findFirst().get();
 
 		Assert.assertNotNull(recordId.getValue(), "A new record should have an id");
+	}
+
+	@Test
+	public void testReadRecordList() {
+		SystemBuilderForTest systemBuilderForTest = new SystemBuilderForTest();
+		systemBuilderForTest.createAllDependenciesInSystemHolder();
+
+		SystemOneRecordHandler handler = new SystemOneRecordHandlerImp();
+
+		SpiderRecordList recordList = handler.readRecordList("userId", "place");
+
+		Assert.assertNotNull(recordList);
 	}
 
 	@Test
