@@ -21,7 +21,7 @@ public class SystemOneRecordHandlerTest {
 
 		SystemOneRecordHandler handler = new SystemOneRecordHandlerImp();
 		SpiderDataGroup record = SpiderDataGroup.withDataId("authority");
-		SpiderDataRecord recordOut = handler.createRecord("userId", "type", record);
+		SpiderDataRecord recordOut = handler.createRecord("userId", "place", record);
 		SpiderDataGroup groupOut = recordOut.getSpiderDataGroup();
 		SpiderDataGroup recordInfo = (SpiderDataGroup) groupOut.getChildren().stream()
 				.filter(p -> p.getDataId().equals("recordInfo")).findFirst().get();
