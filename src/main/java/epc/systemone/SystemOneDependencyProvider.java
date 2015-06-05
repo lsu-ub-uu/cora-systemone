@@ -82,6 +82,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		addRecordTypeRecordType();
 		addMetadataTextVariableWithId(ID);
+		addMetadataTextVariableWithId(CREATED_BY);
 		addMetadataTextVariableWithId(METADATA_ID);
 		addMetadataTextVariableWithId(PRESENTATION_VIEW_ID);
 		addMetadataTextVariableWithId(PRESENTATION_FORM_ID);
@@ -95,7 +96,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataTextVariableWithIdAndRegEx(PERMISSION_KEY, A_Z);
 		addMetadataTextVariableWithId(SELF_PRESENTATION_VIEW_ID);
 		addMetadataRecordInfoNew();
+		addMetadataRecordInfo();
 		addMetadataRecordTypeNew();
+		addMetadataRecordType();
 		addRecordTypeMetadata();
 
 		addMetadataTextVariableWithId(DATA_ID);
@@ -325,7 +328,30 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		childReferences.addChild(childReference);
 
 		recordStorage.create(METADATA, RECORD_INFO_NEW, dataGroup);
+	}
 
+	private void addMetadataRecordInfo() {
+		DataGroup dataGroup = DataGroup.withDataId(METADATA);
+		dataGroup.addAttributeByIdWithValue("type", GROUP);
+		DataGroup recordInfo = DataGroup.withDataId(RECORD_INFO);
+		dataGroup.addChild(recordInfo);
+		recordInfo.addChild(DataAtomic.withDataIdAndValue(ID, RECORD_INFO));
+		recordInfo.addChild(DataAtomic.withDataIdAndValue("type", METADATA));
+		recordInfo.addChild(DataAtomic.withDataIdAndValue(CREATED_BY, USER_ID));
+		recordInfo.addChild(DataAtomic.withDataIdAndValue(UPDATED_BY, USER_ID));
+
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(DATA_ID, RECORD_INFO));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(TEXT_ID, "recordInfoText"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID, "recordInfoDeffText"));
+
+		DataGroup childReferences = DataGroup.withDataId(CHILD_REFERENCES);
+		dataGroup.addChild(childReferences);
+
+		addChildReferenceWithId(childReferences, ID);
+		addChildReferenceWithId(childReferences, "type");
+		addChildReferenceWithId(childReferences, CREATED_BY);
+
+		recordStorage.create(METADATA, RECORD_INFO, dataGroup);
 	}
 
 	private void addMetadataRecordTypeNew() {
@@ -359,6 +385,39 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addChildReferenceWithId(childReferences, SELF_PRESENTATION_VIEW_ID);
 
 		recordStorage.create(METADATA, RECORD_TYPE_NEW, dataGroup);
+	}
+
+	private void addMetadataRecordType() {
+		DataGroup dataGroup = DataGroup.withDataId(METADATA);
+		dataGroup.addAttributeByIdWithValue("type", GROUP);
+		DataGroup recordInfo = DataGroup.withDataId(RECORD_INFO);
+		dataGroup.addChild(recordInfo);
+		recordInfo.addChild(DataAtomic.withDataIdAndValue(ID, RECORD_TYPE));
+		recordInfo.addChild(DataAtomic.withDataIdAndValue("type", METADATA));
+		recordInfo.addChild(DataAtomic.withDataIdAndValue(CREATED_BY, USER_ID));
+		recordInfo.addChild(DataAtomic.withDataIdAndValue(UPDATED_BY, USER_ID));
+
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(DATA_ID, RECORD_TYPE));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(TEXT_ID, "recordTypeText"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID, "recordTypeDeffText"));
+
+		DataGroup childReferences = DataGroup.withDataId(CHILD_REFERENCES);
+		dataGroup.addChild(childReferences);
+
+		addChildReferenceWithId(childReferences, METADATA_ID);
+		addChildReferenceWithId(childReferences, RECORD_INFO);
+		addChildReferenceWithId(childReferences, PRESENTATION_VIEW_ID);
+		addChildReferenceWithId(childReferences, PRESENTATION_FORM_ID);
+		addChildReferenceWithId(childReferences, NEW_METADATA_ID);
+		addChildReferenceWithId(childReferences, NEW_PRESENTATION_FORM_ID);
+		addChildReferenceWithId(childReferences, LIST_PRESENTATION_VIEW_ID);
+		addChildReferenceWithId(childReferences, SEARCH_METADATA_ID);
+		addChildReferenceWithId(childReferences, SEARCH_PRESENTATION_FORM_ID);
+		addChildReferenceWithId(childReferences, USER_SUPPLIED_ID);
+		addChildReferenceWithId(childReferences, PERMISSION_KEY);
+		addChildReferenceWithId(childReferences, SELF_PRESENTATION_VIEW_ID);
+
+		recordStorage.create(METADATA, RECORD_TYPE, dataGroup);
 	}
 
 	private void addChildReferenceWithId(DataGroup childReferences, String id) {
