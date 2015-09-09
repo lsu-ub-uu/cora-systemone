@@ -72,7 +72,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	public SystemOneDependencyProvider() {
 		Map<String, Map<String, DataGroup>> records = new HashMap<>();
-		addRecordTypeRecordType(records);
 
 		recordStorage = new RecordStorageInMemory(records);
 		metadataStorage = (MetadataStorage) recordStorage;
@@ -141,37 +140,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		return keyCalculator;
 	}
 
-	private static void addRecordTypeRecordType(Map<String, Map<String, DataGroup>> records) {
-		records.put(RECORD_TYPE, new HashMap<String, DataGroup>());
-		DataGroup dataGroup = DataGroup.withDataId(RECORD_TYPE);
-
-		DataGroup recordInfo = DataGroup.withDataId(RECORD_INFO);
-		recordInfo.addChild(DataAtomic.withDataIdAndValue(ID, RECORD_TYPE));
-		recordInfo.addChild(DataAtomic.withDataIdAndValue("type", RECORD_TYPE));
-		dataGroup.addChild(recordInfo);
-
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(ID, RECORD_TYPE));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(METADATA_ID, RECORD_TYPE));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(PRESENTATION_VIEW_ID,
-				"presentation:pgRecordTypeView"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(PRESENTATION_FORM_ID,
-				"presentation:pgRecordTypeForm"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(NEW_METADATA_ID, RECORD_TYPE_NEW));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(NEW_PRESENTATION_FORM_ID,
-				"presentation:pgRecordTypeFormNew"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(LIST_PRESENTATION_VIEW_ID,
-				"presentation:pgRecordTypeViewList"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(SEARCH_METADATA_ID,
-				"metadata:recordTypeSearch"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(SEARCH_PRESENTATION_FORM_ID,
-				"presentation:pgRecordTypeSearchForm"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(USER_SUPPLIED_ID, "true"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(PERMISSION_KEY, "RECORDTYPE_RECORDTYPE"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(SELF_PRESENTATION_VIEW_ID,
-				"presentation:pgrecordTypeRecordType"));
-		records.get(RECORD_TYPE).put(RECORD_TYPE, dataGroup);
-	}
-
 	private void addRecordTypeRecordType() {
 		DataGroup dataGroup = DataGroup.withDataId(RECORD_TYPE);
 		DataGroup recordInfo = DataGroup.withDataId(RECORD_INFO);
@@ -201,7 +169,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataTextVariableWithId(String id) {
-		addMetadataTextVariableWithIdAndRegEx(id, "(^[0-9A-Za-z]{2,50}$)");
+		addMetadataTextVariableWithIdAndRegEx(id, "(^[0-9A-Za-z:-_]{2,50}$)");
 	}
 
 	private void addMetadataTextVariableWithIdAndRegEx(String id, String regEx) {
@@ -263,6 +231,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup collectionItemReferences = DataGroup.withDataId("collectionItemReferences");
 		collectionItemReferences.addChild(DataAtomic.withDataIdAndValue("ref",
 				RECORD_TYPE_TYPE_GROUP));
+		collectionItemReferences.addChild(DataAtomic.withDataIdAndValue("ref",
+				"recordTypeTypeTextVariable"));
 		dataGroup2.addChild(collectionItemReferences);
 
 		recordStorage.create(METADATA, RECORD_TYPE_TYPE_COLLECTION, dataGroup2);
@@ -585,13 +555,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addChildReferenceWithId(childReferences, DATA_ID);
 		addChildReferenceWithId(childReferences, TEXT_ID);
 		addChildReferenceWithId(childReferences, DEF_TEXT_ID);
-
-		// attributeReferences
-		DataGroup attributeReferences2 = DataGroup.withDataId(CHILD_REFERENCE);
-		attributeReferences2.addChild(DataAtomic.withDataIdAndValue("ref", ATTRIBUTE_REFERENCES));
-		attributeReferences2.addChild(DataAtomic.withDataIdAndValue(REPEAT_MIN, "1"));
-		attributeReferences2.addChild(DataAtomic.withDataIdAndValue(REPEAT_MAX, "1"));
-		childReferences.addChild(attributeReferences2);
 
 		// childReferences
 		addChildReferenceWithId(childReferences, CHILD_REFERENCES);
