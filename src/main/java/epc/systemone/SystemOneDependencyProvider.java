@@ -153,18 +153,14 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(PRESENTATION_VIEW_ID, "pgRecordTypeView"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(PRESENTATION_FORM_ID, "pgRecordTypeForm"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(NEW_METADATA_ID, RECORD_TYPE_NEW));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(NEW_PRESENTATION_FORM_ID,
-				"pgRecordTypeFormNew"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(LIST_PRESENTATION_VIEW_ID,
-				"pgRecordTypeList"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(NEW_PRESENTATION_FORM_ID, "pgRecordTypeFormNew"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(LIST_PRESENTATION_VIEW_ID, "pgRecordTypeList"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(SEARCH_METADATA_ID, "recordTypeSearch"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(SEARCH_PRESENTATION_FORM_ID,
-				"pgRecordTypeSearchForm"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(SEARCH_PRESENTATION_FORM_ID, "pgRecordTypeSearchForm"));
 
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(USER_SUPPLIED_ID, "true"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(PERMISSION_KEY, "RECORDTYPE_RECORDTYPE"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(SELF_PRESENTATION_VIEW_ID,
-				"pgRecordTypeSelf"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(SELF_PRESENTATION_VIEW_ID, "pgRecordTypeSelf"));
 		recordStorage.create(RECORD_TYPE, RECORD_TYPE, dataGroup);
 	}
 
@@ -202,12 +198,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup.addChild(recordInfo);
 
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(DATA_ID, "type"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(TEXT_ID,
-				"recordTypeTypeCollectionVarTextId"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID,
-				"recordTypeTypeCollectionVarDeffTextId"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue("refCollectionId",
-				RECORD_TYPE_TYPE_COLLECTION));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(TEXT_ID, "recordTypeTypeCollectionVarTextId"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID, "recordTypeTypeCollectionVarDeffTextId"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue("refCollectionId", RECORD_TYPE_TYPE_COLLECTION));
 
 		recordStorage.create(METADATA, RECORD_TYPE_TYPE_COLLECTION_VAR, dataGroup);
 
@@ -223,16 +216,12 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup2.addChild(recordInfo2);
 
 		dataGroup2.addChild(DataAtomic.withDataIdAndValue(DATA_ID, RECORD_TYPE_TYPE_COLLECTION));
-		dataGroup2.addChild(DataAtomic
-				.withDataIdAndValue(TEXT_ID, "recordTypeTypeCollectionTextId"));
-		dataGroup2.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID,
-				"recordTypeTypeCollectionDeffTextId"));
+		dataGroup2.addChild(DataAtomic.withDataIdAndValue(TEXT_ID, "recordTypeTypeCollectionTextId"));
+		dataGroup2.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID, "recordTypeTypeCollectionDeffTextId"));
 
 		DataGroup collectionItemReferences = DataGroup.withDataId("collectionItemReferences");
-		collectionItemReferences.addChild(DataAtomic.withDataIdAndValue("ref",
-				RECORD_TYPE_TYPE_GROUP));
-		collectionItemReferences.addChild(DataAtomic.withDataIdAndValue("ref",
-				"recordTypeTypeTextVariable"));
+		collectionItemReferences.addChild(DataAtomic.withDataIdAndValue("ref", RECORD_TYPE_TYPE_GROUP));
+		collectionItemReferences.addChild(DataAtomic.withDataIdAndValue("ref", "recordTypeTypeTextVariable"));
 		dataGroup2.addChild(collectionItemReferences);
 
 		recordStorage.create(METADATA, RECORD_TYPE_TYPE_COLLECTION, dataGroup2);
@@ -250,8 +239,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup3.addChild(DataAtomic.withDataIdAndValue(DATA_ID, GROUP));
 		dataGroup3.addChild(DataAtomic.withDataIdAndValue(TEXT_ID, "recordTypeTypeGroupTextId"));
-		dataGroup3.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID,
-				"recordTypeTypeGroupDeffTextId"));
+		dataGroup3.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID, "recordTypeTypeGroupDeffTextId"));
 		recordStorage.create(METADATA, RECORD_TYPE_TYPE_GROUP, dataGroup3);
 
 		// item2
@@ -266,10 +254,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup4.addChild(recordInfo4);
 
 		dataGroup4.addChild(DataAtomic.withDataIdAndValue(DATA_ID, "textVariable"));
-		dataGroup4.addChild(DataAtomic.withDataIdAndValue(TEXT_ID,
-				"recordTypeTypeTextVariableTextId"));
-		dataGroup4.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID,
-				"recordTypeTypeTextVariableDeffTextId"));
+		dataGroup4.addChild(DataAtomic.withDataIdAndValue(TEXT_ID, "recordTypeTypeTextVariableTextId"));
+		dataGroup4.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID, "recordTypeTypeTextVariableDeffTextId"));
 		recordStorage.create(METADATA, "recordTypeTypeTextVariable", dataGroup4);
 
 	}
@@ -411,18 +397,14 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(PRESENTATION_VIEW_ID, "pgMetadataView"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(PRESENTATION_FORM_ID, "pgMetadataForm"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(NEW_METADATA_ID, METADATA_NEW));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(NEW_PRESENTATION_FORM_ID,
-				"pgMetadataFormNew"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(LIST_PRESENTATION_VIEW_ID,
-				"pgMetadataList"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(NEW_PRESENTATION_FORM_ID, "pgMetadataFormNew"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(LIST_PRESENTATION_VIEW_ID, "pgMetadataList"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(SEARCH_METADATA_ID, "metadataSearch"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(SEARCH_PRESENTATION_FORM_ID,
-				"pgMetadataeSearchForm"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(SEARCH_PRESENTATION_FORM_ID, "pgMetadataeSearchForm"));
 
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(USER_SUPPLIED_ID, "true"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(PERMISSION_KEY, "RECORDTYPE_METADATA"));
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(SELF_PRESENTATION_VIEW_ID,
-				"pgMetadataSelf"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(SELF_PRESENTATION_VIEW_ID, "pgMetadataSelf"));
 		recordStorage.create(RECORD_TYPE, METADATA, dataGroup);
 	}
 
@@ -438,8 +420,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(DATA_ID, ATTRIBUTE_REFERENCES));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(TEXT_ID, "attributeReferencesText"));
-		dataGroup.addChild(DataAtomic
-				.withDataIdAndValue(DEF_TEXT_ID, "attributeReferencesDeffText"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(DEF_TEXT_ID, "attributeReferencesDeffText"));
 
 		DataGroup childReferences = DataGroup.withDataId(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -544,8 +525,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		DataGroup attributeReferences = DataGroup.withDataId(ATTRIBUTE_REFERENCES);
 		dataGroup.addChild(attributeReferences);
-		attributeReferences.addChild(DataAtomic.withDataIdAndValue("ref",
-				RECORD_TYPE_TYPE_COLLECTION_VAR));
+		attributeReferences.addChild(DataAtomic.withDataIdAndValue("ref", RECORD_TYPE_TYPE_COLLECTION_VAR));
 
 		DataGroup childReferences = DataGroup.withDataId(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
