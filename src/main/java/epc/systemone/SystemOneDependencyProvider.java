@@ -459,5 +459,4 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = createRecordTypeWithIdAndMetadataId(METADATA, METADATA);
 		recordStorage.create(RECORD_TYPE, METADATA, dataGroup);
 	}
-
 }
