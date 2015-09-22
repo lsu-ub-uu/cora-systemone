@@ -7,6 +7,7 @@ import epc.beefeater.Authorizator;
 import epc.beefeater.AuthorizatorImp;
 import epc.metadataformat.data.DataAtomic;
 import epc.metadataformat.data.DataGroup;
+import epc.metadataformat.metadata.MetadataTypes;
 import epc.metadataformat.storage.MetadataStorage;
 import epc.metadataformat.validator.DataValidator;
 import epc.metadataformat.validator.DataValidatorImp;
@@ -80,6 +81,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataTextVariableWithId(ID);
 		addMetadataTextVariableWithId(CREATED_BY);
 		addMetadataTextVariableWithId(METADATA_ID);
+		addMetadataTextVariableWithId("parentId");
+		addMetadataTextVariableWithIdAndRegEx("abstract", TRUE_OR_FALSE);
 		addMetadataTextVariableWithId(PRESENTATION_VIEW_ID);
 		addMetadataTextVariableWithId(PRESENTATION_FORM_ID);
 		addMetadataTextVariableWithId(NEW_METADATA_ID);
@@ -113,10 +116,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataChildReferences();
 		addMetadataCollectionVariableMetadataType();
 		addMetadataTextVariableWithId("type");
-		addMetadataMetadataNew();
+		addMetadataMetadataGroupNew();
 
 		addRecordTypeRecordType();
 		addRecordTypeMetadata();
+		addRecordTypeMetadataGroup();
 	}
 
 	@Override
@@ -288,6 +292,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup.addChild(childReferences);
 
 		addChildReferenceWithRef1to1(childReferences, METADATA_ID);
+		addChildReferenceWithRef1to1(childReferences, "abstract");
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, "parentId", "0", "1");
 		addChildReferenceWithRef1to1(childReferences, RECORD_INFO_NEW);
 		addChildReferenceWithRef1to1(childReferences, PRESENTATION_VIEW_ID);
 		addChildReferenceWithRef1to1(childReferences, PRESENTATION_FORM_ID);
@@ -316,6 +322,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup.addChild(childReferences);
 
 		addChildReferenceWithRef1to1(childReferences, METADATA_ID);
+		addChildReferenceWithRef1to1(childReferences, "abstract");
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, "parentId", "0", "1");
 		addChildReferenceWithRef1to1(childReferences, RECORD_INFO);
 		addChildReferenceWithRef1to1(childReferences, PRESENTATION_VIEW_ID);
 		addChildReferenceWithRef1to1(childReferences, PRESENTATION_FORM_ID);
@@ -388,10 +396,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		recordStorage.create(METADATA, CHILD_REFERENCE, dataGroup);
 	}
 
-	private void addMetadataMetadataNew() {
+	private void addMetadataMetadataGroupNew() {
 		DataGroup dataGroup = DataGroup.withDataId(METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
-		dataGroup.addChild(createRecordInfoWithIdAndRecordType(METADATA_NEW, METADATA));
+		dataGroup.addChild(createRecordInfoWithIdAndRecordType("metadataGroupNew",
+				MetadataTypes.METADATA_GROUP.type));
 
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(DATA_ID, METADATA));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(TEXT_ID, "metadataText"));
@@ -414,7 +423,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		// childReferences
 		addChildReferenceWithRef1to1(childReferences, CHILD_REFERENCES);
 
-		recordStorage.create(METADATA, METADATA_NEW, dataGroup);
+		recordStorage.create(MetadataTypes.METADATA_GROUP.type, "metadataGroupNew", dataGroup);
 	}
 
 	@Override
@@ -422,13 +431,13 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		return new DataValidatorImp(metadataStorage);
 	}
 
-	private DataGroup createRecordTypeWithIdAndMetadataId(String id, String metadataId) {
+	private DataGroup createRecordTypeWithIdAndMetadataId(String id) {
 		String idWithCapitalFirst = id.substring(0, 1).toUpperCase() + id.substring(1);
 
 		DataGroup dataGroup = DataGroup.withDataId(RECORD_TYPE);
-		dataGroup.addChild(createRecordInfoWithIdAndRecordType(ID, RECORD_TYPE));
+		dataGroup.addChild(createRecordInfoWithIdAndRecordType(id, RECORD_TYPE));
 
-		dataGroup.addChild(DataAtomic.withDataIdAndValue(METADATA_ID, metadataId));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue(METADATA_ID, id));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(PRESENTATION_VIEW_ID,
 				"pg" + idWithCapitalFirst + "View"));
 		dataGroup.addChild(DataAtomic.withDataIdAndValue(PRESENTATION_FORM_ID,
@@ -451,12 +460,21 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addRecordTypeRecordType() {
-		DataGroup dataGroup = createRecordTypeWithIdAndMetadataId(RECORD_TYPE, RECORD_TYPE);
+		DataGroup dataGroup = createRecordTypeWithIdAndMetadataId(RECORD_TYPE);
+		dataGroup.addChild(DataAtomic.withDataIdAndValue("abstract", "false"));
 		recordStorage.create(RECORD_TYPE, RECORD_TYPE, dataGroup);
 	}
 
 	private void addRecordTypeMetadata() {
-		DataGroup dataGroup = createRecordTypeWithIdAndMetadataId(METADATA, METADATA);
-		recordStorage.create(RECORD_TYPE, METADATA, dataGroup);
+		DataGroup dataGroup = createRecordTypeWithIdAndMetadataId("metadata");
+		dataGroup.addChild(DataAtomic.withDataIdAndValue("abstract", "true"));
+		recordStorage.create(RECORD_TYPE, "metadata", dataGroup);
+	}
+
+	private void addRecordTypeMetadataGroup() {
+		DataGroup dataGroup = createRecordTypeWithIdAndMetadataId("metadataGroup");
+		dataGroup.addChild(DataAtomic.withDataIdAndValue("abstract", "false"));
+		dataGroup.addChild(DataAtomic.withDataIdAndValue("parentId", "metadata"));
+		recordStorage.create(RECORD_TYPE, "metadataGroup", dataGroup);
 	}
 }
