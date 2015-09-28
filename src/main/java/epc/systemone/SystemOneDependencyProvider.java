@@ -68,6 +68,10 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	private static final String EVERYTHING_REG_EXP = "everythingRegExp";
 
+	private static final String METADATA_TEXT_VARIABLE = "metadataTextVariable";
+
+	private static final String METADATA_TEXT_VARIABLE_NEW = "metadataTextVariableNew";
+
 	private RecordStorage recordStorage;
 	private MetadataStorage metadataStorage;
 	private Authorizator authorizator;
@@ -135,9 +139,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataMetadataGroupNew();
 
 		addRecordTypeRecordType();
+		addRecordTypeMetadataTextVariable();
 		addRecordTypeMetadata();
 		addRecordTypeMetadataGroup();
 	}
+
 
 	@Override
 	public Authorizator getAuthorizator() {
@@ -260,7 +266,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
 
-		dataGroup.addChild(createRecordInfoWithIdAndRecordType("textVariable", MetadataTypes.GROUP.type));
+		dataGroup.addChild(createRecordInfoWithIdAndRecordType(METADATA_TEXT_VARIABLE, MetadataTypes.GROUP.type));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -270,8 +276,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addChildReferenceWithRef1to1(childReferences, DEF_TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, EVERYTHING_REG_EXP);
 
-
-		recordStorage.create(MetadataTypes.GROUP.type, "textVariable", dataGroup);
+		recordStorage.create(MetadataTypes.GROUP.type, METADATA_TEXT_VARIABLE, dataGroup);
 	}
 
 	private void addMetadataTextVariableNew()
@@ -279,14 +284,17 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
 
-		dataGroup.addChild(createRecordInfoWithIdAndRecordType("textVariableNew", MetadataTypes.GROUP.type));
+		dataGroup.addChild(createRecordInfoWithIdAndRecordType(METADATA_TEXT_VARIABLE_NEW, MetadataTypes.GROUP.type));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 		addChildReferenceWithRef1to1(childReferences, RECORD_INFO_NEW);
+		addChildReferenceWithRef1to1(childReferences, NAME_IN_DATA);
+		addChildReferenceWithRef1to1(childReferences, TEXT_ID);
+		addChildReferenceWithRef1to1(childReferences, DEF_TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, EVERYTHING_REG_EXP);
 
-		recordStorage.create(MetadataTypes.GROUP.type, "textVariableNew", dataGroup);
+		recordStorage.create(MetadataTypes.GROUP.type, METADATA_TEXT_VARIABLE_NEW, dataGroup);
 	}
 
 
@@ -530,6 +538,14 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = createRecordTypeWithId(RECORD_TYPE);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "false"));
 		recordStorage.create(RECORD_TYPE, RECORD_TYPE, dataGroup);
+	}
+
+
+	private void addRecordTypeMetadataTextVariable()
+	{
+		DataGroup dataGroup = createRecordTypeWithId("textVariable");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "false"));
+		recordStorage.create(RECORD_TYPE, "textVariable", dataGroup);
 	}
 
 	private void addRecordTypeMetadata() {
