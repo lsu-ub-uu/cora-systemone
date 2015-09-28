@@ -105,7 +105,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataTextVariableWithId(NEW_METADATA_ID);
 		addMetadataTextVariableWithId(NEW_PRESENTATION_FORM_ID);
 		addMetadataTextVariableWithId(LIST_PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithId(LIST_PRESENTATION_VIEW_ID);
 		addMetadataTextVariableWithId(SEARCH_METADATA_ID);
 		addMetadataTextVariableWithId(SEARCH_PRESENTATION_FORM_ID);
 		addMetadataTextVariableWithIdAndRegEx(USER_SUPPLIED_ID, TRUE_OR_FALSE);
