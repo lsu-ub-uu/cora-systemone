@@ -65,6 +65,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private static final String CREATED_BY = "createdBy";
 	private static final String RECORD_INFO = "recordInfo";
 	private static final String RECORD_TYPE = "recordType";
+
+	private static final String EVERYTHING_REG_EXP = "everythingRegExp";
+
 	private RecordStorage recordStorage;
 	private MetadataStorage metadataStorage;
 	private Authorizator authorizator;
@@ -80,6 +83,14 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		idGenerator = new TimeStampIdGenerator();
 		keyCalculator = new RecordPermissionKeyCalculator();
 
+		bootstrapSystemMetadata();
+	}
+
+	/**
+	 * This metadata and record types needs to be in place when the system starts
+	 */
+	private void bootstrapSystemMetadata()
+	{
 		addMetadataTextVariableWithId(ID);
 		addMetadataTextVariableWithId(CREATED_BY);
 		addMetadataTextVariableWithId(METADATA_ID);
@@ -96,6 +107,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataTextVariableWithIdAndRegEx(USER_SUPPLIED_ID, TRUE_OR_FALSE);
 		addMetadataTextVariableWithIdAndRegEx(PERMISSION_KEY, A_Z);
 		addMetadataTextVariableWithId(SELF_PRESENTATION_VIEW_ID);
+		addMetadataTextVariableWithIdAndRegEx(EVERYTHING_REG_EXP, "regEx", "[\\s\\S]*");
+		addMetadataTextVariable();
+		addMetadataTextVariableNew();
 		addMetadataRecordInfoNew();
 		addMetadataRecordInfo();
 		addMetadataRecordTypeNew();
@@ -159,14 +173,17 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataTextVariableWithIdAndRegEx(String id, String regEx) {
+		addMetadataTextVariableWithIdAndRegEx(id, id, regEx);
+	}
+	private void addMetadataTextVariableWithIdAndRegEx(String id, String nameInData, String regEx) {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", "textVariable");
 		dataGroup
 				.addChild(createRecordInfoWithIdAndRecordType(id, MetadataTypes.TEXTVARIABLE.type));
 
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, id));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + "DeffText"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + "DefText"));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue("regEx", regEx));
 		recordStorage.create(MetadataTypes.TEXTVARIABLE.type, id, dataGroup);
 	}
@@ -238,6 +255,41 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	}
 
+	private void addMetadataTextVariable()
+	{
+		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
+		dataGroup.addAttributeByIdWithValue("type", GROUP);
+
+		dataGroup.addChild(createRecordInfoWithIdAndRecordType("textVariable", MetadataTypes.GROUP.type));
+
+		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
+		dataGroup.addChild(childReferences);
+		addChildReferenceWithRef1to1(childReferences, RECORD_INFO);
+		addChildReferenceWithRef1to1(childReferences, NAME_IN_DATA);
+		addChildReferenceWithRef1to1(childReferences, TEXT_ID);
+		addChildReferenceWithRef1to1(childReferences, DEF_TEXT_ID);
+		addChildReferenceWithRef1to1(childReferences, EVERYTHING_REG_EXP);
+
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textVariable", dataGroup);
+	}
+
+	private void addMetadataTextVariableNew()
+	{
+		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
+		dataGroup.addAttributeByIdWithValue("type", GROUP);
+
+		dataGroup.addChild(createRecordInfoWithIdAndRecordType("textVariableNew", MetadataTypes.GROUP.type));
+
+		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
+		dataGroup.addChild(childReferences);
+		addChildReferenceWithRef1to1(childReferences, RECORD_INFO_NEW);
+		addChildReferenceWithRef1to1(childReferences, EVERYTHING_REG_EXP);
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textVariableNew", dataGroup);
+	}
+
+
 	private void addMetadataRecordInfoNew() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
@@ -246,7 +298,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_INFO));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordInfoText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordInfoDeffText"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordInfoDefText"));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -277,7 +329,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_INFO));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordInfoText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordInfoDeffText"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordInfoDefText"));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -297,7 +349,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_TYPE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordTypeText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordTypeDeffText"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordTypeDefText"));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -328,7 +380,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_TYPE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordTypeText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordTypeDeffText"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordTypeDefText"));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -360,7 +412,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTE_REFERENCES));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "attributeReferencesText"));
 		dataGroup.addChild(
-				DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "attributeReferencesDeffText"));
+				DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "attributeReferencesDefText"));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -377,7 +429,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, CHILD_REFERENCES));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "childReferencesText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "childReferencesDeffText"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "childReferencesDefText"));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -394,7 +446,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, CHILD_REFERENCE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "childReferenceText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "childReferenceDeffText"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "childReferenceDefText"));
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
@@ -419,7 +471,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, NAME_FOR_METADATA));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "metadataText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "metadataDeffText"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "metadataDefText"));
 
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
 		dataGroup.addChild(attributeReferences);
