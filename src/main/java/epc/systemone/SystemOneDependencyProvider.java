@@ -107,7 +107,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider
 		addMetadataTextVariableWithIdAndRegEx(USER_SUPPLIED_ID, TRUE_OR_FALSE);
 		addMetadataTextVariableWithIdAndRegEx(PERMISSION_KEY, A_Z);
 		addMetadataTextVariableWithId(SELF_PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithIdAndRegEx(EVERYTHING_REG_EXP, "regEx", "[\\s\\S]*");
+		addMetadataTextVariableWithIdAndRegEx(EVERYTHING_REG_EXP, "regEx", ".+");
 		addMetadataTextVariable();
 		addMetadataTextVariableNew();
 		addMetadataRecordInfoNew();
