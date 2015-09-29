@@ -313,7 +313,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider
 		// item2
 		DataGroup dataGroup4 = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup4.addAttributeByIdWithValue("type", "collectionItem");
-		dataGroup4.addChild(createRecordInfoWithIdAndRecordType(RECORD_TYPE_TYPE_GROUP,
+		dataGroup4.addChild(createRecordInfoWithIdAndRecordType("recordTypeTypeTextVariable",
 				MetadataTypes.COLLECTIONITEM.type));
 
 		dataGroup4.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "textVariable"));
