@@ -23,11 +23,12 @@ import epc.spider.record.storage.TimeStampIdGenerator;
  * SystemOneDependencyProvider wires up the system for use in "production", as
  * this is in SystemOne production currently means using all in memory storage,
  * so do NOT use this class in production as it is written today. :)
- * 
+ *
  * @author <a href="mailto:olov.mckie@ub.uu.se">Olov McKie</a>
  * @since 0.1
  */
-public class SystemOneDependencyProvider implements SpiderDependencyProvider {
+public class SystemOneDependencyProvider implements SpiderDependencyProvider
+{
 	private static final String METADATA = "metadata";
 	private static final String NAME_FOR_ABSTRACT = "abstract";
 	private static final String PARENT_ID = "parentId";
