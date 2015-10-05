@@ -1,23 +1,23 @@
-package epc.systemone;
+package se.uu.ub.cora.systemone;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import epc.beefeater.Authorizator;
-import epc.beefeater.AuthorizatorImp;
-import epc.metadataformat.data.DataAtomic;
-import epc.metadataformat.data.DataGroup;
-import epc.metadataformat.metadata.MetadataTypes;
-import epc.metadataformat.storage.MetadataStorage;
-import epc.metadataformat.validator.DataValidator;
-import epc.metadataformat.validator.DataValidatorImp;
-import epc.spider.dependency.SpiderDependencyProvider;
-import epc.spider.record.PermissionKeyCalculator;
-import epc.spider.record.RecordPermissionKeyCalculator;
-import epc.spider.record.storage.RecordIdGenerator;
-import epc.spider.record.storage.RecordStorage;
-import epc.spider.record.storage.RecordStorageInMemory;
-import epc.spider.record.storage.TimeStampIdGenerator;
+import se.uu.ub.cora.beefeater.Authorizator;
+import se.uu.ub.cora.beefeater.AuthorizatorImp;
+import se.uu.ub.cora.metadataformat.data.DataAtomic;
+import se.uu.ub.cora.metadataformat.data.DataGroup;
+import se.uu.ub.cora.metadataformat.metadata.MetadataTypes;
+import se.uu.ub.cora.metadataformat.storage.MetadataStorage;
+import se.uu.ub.cora.metadataformat.validator.DataValidator;
+import se.uu.ub.cora.metadataformat.validator.DataValidatorImp;
+import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
+import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
+import se.uu.ub.cora.spider.record.RecordPermissionKeyCalculator;
+import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
+import se.uu.ub.cora.spider.record.storage.RecordStorage;
+import se.uu.ub.cora.spider.record.storage.RecordStorageInMemory;
+import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
