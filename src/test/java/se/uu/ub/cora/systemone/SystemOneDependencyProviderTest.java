@@ -4,8 +4,6 @@ import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.systemone.SystemOneDependencyProvider;
-
 public class SystemOneDependencyProviderTest {
 	@Test
 	public void testInit() {
@@ -15,5 +13,6 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getIdGenerator());
 		assertNotNull(dependencyProvider.getPermissionKeyCalculator());
 		assertNotNull(dependencyProvider.getDataValidator());
+		assertNotNull(dependencyProvider.getDataRecordLinkCollector());
 	}
 }
