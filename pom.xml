@@ -6,19 +6,19 @@
 	<parent>
 		<groupId>se.uu.ub.cora</groupId>
 		<artifactId>cora-parent</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>systemone</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>System One</name>
 
 	<properties>
-		<metadataformat.version>0.2-SNAPSHOT</metadataformat.version>
-		<beefeater.version>0.2-SNAPSHOT</beefeater.version>
-		<spider.version>0.2-SNAPSHOT</spider.version>
+		<metadataformat.version>0.3-SNAPSHOT</metadataformat.version>
+		<beefeater.version>0.3-SNAPSHOT</beefeater.version>
+		<spider.version>0.3-SNAPSHOT</spider.version>
 	</properties>
 
 	<scm>
