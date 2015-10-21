@@ -434,6 +434,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addChildReferenceWithRefRepeatMinRepeatMax(DataGroup childReferences, String ref,
 			String repeatMin, String repeatMax) {
 		DataGroup childReference = DataGroup.withNameInData(CHILD_REFERENCE);
+		childReference.setRepeatId(String.valueOf(childReferences.getChildren().size() + 1));
 		childReference.addChild(DataAtomic.withNameInDataAndValue("ref", ref));
 		childReference.addChild(DataAtomic.withNameInDataAndValue(REPEAT_MIN, repeatMin));
 		childReference.addChild(DataAtomic.withNameInDataAndValue(REPEAT_MAX, repeatMax));
