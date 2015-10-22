@@ -49,9 +49,11 @@ import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
  * @since 0.1
  */
 public class SystemOneDependencyProvider implements SpiderDependencyProvider {
+	private static final String ATTRIBUTE = "attribute";
+	private static final String ATTRIBUTES = "attributes";
 	private static final String COLLECTION_ITEM = "collectionItem";
 	private static final String DEF_TEXT = "DefText";
-	private static final String TARGET_PATH = "targetPath";
+	private static final String LINKED_PATH = "linkedPath";
 	private static final String TARGET_RECORD_TYPE = "targetRecordType";
 	private static final String METADATA = "metadata";
 	private static final String NAME_FOR_ABSTRACT = "abstract";
@@ -152,11 +154,16 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataTextVariableWithId(SELF_PRESENTATION_VIEW_ID);
 		addMetadataTextVariableWithIdAndRegEx(EVERYTHING_REG_EXP, "regEx", ".+");
 		addMetadataTextVariableWithId(TARGET_RECORD_TYPE);
-		addMetadataTextVariableWithId(TARGET_PATH);
 		addMetadataTextVariable();
 		addMetadataTextVariableNew();
 		addMetadataDataToDataLink();
 		addMetadataDataToDataLinkNew();
+		addMetadataLinkedPath();
+		addMetadataAttributes();
+		addMetadataAttribute();
+		addMetadataTextVariableWithId("attributeName");
+		addMetadataTextVariableWithId("attributeValue");
+
 		addMetadataRecordInfoNew();
 		addMetadataRecordInfo();
 		addMetadataRecordTypeNew();
@@ -304,7 +311,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addChildReferenceWithRef1to1(childReferences, TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, DEF_TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, TARGET_RECORD_TYPE);
-		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, TARGET_PATH, "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, LINKED_PATH, "0", "1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, "metadataDataToDataLinkNew", dataGroup,
 				emptyLinkList);
@@ -326,10 +333,46 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addChildReferenceWithRef1to1(childReferences, TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, DEF_TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, TARGET_RECORD_TYPE);
-		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, TARGET_PATH, "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, LINKED_PATH, "0", "1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, "metadataDataToDataLink", dataGroup,
 				emptyLinkList);
+	}
+
+	private void addMetadataLinkedPath() {
+		DataGroup dataGroup = createDataGroupOfTypeGroup(LINKED_PATH);
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, LINKED_PATH));
+
+		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
+		dataGroup.addChild(childReferences);
+		addChildReferenceWithRef1to1(childReferences, NAME_IN_DATA);
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, ATTRIBUTES, "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, LINKED_PATH, "0", "1");
+
+		recordStorage.create(MetadataTypes.GROUP.type, LINKED_PATH, dataGroup, emptyLinkList);
+	}
+
+	private void addMetadataAttributes() {
+		DataGroup dataGroup = createDataGroupOfTypeGroup(ATTRIBUTES);
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTES));
+
+		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
+		dataGroup.addChild(childReferences);
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, ATTRIBUTE, "1", "X");
+
+		recordStorage.create(MetadataTypes.GROUP.type, ATTRIBUTES, dataGroup, emptyLinkList);
+	}
+
+	private void addMetadataAttribute() {
+		DataGroup dataGroup = createDataGroupOfTypeGroup(ATTRIBUTE);
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTE));
+
+		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
+		dataGroup.addChild(childReferences);
+		addChildReferenceWithRef1to1(childReferences, "attributeName");
+		addChildReferenceWithRef1to1(childReferences, "attributeValue");
+
+		recordStorage.create(MetadataTypes.GROUP.type, ATTRIBUTE, dataGroup, emptyLinkList);
 	}
 
 	private DataGroup createDataGroupOfTypeGroup(final String name) {
