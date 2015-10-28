@@ -19,19 +19,16 @@
 
 package se.uu.ub.cora.systemone;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import se.uu.ub.cora.beefeater.Authorizator;
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
-import se.uu.ub.cora.metadataformat.data.DataAtomic;
-import se.uu.ub.cora.metadataformat.data.DataGroup;
-import se.uu.ub.cora.metadataformat.linkcollector.DataRecordLinkCollector;
-import se.uu.ub.cora.metadataformat.linkcollector.DataRecordLinkCollectorImp;
-import se.uu.ub.cora.metadataformat.metadata.MetadataTypes;
-import se.uu.ub.cora.metadataformat.storage.MetadataStorage;
-import se.uu.ub.cora.metadataformat.validator.DataValidator;
-import se.uu.ub.cora.metadataformat.validator.DataValidatorImp;
+import se.uu.ub.cora.bookkeeper.data.DataAtomic;
+import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
+import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
+import se.uu.ub.cora.bookkeeper.metadata.MetadataTypes;
+import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
+import se.uu.ub.cora.bookkeeper.validator.DataValidator;
+import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.RecordPermissionKeyCalculator;
@@ -39,6 +36,9 @@ import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorageInMemory;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as

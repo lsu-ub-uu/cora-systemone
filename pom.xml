@@ -35,7 +35,7 @@
 	<name>System One</name>
 
 	<properties>
-		<metadataformat.version>0.3-SNAPSHOT</metadataformat.version>
+		<bookkeeper.version>0.3-SNAPSHOT</bookkeeper.version>
 		<beefeater.version>0.3-SNAPSHOT</beefeater.version>
 		<spider.version>0.3-SNAPSHOT</spider.version>
 	</properties>
@@ -75,8 +75,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>metadataformat</artifactId>
-			<version>${metadataformat.version}</version>
+			<artifactId>bookkeeper</artifactId>
+			<version>${bookkeeper.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
