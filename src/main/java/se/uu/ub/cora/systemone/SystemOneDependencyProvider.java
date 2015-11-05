@@ -19,6 +19,9 @@
 
 package se.uu.ub.cora.systemone;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import se.uu.ub.cora.beefeater.Authorizator;
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
@@ -36,9 +39,6 @@ import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorageInMemory;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
@@ -123,7 +123,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dummyDTDL.addAttributeByIdWithValue("type", "recordLink");
 		String id = "dummyRecordLink";
 		dummyDTDL.addChild(
-				createRecordInfoWithIdAndRecordType(id, MetadataTypes.RECORDLINK.type));
+				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.RECORDLINK.type, id));
 
 		dummyDTDL.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "dummyLink"));
 		dummyDTDL.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
@@ -223,7 +223,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		return new DataRecordLinkCollectorImp(metadataStorage);
 	}
 
-	private DataGroup createRecordInfoWithIdAndRecordType(String id, String recordType) {
+	private DataGroup createRecordInfoWithRecordTypeAndRecordId(String recordType, String id) {
 		DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
 		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
 		recordInfo.addChild(DataAtomic.withNameInDataAndValue("type", recordType));
@@ -243,8 +243,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataTextVariableWithIdAndRegEx(String id, String nameInData, String regEx) {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", "textVariable");
-		dataGroup
-				.addChild(createRecordInfoWithIdAndRecordType(id, MetadataTypes.TEXTVARIABLE.type));
+		dataGroup.addChild(
+				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.TEXTVARIABLE.type, id));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
@@ -379,7 +379,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
 
-		dataGroup.addChild(createRecordInfoWithIdAndRecordType(name, MetadataTypes.GROUP.type));
+		dataGroup.addChild(
+				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type, name));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, name + "Text"));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, name + DEF_TEXT));
 		return dataGroup;
@@ -388,8 +389,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataCollectionVariableMetadataType() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", "collectionVariable");
-		dataGroup.addChild(createRecordInfoWithIdAndRecordType(RECORD_TYPE_TYPE_COLLECTION_VAR,
-				MetadataTypes.COLLECTIONVARIABLE.type));
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.COLLECTIONVARIABLE.type, RECORD_TYPE_TYPE_COLLECTION_VAR));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "type"));
 		dataGroup.addChild(
@@ -405,8 +406,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		// collection
 		DataGroup dataGroup2 = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup2.addAttributeByIdWithValue("type", "itemCollection");
-		dataGroup2.addChild(createRecordInfoWithIdAndRecordType(RECORD_TYPE_TYPE_COLLECTION,
-				MetadataTypes.ITEMCOLLECTION.type));
+		dataGroup2.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.ITEMCOLLECTION.type, RECORD_TYPE_TYPE_COLLECTION));
 
 		dataGroup2.addChild(
 				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_TYPE_TYPE_COLLECTION));
@@ -430,8 +431,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		// item1
 		DataGroup dataGroup3 = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup3.addAttributeByIdWithValue("type", COLLECTION_ITEM);
-		dataGroup3.addChild(createRecordInfoWithIdAndRecordType(RECORD_TYPE_TYPE_GROUP,
-				MetadataTypes.COLLECTIONITEM.type));
+		dataGroup3.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.COLLECTIONITEM.type, RECORD_TYPE_TYPE_GROUP));
 
 		dataGroup3.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, GROUP));
 		dataGroup3
@@ -444,8 +445,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		// item2
 		DataGroup dataGroup4 = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup4.addAttributeByIdWithValue("type", COLLECTION_ITEM);
-		dataGroup4.addChild(createRecordInfoWithIdAndRecordType(RECORD_TYPE_TYPE_TEXT_VARIABLE,
-				MetadataTypes.COLLECTIONITEM.type));
+		dataGroup4.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.COLLECTIONITEM.type, RECORD_TYPE_TYPE_TEXT_VARIABLE));
 
 		dataGroup4.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "textVariable"));
 		dataGroup4.addChild(
@@ -458,8 +459,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		// item3 recordLink
 		DataGroup dataGroup5 = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup5.addAttributeByIdWithValue("type", COLLECTION_ITEM);
-		dataGroup5.addChild(createRecordInfoWithIdAndRecordType(RECORD_TYPE_TYPE_DATA_TO_DATA_LINK,
-				MetadataTypes.COLLECTIONITEM.type));
+		dataGroup5.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.COLLECTIONITEM.type, RECORD_TYPE_TYPE_DATA_TO_DATA_LINK));
 
 		dataGroup5.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "recordLink"));
 		dataGroup5.addChild(
@@ -474,8 +475,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataRecordInfoNew() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
-		dataGroup.addChild(
-				createRecordInfoWithIdAndRecordType(RECORD_INFO_NEW, MetadataTypes.GROUP.type));
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
+				RECORD_INFO_NEW));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_INFO));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordInfoText"));
@@ -507,7 +508,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
 		dataGroup.addChild(
-				createRecordInfoWithIdAndRecordType(RECORD_INFO, MetadataTypes.GROUP.type));
+				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type, RECORD_INFO));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_INFO));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordInfoText"));
@@ -526,8 +527,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataRecordTypeNew() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
-		dataGroup.addChild(
-				createRecordInfoWithIdAndRecordType(RECORD_TYPE_NEW, MetadataTypes.GROUP.type));
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
+				RECORD_TYPE_NEW));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_TYPE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordTypeText"));
@@ -558,7 +559,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
 		dataGroup.addChild(
-				createRecordInfoWithIdAndRecordType(RECORD_TYPE, MetadataTypes.GROUP.type));
+				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type, RECORD_TYPE));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_TYPE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordTypeText"));
@@ -588,8 +589,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataAttributeReferences() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
-		dataGroup.addChild(createRecordInfoWithIdAndRecordType(ATTRIBUTE_REFERENCES,
-				MetadataTypes.GROUP.type));
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
+				ATTRIBUTE_REFERENCES));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTE_REFERENCES));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "attributeReferencesText"));
@@ -607,8 +608,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataChildReferences() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
-		dataGroup.addChild(
-				createRecordInfoWithIdAndRecordType(CHILD_REFERENCES, MetadataTypes.GROUP.type));
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
+				CHILD_REFERENCES));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, CHILD_REFERENCES));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "childReferencesText"));
@@ -625,8 +626,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataChildReference() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
-		dataGroup.addChild(
-				createRecordInfoWithIdAndRecordType(CHILD_REFERENCE, MetadataTypes.GROUP.type));
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
+				CHILD_REFERENCE));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, CHILD_REFERENCE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "childReferenceText"));
@@ -650,8 +651,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataMetadataGroupNew() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue("type", GROUP);
-		dataGroup.addChild(
-				createRecordInfoWithIdAndRecordType("metadataGroupNew", MetadataTypes.GROUP.type));
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
+				"metadataGroupNew"));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, NAME_FOR_METADATA));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "metadataText"));
@@ -682,7 +683,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		String idWithCapitalFirst = id.substring(0, 1).toUpperCase() + id.substring(1);
 
 		DataGroup dataGroup = DataGroup.withNameInData(RECORD_TYPE);
-		dataGroup.addChild(createRecordInfoWithIdAndRecordType(id, RECORD_TYPE));
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(RECORD_TYPE, id));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(METADATA_ID, id));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PRESENTATION_VIEW_ID,
