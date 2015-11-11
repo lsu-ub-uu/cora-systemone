@@ -672,6 +672,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addChildReferenceWithRef1to1(childReferences, TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, DEF_TEXT_ID);
 
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, ATTRIBUTE_REFERENCES, "0", "1");
 		// childReferences
 		addChildReferenceWithRef1to1(childReferences, CHILD_REFERENCES);
 
