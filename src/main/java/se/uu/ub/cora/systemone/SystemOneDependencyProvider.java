@@ -51,7 +51,6 @@ import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
 public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private static final String REF_PARENT_ID = "refParentId";
 	private static final String FINAL_VALUE = "finalValue";
-	private static final String DUMMY = "dummy";
 	private static final String REF_COLLECTION_ID = "refCollectionId";
 	private static final String METADATA_GROUP = "metadataGroup";
 	private static final String COLLECTION_ITEM_REFERENCES = "collectionItemReferences";
