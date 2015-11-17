@@ -121,7 +121,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		bootstrapSystemMetadata();
 
 		createDummyRecordLink();
-		createDummyMetadataCollectionVariableChild();
 	}
 
 	private void createDummyRecordLink() {
@@ -136,24 +135,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dummyDTDL.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + DEF_TEXT));
 		dummyDTDL.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "someRecordType"));
 		recordStorage.create(MetadataTypes.RECORDLINK.type, id, dummyDTDL, emptyLinkList);
-	}
-
-	private void createDummyMetadataCollectionVariableChild() {
-		DataGroup dummyMCVC = DataGroup.withNameInData(NAME_FOR_METADATA);
-		dummyMCVC.addAttributeByIdWithValue(TYPE, "collectionVariableChild");
-		String id = "dummyCollectionVariableChild";
-		dummyMCVC.addChild(createRecordInfoWithRecordTypeAndRecordId(
-				MetadataTypes.COLLECTIONVARIABLECHILD.type, id));
-
-		dummyMCVC.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, METADATA));
-		dummyMCVC.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
-		dummyMCVC.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + DEF_TEXT));
-		dummyMCVC.addChild(DataAtomic.withNameInDataAndValue("refCollectionId", DUMMY));
-		dummyMCVC.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, DUMMY));
-		dummyMCVC.addChild(DataAtomic.withNameInDataAndValue(FINAL_VALUE, DUMMY));
-		recordStorage.create(MetadataTypes.COLLECTIONVARIABLECHILD.type, id, dummyMCVC,
-				emptyLinkList);
-
 	}
 
 	/**
@@ -184,7 +165,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataMetadataCollectionVariableNew();
 		addMetadataTextVariableWithId(REF_PARENT_ID);
 		addMetadataTextVariableWithId(FINAL_VALUE);
-		addMetadataMetadataCollectionVariableChildNew();
 		addMetadataMetadataItemCollectionNew();
 		addMetadataTextVariableWithId(REF_COLLECTION_ID);
 		addMetadataCollectionItemReferences();
@@ -348,34 +328,10 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addChildReferenceWithRef1to1(childReferences, TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, DEF_TEXT_ID);
 		addChildReferenceWithRef1to1(childReferences, REF_COLLECTION_ID);
-
-		recordStorage.create(METADATA_GROUP, "metadataCollectionVariableNew", dataGroup,
-				emptyLinkList);
-	}
-
-	private void addMetadataMetadataCollectionVariableChildNew() {
-		DataGroup dataGroup = createDataGroupOfTypeGroup("metadataCollectionVariableChildNew");
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, NAME_FOR_METADATA));
-
-		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
-		dataGroup.addChild(attributeReferences);
-		attributeReferences.addChild(
-				DataAtomic.withNameInDataAndValue("ref", RECORD_TYPE_TYPE_COLLECTION_VAR));
-
-		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
-		dataGroup.addChild(childReferences);
-
-		// what does a metadataCollectionVariableChild contain
-		addChildReferenceWithRef1to1(childReferences, RECORD_INFO_NEW);
-		addChildReferenceWithRef1to1(childReferences, NAME_IN_DATA);
-		addChildReferenceWithRef1to1(childReferences, TEXT_ID);
-		addChildReferenceWithRef1to1(childReferences, DEF_TEXT_ID);
-
-		addChildReferenceWithRef1to1(childReferences, REF_COLLECTION_ID);
-		addChildReferenceWithRef1to1(childReferences, REF_PARENT_ID);
+		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, REF_PARENT_ID, "0", "1");
 		addChildReferenceWithRefRepeatMinRepeatMax(childReferences, FINAL_VALUE, "0", "1");
 
-		recordStorage.create(METADATA_GROUP, "metadataCollectionVariableChildNew", dataGroup,
+		recordStorage.create(METADATA_GROUP, "metadataCollectionVariableNew", dataGroup,
 				emptyLinkList);
 	}
 
