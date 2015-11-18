@@ -826,16 +826,32 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	private void createSystemLanguageVar() {
 		String collectionId = "systemLanguages";
-		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionId,
-				"systemLanguagesCollection");
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(
+				collectionId, "systemLanguagesCollection", "lang");
 		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + "CollectionVar",
 				dataGroup, emptyLinkList);
 	}
 
+	private DataGroup createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(
+			String collectionId, String refCollectionId, String nameInData) {
+		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
+		dataGroup.addAttributeByIdWithValue(TYPE, "collectionVariable");
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.COLLECTIONVARIABLE.type, collectionId + "CollectionVar"));
+
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(TEXT_ID, collectionId + "CollectionVarTextId"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID,
+				collectionId + "CollectionVarDefTextId"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_COLLECTION_ID, refCollectionId));
+		return dataGroup;
+	}
+
 	private void createSystemLanguageSvVar() {
 		String collectionVarId = "systemLanguageSv";
-		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionVarId,
-				"systemLanguagesCollection");
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(
+				collectionVarId, "systemLanguagesCollection", "lang");
 
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "systemLanguagesCollectionVar"));
@@ -845,26 +861,10 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 				collectionVarId + "CollectionVar", dataGroup, emptyLinkList);
 	}
 
-	private DataGroup createCollectionVarDataGroupWithIdAndRefCollectionId(String collectionId,
-			String refCollectionId) {
-		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-		dataGroup.addAttributeByIdWithValue(TYPE, "collectionVariable");
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
-				MetadataTypes.COLLECTIONVARIABLE.type, collectionId + "CollectionVar"));
-
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, TYPE));
-		dataGroup.addChild(
-				DataAtomic.withNameInDataAndValue(TEXT_ID, collectionId + "CollectionVarTextId"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID,
-				collectionId + "CollectionVarDefTextId"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_COLLECTION_ID, refCollectionId));
-		return dataGroup;
-	}
-
 	private void createSystemLanguageEnVar() {
 		String collectionVarId = "systemLanguageEn";
-		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionVarId,
-				"systemLanguagesCollection");
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(
+				collectionVarId, "systemLanguagesCollection", "lang");
 
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "systemLanguagesCollectionVar"));
@@ -894,8 +894,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	private void createTextPartTypeVar() {
 		String collectionId = "textPartType";
-		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionId,
-				"textPartTypeCollection");
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(
+				collectionId, "textPartTypeCollection", "type");
 		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + "CollectionVar",
 				dataGroup, emptyLinkList);
 	}
@@ -916,8 +916,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	private void createTextPartTypeDefaultVar() {
 		String collectionVarId = "textPartTypeDefault";
-		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionVarId,
-				"textPartTypeCollection");
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(
+				collectionVarId, "textPartTypeCollection", "type");
 
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textPartTypeCollectionVar"));
@@ -929,8 +929,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	private void createTextPartTypeAlternativeVar() {
 		String collectionVarId = "textPartTypeAlternative";
-		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionVarId,
-				"textPartTypeCollection");
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(
+				collectionVarId, "textPartTypeCollection", "type");
 
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textPartTypeCollectionVar"));
