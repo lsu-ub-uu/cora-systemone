@@ -154,7 +154,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataTextVariableWithIdAndRegEx(USER_SUPPLIED_ID, TRUE_OR_FALSE);
 		addMetadataTextVariableWithIdAndRegEx(PERMISSION_KEY, A_Z);
 		addMetadataTextVariableWithId(SELF_PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithIdAndRegEx(EVERYTHING_REG_EXP, "regEx", ".+");
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx(EVERYTHING_REG_EXP, "regEx", ".+");
 		addMetadataTextVariableWithId(LINKED_RECORD_TYPE);
 		addTopLevelMetadataGroupsForTextVariable();
 
@@ -201,6 +201,28 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addRecordTypeRecordType();
 		addRecordTypeMetadata();
 		addRecordTypeForAllMetadataGroups();
+
+		createLanguageCollectionItems();
+		createSystemLanguageItemCollection();
+		createSystemLanguageVar();
+		createSystemLanguageSvVar();
+		createSystemLanguageEnVar();
+		createTextVar();
+		createTextPartTypeCollectionItems();
+		createTextPartTypeItemCollection();
+		createTextPartTypeVar();
+		createTextPart();
+		createTextPartTypeDefaultVar();
+		createTextPartTypeAlternativeVar();
+		createTextPartDefault();
+		createTextPartAlternative();
+		createTextPartSv();
+		createTextPartEn();
+		createTextGroup();
+		createTextGroup2();
+		createTextGroupSystemOne();
+		addRecordTypeText();
+		addRecordTypeTextSystemOne();
 	}
 
 	@Override
@@ -247,10 +269,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataTextVariableWithIdAndRegEx(String id, String regEx) {
-		addMetadataTextVariableWithIdAndRegEx(id, id, regEx);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx(id, id, regEx);
 	}
 
-	private void addMetadataTextVariableWithIdAndRegEx(String id, String nameInData, String regEx) {
+	private void addMetadataTextVariableWithIdAndNameInDataAndRegEx(String id, String nameInData,
+			String regEx) {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, "textVariable");
 		dataGroup.addChild(
@@ -278,9 +301,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 			boolean isNew) {
 		DataGroup dataGroup;
 		if (isNew) {
-			dataGroup = createDataGroupForMetadataWithGroupId(metadataGroupId + "New");
+			dataGroup = createDataGroupForMetadataWithRecordId(metadataGroupId + "New");
 		} else {
-			dataGroup = createDataGroupForMetadataWithGroupId(metadataGroupId);
+			dataGroup = createDataGroupForMetadataWithRecordId(metadataGroupId);
 		}
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, NAME_FOR_METADATA));
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
@@ -327,7 +350,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataCollectionItemReferences() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(COLLECTION_ITEM_REFERENCES);
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId(COLLECTION_ITEM_REFERENCES);
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, COLLECTION_ITEM_REFERENCES));
 
@@ -338,7 +361,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataCollectionItemReference() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(COLLECTION_ITEM_REFERENCE);
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId(COLLECTION_ITEM_REFERENCE);
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, COLLECTION_ITEM_REFERENCE));
 
@@ -370,7 +393,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataLinkedPath() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(LINKED_PATH);
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId(LINKED_PATH);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, LINKED_PATH));
 
 		addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA);
@@ -381,7 +404,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataAttributes() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(ATTRIBUTES);
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId(ATTRIBUTES);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTES));
 
 		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTE, "1", "X");
@@ -390,7 +413,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataAttribute() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(ATTRIBUTE);
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId(ATTRIBUTE);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTE));
 
 		addChildReferenceWithRef1to1(dataGroup, "attributeName");
@@ -399,7 +422,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		recordStorage.create(MetadataTypes.GROUP.type, ATTRIBUTE, dataGroup, emptyLinkList);
 	}
 
-	private DataGroup createDataGroupForMetadataWithGroupId(final String name) {
+	private DataGroup createDataGroupForMetadataWithRecordId(final String name) {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
 
@@ -427,27 +450,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		createMetadataTypeCollectionItem("collectionVariable");
 	}
 
-	// private void createMetadataTypeCollectionItem(String id) {
-	// String idWithCapitalFirst = id.substring(0, 1).toUpperCase() +
-	// id.substring(1);
-	// DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-	// dataGroup.addAttributeByIdWithValue(TYPE, COLLECTION_ITEM);
-	// dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
-	// MetadataTypes.COLLECTIONITEM.type, "metadataType" + idWithCapitalFirst +
-	// "Item"));
-	//
-	// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, id));
-	// dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID,
-	// "recordTypeType" + idWithCapitalFirst + "TextId"));
-	// dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID,
-	// "recordTypeType" + idWithCapitalFirst + "DefTextId"));
-	// recordStorage.create(MetadataTypes.COLLECTIONITEM.type,
-	// "metadataType" + idWithCapitalFirst + "Item", dataGroup, emptyLinkList);
-	// }
 	private void createMetadataTypeCollectionItem(String id) {
 		String idWithCapitalFirst = id.substring(0, 1).toUpperCase() + id.substring(1);
 		createCollectionItem("metadataType" + idWithCapitalFirst, id);
-		// metadataTypeGroupItem
 	}
 
 	private void createCollectionItem(String id, String nameInData) {
@@ -777,4 +782,298 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 			recordStorage.create(RECORD_TYPE, type, dataGroup, emptyLinkList);
 		}
 	}
+
+	private void createLanguageCollectionItems() {
+		createCollectionItem("sv", "sv");
+		createCollectionItem("en", "en");
+		createCollectionItem("es", "es");
+		createCollectionItem("no", "no");
+	}
+
+	private void createSystemLanguageItemCollection() {
+		String id = "systemLanguages";
+		DataGroup dataGroup = createDataGroupForItemCollectionWithId(id);
+		// note, only sv and en are currently used in the system
+		addCollectionItemReferenceByCollectionItemId(dataGroup, "svItem");
+		addCollectionItemReferenceByCollectionItemId(dataGroup, "enItem");
+		recordStorage.create(MetadataTypes.ITEMCOLLECTION.type, id + "Collection", dataGroup,
+				emptyLinkList);
+	}
+
+	private DataGroup createDataGroupForItemCollectionWithId(String id) {
+		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
+		dataGroup.addAttributeByIdWithValue(TYPE, "itemCollection");
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.ITEMCOLLECTION.type, id + "Collection"));
+
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, id + "Collection"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "CollectionTextId"));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + "CollectionDefTextId"));
+
+		DataGroup collectionItemReferences = DataGroup.withNameInData(COLLECTION_ITEM_REFERENCES);
+		dataGroup.addChild(collectionItemReferences);
+		return dataGroup;
+	}
+
+	private void addCollectionItemReferenceByCollectionItemId(DataGroup dataGroup,
+			String collectionItemId) {
+		DataGroup collectionItemReferences = dataGroup
+				.getFirstGroupWithNameInData(COLLECTION_ITEM_REFERENCES);
+		collectionItemReferences
+				.addChild(DataAtomic.withNameInDataAndValue("ref", collectionItemId));
+	}
+
+	private void createSystemLanguageVar() {
+		String collectionId = "systemLanguages";
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionId,
+				"systemLanguagesCollection");
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + "CollectionVar",
+				dataGroup, emptyLinkList);
+	}
+
+	private void createSystemLanguageSvVar() {
+		String collectionVarId = "systemLanguageSv";
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionVarId,
+				"systemLanguagesCollection");
+
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "systemLanguagesCollectionVar"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(FINAL_VALUE, "sv"));
+
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type,
+				collectionVarId + "CollectionVar", dataGroup, emptyLinkList);
+	}
+
+	private DataGroup createCollectionVarDataGroupWithIdAndRefCollectionId(String collectionId,
+			String refCollectionId) {
+		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
+		dataGroup.addAttributeByIdWithValue(TYPE, "collectionVariable");
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.COLLECTIONVARIABLE.type, collectionId + "CollectionVar"));
+
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, TYPE));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(TEXT_ID, collectionId + "CollectionVarTextId"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID,
+				collectionId + "CollectionVarDefTextId"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_COLLECTION_ID, refCollectionId));
+		return dataGroup;
+	}
+
+	private void createSystemLanguageEnVar() {
+		String collectionVarId = "systemLanguageEn";
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionVarId,
+				"systemLanguagesCollection");
+
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "systemLanguagesCollectionVar"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(FINAL_VALUE, "en"));
+
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type,
+				collectionVarId + "CollectionVar", dataGroup, emptyLinkList);
+	}
+
+	private void createTextVar() {
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("textVar", "text", "(.*)");
+	}
+
+	private void createTextPartTypeCollectionItems() {
+		createCollectionItem("default", "default");
+		createCollectionItem("alternative", "alternative");
+	}
+
+	private void createTextPartTypeItemCollection() {
+		String id = "textPartType";
+		DataGroup dataGroup = createDataGroupForItemCollectionWithId(id);
+		addCollectionItemReferenceByCollectionItemId(dataGroup, "default");
+		addCollectionItemReferenceByCollectionItemId(dataGroup, "alternative");
+		recordStorage.create(MetadataTypes.ITEMCOLLECTION.type, id + "Collection", dataGroup,
+				emptyLinkList);
+	}
+
+	private void createTextPartTypeVar() {
+		String collectionId = "textPartType";
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionId,
+				"textPartTypeCollection");
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + "CollectionVar",
+				dataGroup, emptyLinkList);
+	}
+
+	private void createTextPart() {
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId("textPart");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "textPart"));
+		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup.addChild(attributeReferences);
+		attributeReferences
+				.addChild(DataAtomic.withNameInDataAndValue("ref", "textPartTypeCollectionVar"));
+
+		addChildReferenceWithRef1to1(dataGroup, "systemLanguageCollectionVar");
+		addChildReferenceWithRef1to1(dataGroup, "textVar");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textPart", dataGroup, emptyLinkList);
+	}
+
+	private void createTextPartTypeDefaultVar() {
+		String collectionVarId = "textPartTypeDefault";
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionVarId,
+				"textPartTypeCollection");
+
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textPartTypeCollectionVar"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(FINAL_VALUE, "default"));
+
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type,
+				collectionVarId + "CollectionVar", dataGroup, emptyLinkList);
+	}
+
+	private void createTextPartTypeAlternativeVar() {
+		String collectionVarId = "textPartTypeAlternative";
+		DataGroup dataGroup = createCollectionVarDataGroupWithIdAndRefCollectionId(collectionVarId,
+				"textPartTypeCollection");
+
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textPartTypeCollectionVar"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(FINAL_VALUE, "alternative"));
+
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type,
+				collectionVarId + "CollectionVar", dataGroup, emptyLinkList);
+	}
+
+	private void createTextPartDefault() {
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId("textPartDefault");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "textPart"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textPart"));
+
+		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup.addChild(attributeReferences);
+		attributeReferences.addChild(
+				DataAtomic.withNameInDataAndValue("ref", "textPartTypeDefaultCollectionVar"));
+
+		addChildReferenceWithRef1to1(dataGroup, "systemLanguageCollectionVar");
+		addChildReferenceWithRef1to1(dataGroup, "textVar");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textPartDefault", dataGroup, emptyLinkList);
+	}
+
+	private void createTextPartAlternative() {
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId("textPartAlternative");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "textPart"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textPart"));
+
+		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup.addChild(attributeReferences);
+		attributeReferences.addChild(
+				DataAtomic.withNameInDataAndValue("ref", "textPartTypeAlternativeCollectionVar"));
+
+		addChildReferenceWithRef1to1(dataGroup, "systemLanguageCollectionVar");
+		addChildReferenceWithRef1to1(dataGroup, "textVar");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textPartAlternative", dataGroup,
+				emptyLinkList);
+	}
+
+	private void createTextPartSv() {
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId("textPartSv");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "textPart"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textPartDefault"));
+
+		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup.addChild(attributeReferences);
+		attributeReferences.addChild(
+				DataAtomic.withNameInDataAndValue("ref", "textPartTypeDefaultCollectionVar"));
+
+		addChildReferenceWithRef1to1(dataGroup, "systemLanguageSvCollectionVar");
+		addChildReferenceWithRef1to1(dataGroup, "textVar");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textPartSv", dataGroup, emptyLinkList);
+	}
+
+	private void createTextPartEn() {
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId("textPartEn");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "textPart"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textPartAlternative"));
+
+		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup.addChild(attributeReferences);
+		attributeReferences.addChild(
+				DataAtomic.withNameInDataAndValue("ref", "textPartTypeAlternativeCollectionVar"));
+
+		addChildReferenceWithRef1to1(dataGroup, "systemLanguageEnCollectionVar");
+		addChildReferenceWithRef1to1(dataGroup, "textVar");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textPartEn", dataGroup, emptyLinkList);
+	}
+
+	private void addTopLevelMetadataGroupsForRecordLin22k() {
+		String id = "metadataRecordLink";
+		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
+		addChildReferenceWithRef1to1(dataGroup, LINKED_RECORD_TYPE);
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, LINKED_PATH, "0", "1");
+		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
+
+		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, true);
+		addChildReferenceWithRef1to1(dataGroupNew, LINKED_RECORD_TYPE);
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, LINKED_PATH, "0", "1");
+		recordStorage.create(MetadataTypes.GROUP.type, id + "New", dataGroupNew, emptyLinkList);
+	}
+
+	private void createTextGroup() {
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId("text");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "text"));
+
+		addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "textPart", "1", "X");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "text", dataGroup, emptyLinkList);
+
+	}
+
+	private void createTextGroup2() {
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId("text2");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "text"));
+		addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "text"));
+
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "textPartDefault", "1", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "textPartAlternative", "0", "X");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "text2", dataGroup, emptyLinkList);
+	}
+
+	private void createTextGroupSystemOne() {
+		DataGroup dataGroup = createDataGroupForMetadataWithRecordId("textSystemOne");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "text"));
+		addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "text2"));
+
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "textPartSv", "1", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "textPartEn", "0", "1");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textSystemOne", dataGroup, emptyLinkList);
+
+		DataGroup dataGroup2 = createDataGroupForMetadataWithRecordId("textSystemOneNew");
+		dataGroup2.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "text"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "textSystemOne"));
+
+		addChildReferenceWithRef1to1(dataGroup2, RECORD_INFO_NEW);
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2, "textPartSv", "1", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2, "textPartEn", "0", "1");
+
+		recordStorage.create(MetadataTypes.GROUP.type, "textSystemOneNew", dataGroup2,
+				emptyLinkList);
+	}
+
+	private void addRecordTypeText() {
+		DataGroup dataGroup = createRecordTypeWithId("text");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "true"));
+		recordStorage.create(RECORD_TYPE, "text", dataGroup, emptyLinkList);
+	}
+
+	private void addRecordTypeTextSystemOne() {
+		DataGroup dataGroup = createRecordTypeWithId("textSystemOne");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "false"));
+		recordStorage.create(RECORD_TYPE, "textSystemOne", dataGroup, emptyLinkList);
+	}
+
 }
