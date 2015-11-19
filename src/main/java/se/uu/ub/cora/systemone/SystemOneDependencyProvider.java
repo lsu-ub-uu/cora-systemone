@@ -1073,6 +1073,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addRecordTypeTextSystemOne() {
 		DataGroup dataGroup = createRecordTypeWithId("textSystemOne");
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "false"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PARENT_ID, "text"));
 		recordStorage.create(RECORD_TYPE, "textSystemOne", dataGroup, emptyLinkList);
 	}
 
