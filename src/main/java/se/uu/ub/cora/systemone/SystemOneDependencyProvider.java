@@ -137,30 +137,40 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	 * starts
 	 */
 	private void bootstrapSystemMetadata() {
-		addMetadataTextVariableWithId(ID);
-		addMetadataTextVariableWithId(CREATED_BY);
-		addMetadataTextVariableWithId(METADATA_ID);
-		addMetadataTextVariableWithId(PARENT_ID);
-		addMetadataTextVariableWithIdAndRegEx(NAME_FOR_ABSTRACT, TRUE_OR_FALSE);
-		addMetadataTextVariableWithId(PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithId(PRESENTATION_FORM_ID);
-		addMetadataTextVariableWithId(NEW_METADATA_ID);
-		addMetadataTextVariableWithId(NEW_PRESENTATION_FORM_ID);
-		addMetadataTextVariableWithId(LIST_PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithId(SEARCH_METADATA_ID);
-		addMetadataTextVariableWithId(SEARCH_PRESENTATION_FORM_ID);
-		addMetadataTextVariableWithIdAndRegEx(USER_SUPPLIED_ID, TRUE_OR_FALSE);
-		addMetadataTextVariableWithIdAndRegEx(PERMISSION_KEY, A_Z);
-		addMetadataTextVariableWithId(SELF_PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithIdAndNameInDataAndRegEx(EVERYTHING_REG_EXP, "regEx", ".+");
-		addMetadataTextVariableWithId(LINKED_RECORD_TYPE);
+		addMetadataTextVariableWithIdAndNameInData("idTextVar", ID);
+		addMetadataTextVariableWithIdAndNameInData("createdByTextVar", CREATED_BY);
+		addMetadataTextVariableWithIdAndNameInData("metadataIdTextVar", METADATA_ID);
+		addMetadataTextVariableWithIdAndNameInData("parentIdTextVar", PARENT_ID);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("abstractTextVar", "abstract",
+				TRUE_OR_FALSE);
+		addMetadataTextVariableWithIdAndNameInData("presentationViewIdTextVar",
+				PRESENTATION_VIEW_ID);
+		addMetadataTextVariableWithIdAndNameInData("presentationFormIdTextVar",
+				PRESENTATION_FORM_ID);
+		addMetadataTextVariableWithIdAndNameInData("newMetadataIdTextVar", NEW_METADATA_ID);
+		addMetadataTextVariableWithIdAndNameInData("newPresentationFormIdTextVar",
+				NEW_PRESENTATION_FORM_ID);
+		addMetadataTextVariableWithIdAndNameInData("listPresentationViewIdTextVar",
+				LIST_PRESENTATION_VIEW_ID);
+		addMetadataTextVariableWithIdAndNameInData("searchMetadataIdTextVar", SEARCH_METADATA_ID);
+		addMetadataTextVariableWithIdAndNameInData("searchPresentationFormIdTextVar",
+				SEARCH_PRESENTATION_FORM_ID);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("userSuppliedIdTextVar",
+				USER_SUPPLIED_ID, TRUE_OR_FALSE);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("permissionKeyTextVar", PERMISSION_KEY,
+				A_Z);
+		addMetadataTextVariableWithIdAndNameInData("selfPresentationViewIdTextVar",
+				SELF_PRESENTATION_VIEW_ID);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("everythingRegExpTextVar", "regEx",
+				".+");
+		addMetadataTextVariableWithIdAndNameInData("linkedRecordTypeTextVar", LINKED_RECORD_TYPE);
 		addTopLevelMetadataGroupsForTextVariable();
 
 		addTopLevelMetadataGroupsForCollectionVariable();
-		addMetadataTextVariableWithId(REF_PARENT_ID);
-		addMetadataTextVariableWithId(FINAL_VALUE);
+		addMetadataTextVariableWithIdAndNameInData("refParentIdTextVar", REF_PARENT_ID);
+		addMetadataTextVariableWithIdAndNameInData("finalValueTextVar", FINAL_VALUE);
 		addTopLevelMetadataGroupsForItemCollection();
-		addMetadataTextVariableWithId(REF_COLLECTION_ID);
+		addMetadataTextVariableWithIdAndNameInData("refCollectionIdTextVar", REF_COLLECTION_ID);
 		addMetadataCollectionItemReferences();
 		addMetadataCollectionItemReference();
 		addTopLevelMetadataGroupsForCollectionItem();
@@ -169,31 +179,37 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataLinkedPath();
 		addMetadataAttributes();
 		addMetadataAttribute();
-		addMetadataTextVariableWithId("attributeName");
-		addMetadataTextVariableWithId("attributeValue");
+		addMetadataTextVariableWithIdAndNameInData("attributeNameTextVar", "attributeName");
+		addMetadataTextVariableWithIdAndNameInData("attributeValueTextVar", "attributeValue");
 
 		addMetadataRecordInfoNew();
 		addMetadataRecordInfo();
 		addMetadataRecordTypeNew();
 		addMetadataRecordType();
 
-		addMetadataTextVariableWithId(NAME_IN_DATA);
-		addMetadataTextVariableWithId(TEXT_ID);
-		addMetadataTextVariableWithId(DEF_TEXT_ID);
-		addMetadataTextVariableWithId("ref");
+		addMetadataTextVariableWithIdAndNameInData("nameInDataTextVar", NAME_IN_DATA);
+		addMetadataTextVariableWithIdAndNameInData("textIdTextVar", TEXT_ID);
+		addMetadataTextVariableWithIdAndNameInData("defTextIdTextVar", DEF_TEXT_ID);
+		addMetadataTextVariableWithIdAndNameInData("refTextVar", "ref");
 		addMetadataAttributeReferences();
 
-		addMetadataTextVariableWithIdAndRegEx(REPEAT_MIN, "(^[0-9\\_]{1,3}$)");
-		addMetadataTextVariableWithIdAndRegEx("repeatMinKey", A_Z);
-		addMetadataTextVariableWithIdAndRegEx(REPEAT_MAX, "(^[0-9|X\\_]{1,3}$)");
-		addMetadataTextVariableWithIdAndRegEx("secret", TRUE_OR_FALSE);
-		addMetadataTextVariableWithIdAndRegEx("secretKey", A_Z);
-		addMetadataTextVariableWithIdAndRegEx("readOnly", TRUE_OR_FALSE);
-		addMetadataTextVariableWithIdAndRegEx("readOnlyKey", A_Z);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("repeatMinTextVar", REPEAT_MIN,
+				"(^[0-9\\_]{1,3}$)");
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("repeatMinKeyTextVar", "repeatMinKey",
+				A_Z);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("repeatMaxTextVar", REPEAT_MAX,
+				"(^[0-9|X\\_]{1,3}$)");
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("secretTextVar", "secret",
+				TRUE_OR_FALSE);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("secretKeyTextVar", "secretKey", A_Z);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("readOnlyTextVar", "readOnly",
+				TRUE_OR_FALSE);
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx("readOnlyKeyTextVar", "readOnlyKey",
+				A_Z);
 		addMetadataChildReference();
 		addMetadataChildReferences();
 		addMetadataCollectionVariableMetadataType();
-		addMetadataTextVariableWithId(TYPE);
+		addMetadataTextVariableWithIdAndNameInData("typeTextVar", TYPE);
 		addTopLevelMetadataGroupsForMetadataGroup();
 
 		addRecordTypeRecordType();
@@ -262,12 +278,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		return recordInfo;
 	}
 
-	private void addMetadataTextVariableWithId(String id) {
-		addMetadataTextVariableWithIdAndRegEx(id, "(^[0-9A-Za-z:-_]{2,50}$)");
-	}
-
-	private void addMetadataTextVariableWithIdAndRegEx(String id, String regEx) {
-		addMetadataTextVariableWithIdAndNameInDataAndRegEx(id, id, regEx);
+	private void addMetadataTextVariableWithIdAndNameInData(String id, String nameInData) {
+		addMetadataTextVariableWithIdAndNameInDataAndRegEx(id, nameInData,
+				"(^[0-9A-Za-z:-_]{2,50}$)");
 	}
 
 	private void addMetadataTextVariableWithIdAndNameInDataAndRegEx(String id, String nameInData,
@@ -287,12 +300,12 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addTopLevelMetadataGroupsForTextVariable() {
 		String id = "metadataTextVariableGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
-		addChildReferenceWithRef1to1(dataGroup, EVERYTHING_REG_EXP);
+		addChildReferenceWithRef1to1(dataGroup, "everythingRegExpTextVar");
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
 		String idNew = "metadataTextVariableNewGroup";
 		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
-		addChildReferenceWithRef1to1(dataGroupNew, EVERYTHING_REG_EXP);
+		addChildReferenceWithRef1to1(dataGroupNew, "everythingRegExpTextVar");
 		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
@@ -311,9 +324,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		} else {
 			addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
 		}
-		addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA);
-		addChildReferenceWithRef1to1(dataGroup, TEXT_ID);
-		addChildReferenceWithRef1to1(dataGroup, DEF_TEXT_ID);
+		addChildReferenceWithRef1to1(dataGroup, "nameInDataTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "textIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "defTextIdTextVar");
 
 		return dataGroup;
 	}
@@ -321,16 +334,16 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addTopLevelMetadataGroupsForCollectionVariable() {
 		String id = "metadataCollectionVariableGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
-		addChildReferenceWithRef1to1(dataGroup, REF_COLLECTION_ID);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_PARENT_ID, "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, FINAL_VALUE, "0", "1");
+		addChildReferenceWithRef1to1(dataGroup, "refCollectionIdTextVar");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "refParentIdTextVar", "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "finalValueTextVar", "0", "1");
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
 		String idNew = "metadataCollectionVariableNewGroup";
 		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
-		addChildReferenceWithRef1to1(dataGroupNew, REF_COLLECTION_ID);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, REF_PARENT_ID, "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, FINAL_VALUE, "0", "1");
+		addChildReferenceWithRef1to1(dataGroupNew, "refCollectionIdTextVar");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, "refParentIdTextVar", "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, "finalValueTextVar", "0", "1");
 		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
@@ -351,7 +364,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, COLLECTION_ITEM_REFERENCES));
 
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "ref", "1", "X");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "refTextVar", "1", "X");
 		recordStorage.create(MetadataTypes.GROUP.type, COLLECTION_ITEM_REFERENCES, dataGroup,
 				emptyLinkList);
 
@@ -362,7 +375,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, COLLECTION_ITEM_REFERENCE));
 
-		addChildReferenceWithRef1to1(dataGroup, "ref");
+		addChildReferenceWithRef1to1(dataGroup, "refTextVar");
 		recordStorage.create(MetadataTypes.GROUP.type, COLLECTION_ITEM_REFERENCE, dataGroup,
 				emptyLinkList);
 	}
@@ -380,13 +393,13 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addTopLevelMetadataGroupsForRecordLink() {
 		String id = "metadataRecordLinkGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
-		addChildReferenceWithRef1to1(dataGroup, LINKED_RECORD_TYPE);
+		addChildReferenceWithRef1to1(dataGroup, "linkedRecordTypeTextVar");
 		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, LINKED_PATH, "0", "1");
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
 		String idNew = "metadataRecordLinkNewGroup";
 		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
-		addChildReferenceWithRef1to1(dataGroupNew, LINKED_RECORD_TYPE);
+		addChildReferenceWithRef1to1(dataGroupNew, "linkedRecordTypeTextVar");
 		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, LINKED_PATH, "0", "1");
 		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
@@ -395,7 +408,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = createDataGroupForMetadataWithRecordId(LINKED_PATH);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, LINKED_PATH));
 
-		addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA);
+		addChildReferenceWithRef1to1(dataGroup, "nameInDataTextVar");
 		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTES, "0", "1");
 		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, LINKED_PATH, "0", "1");
 
@@ -415,8 +428,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroup = createDataGroupForMetadataWithRecordId(ATTRIBUTE);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTE));
 
-		addChildReferenceWithRef1to1(dataGroup, "attributeName");
-		addChildReferenceWithRef1to1(dataGroup, "attributeValue");
+		addChildReferenceWithRef1to1(dataGroup, "attributeNameTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "attributeValueTextVar");
 
 		recordStorage.create(MetadataTypes.GROUP.type, ATTRIBUTE, dataGroup, emptyLinkList);
 	}
@@ -534,7 +547,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 
-		addChildReferenceWithRef1to1(dataGroup, ID);
+		addChildReferenceWithRef1to1(dataGroup, "idTextVar");
 
 		recordStorage.create(MetadataTypes.GROUP.type, RECORD_INFO_NEW, dataGroup, emptyLinkList);
 	}
@@ -568,9 +581,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 
-		addChildReferenceWithRef1to1(dataGroup, ID);
-		addChildReferenceWithRef1to1(dataGroup, TYPE);
-		addChildReferenceWithRef1to1(dataGroup, CREATED_BY);
+		addChildReferenceWithRef1to1(dataGroup, "idTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "typeTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "createdByTextVar");
 
 		recordStorage.create(MetadataTypes.GROUP.type, RECORD_INFO, dataGroup, emptyLinkList);
 	}
@@ -588,20 +601,20 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 
-		addChildReferenceWithRef1to1(dataGroup, METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, NAME_FOR_ABSTRACT);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, PARENT_ID, "0", "1");
+		addChildReferenceWithRef1to1(dataGroup, "metadataIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "abstractTextVar");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "parentIdTextVar", "0", "1");
 		addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_NEW);
-		addChildReferenceWithRef1to1(dataGroup, PRESENTATION_VIEW_ID);
-		addChildReferenceWithRef1to1(dataGroup, PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, NEW_METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, NEW_PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, LIST_PRESENTATION_VIEW_ID);
-		addChildReferenceWithRef1to1(dataGroup, SEARCH_METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, SEARCH_PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, USER_SUPPLIED_ID);
-		addChildReferenceWithRef1to1(dataGroup, PERMISSION_KEY);
-		addChildReferenceWithRef1to1(dataGroup, SELF_PRESENTATION_VIEW_ID);
+		addChildReferenceWithRef1to1(dataGroup, "presentationViewIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "presentationFormIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "newMetadataIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "newPresentationFormIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "listPresentationViewIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "searchMetadataIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "searchPresentationFormIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "userSuppliedIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "permissionKeyTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "selfPresentationViewIdTextVar");
 
 		recordStorage.create(MetadataTypes.GROUP.type, "recordTypeNewGroup", dataGroup,
 				emptyLinkList);
@@ -620,20 +633,20 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 
-		addChildReferenceWithRef1to1(dataGroup, METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, NAME_FOR_ABSTRACT);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, PARENT_ID, "0", "1");
+		addChildReferenceWithRef1to1(dataGroup, "metadataIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "abstractTextVar");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "parentIdTextVar", "0", "1");
 		addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
-		addChildReferenceWithRef1to1(dataGroup, PRESENTATION_VIEW_ID);
-		addChildReferenceWithRef1to1(dataGroup, PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, NEW_METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, NEW_PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, LIST_PRESENTATION_VIEW_ID);
-		addChildReferenceWithRef1to1(dataGroup, SEARCH_METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, SEARCH_PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, USER_SUPPLIED_ID);
-		addChildReferenceWithRef1to1(dataGroup, PERMISSION_KEY);
-		addChildReferenceWithRef1to1(dataGroup, SELF_PRESENTATION_VIEW_ID);
+		addChildReferenceWithRef1to1(dataGroup, "presentationViewIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "presentationFormIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "newMetadataIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "newPresentationFormIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "listPresentationViewIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "searchMetadataIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "searchPresentationFormIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "userSuppliedIdTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "permissionKeyTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "selfPresentationViewIdTextVar");
 
 		recordStorage.create(MetadataTypes.GROUP.type, "recordTypeGroup", dataGroup, emptyLinkList);
 	}
@@ -651,7 +664,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "ref", "1", "X");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "refTextVar", "1", "X");
 
 		recordStorage.create(MetadataTypes.GROUP.type, ATTRIBUTE_REFERENCES, dataGroup,
 				emptyLinkList);
@@ -688,14 +701,14 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 
-		addChildReferenceWithRef1to1(dataGroup, "ref");
-		addChildReferenceWithRef1to1(dataGroup, REPEAT_MIN);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "repeatMinKey", "0", "1");
-		addChildReferenceWithRef1to1(dataGroup, REPEAT_MAX);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "secret", "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "secretKey", "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "readOnly", "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "readOnlyKey", "0", "1");
+		addChildReferenceWithRef1to1(dataGroup, "refTextVar");
+		addChildReferenceWithRef1to1(dataGroup, "repeatMinTextVar");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "repeatMinKeyTextVar", "0", "1");
+		addChildReferenceWithRef1to1(dataGroup, "repeatMaxTextVar");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "secretTextVar", "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "secretKeyTextVar", "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "readOnlyTextVar", "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "readOnlyKeyTextVar", "0", "1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, CHILD_REFERENCE, dataGroup, emptyLinkList);
 	}
@@ -703,14 +716,14 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addTopLevelMetadataGroupsForMetadataGroup() {
 		String id = "metadataGroupGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_PARENT_ID, "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "refParentIdTextVar", "0", "1");
 		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTE_REFERENCES, "0", "1");
 		addChildReferenceWithRef1to1(dataGroup, CHILD_REFERENCES);
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
 		String idNew = "metadataGroupNewGroup";
 		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, REF_PARENT_ID, "0", "1");
+		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, "refParentIdTextVar", "0", "1");
 		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, ATTRIBUTE_REFERENCES, "0", "1");
 		addChildReferenceWithRef1to1(dataGroupNew, CHILD_REFERENCES);
 		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
