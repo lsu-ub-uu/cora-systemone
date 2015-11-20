@@ -49,6 +49,27 @@ import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
  * @since 0.1
  */
 public class SystemOneDependencyProvider implements SpiderDependencyProvider {
+	private static final String REF_TEXT_VAR = "refTextVar";
+	private static final String NAME_IN_DATA_TEXT_VAR = "nameInDataTextVar";
+	private static final String REF_COLLECTION_ID_TEXT_VAR = "refCollectionIdTextVar";
+	private static final String FINAL_VALUE_TEXT_VAR = "finalValueTextVar";
+	private static final String REF_PARENT_ID_TEXT_VAR = "refParentIdTextVar";
+	private static final String LINKED_RECORD_TYPE_TEXT_VAR = "linkedRecordTypeTextVar";
+	private static final String EVERYTHING_REG_EXP_TEXT_VAR = "everythingRegExpTextVar";
+	private static final String SELF_PRESENTATION_VIEW_ID_TEXT_VAR = "selfPresentationViewIdTextVar";
+	private static final String PERMISSION_KEY_TEXT_VAR = "permissionKeyTextVar";
+	private static final String USER_SUPPLIED_ID_TEXT_VAR = "userSuppliedIdTextVar";
+	private static final String SEARCH_PRESENTATION_FORM_ID_TEXT_VAR = "searchPresentationFormIdTextVar";
+	private static final String SEARCH_METADATA_ID_TEXT_VAR = "searchMetadataIdTextVar";
+	private static final String LIST_PRESENTATION_VIEW_ID_TEXT_VAR = "listPresentationViewIdTextVar";
+	private static final String NEW_PRESENTATION_FORM_ID_TEXT_VAR = "newPresentationFormIdTextVar";
+	private static final String NEW_METADATA_ID_TEXT_VAR = "newMetadataIdTextVar";
+	private static final String PRESENTATION_FORM_ID_TEXT_VAR = "presentationFormIdTextVar";
+	private static final String PRESENTATION_VIEW_ID_TEXT_VAR = "presentationViewIdTextVar";
+	private static final String ABSTRACT_TEXT_VAR = "abstractTextVar";
+	private static final String PARENT_ID_TEXT_VAR = "parentIdTextVar";
+	private static final String METADATA_ID_TEXT_VAR = "metadataIdTextVar";
+	private static final String ID_TEXT_VAR = "idTextVar";
 	private static final String REF_PARENT_ID = "refParentId";
 	private static final String FINAL_VALUE = "finalValue";
 	private static final String REF_COLLECTION_ID = "refCollectionId";
@@ -57,7 +78,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private static final String TYPE = "type";
 	private static final String ATTRIBUTE = "attribute";
 	private static final String ATTRIBUTES = "attributes";
-	private static final String COLLECTION_ITEM = "collectionItem";
 	private static final String DEF_TEXT = "DefText";
 	private static final String LINKED_PATH = "linkedPath";
 	private static final String LINKED_RECORD_TYPE = "linkedRecordType";
@@ -80,7 +100,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private static final String REPEAT_MIN = "repeatMin";
 	private static final String DEF_TEXT_ID = "defTextId";
 	private static final String TEXT_ID = "textId";
-	private static final String RECORD_TYPE_NEW = "recordTypeNew";
 	private static final String ATTRIBUTE_REFERENCES = "attributeReferences";
 	private static final String NEW_METADATA_ID = "newMetadataId";
 	private static final String CHILD_REFERENCE = "childReference";
@@ -95,8 +114,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private static final String CREATED_BY = "createdBy";
 	private static final String RECORD_INFO = "recordInfo";
 	private static final String RECORD_TYPE = "recordType";
-	private static final String EVERYTHING_REG_EXP = "everythingRegExp";
-	private static final String METADATA_TEXT_VARIABLE = "metadataTextVariable";
 
 	private RecordStorage recordStorage;
 	private MetadataStorage metadataStorage;
@@ -105,6 +122,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private PermissionKeyCalculator keyCalculator;
 
 	private DataGroup emptyLinkList = DataGroup.withNameInData("collectedDataLinks");
+	private MetadataCreator metadataCreator;
 
 	public SystemOneDependencyProvider() {
 		Map<String, Map<String, DataGroup>> records = new HashMap<>();
@@ -115,8 +133,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		idGenerator = new TimeStampIdGenerator();
 		keyCalculator = new RecordPermissionKeyCalculator();
 
-		bootstrapSystemMetadata();
+		metadataCreator = new MetadataCreator(recordStorage);
 
+		bootstrapSystemMetadata();
+		MetadataForTexts metadataForTexts = new MetadataForTexts(recordStorage, metadataCreator);
+		metadataForTexts.createMetadataForTexts();
 		createDummyRecordLink();
 	}
 
@@ -124,8 +145,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dummyDTDL = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dummyDTDL.addAttributeByIdWithValue(TYPE, "recordLink");
 		String id = "dummyRecordLink";
-		dummyDTDL.addChild(
-				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.RECORDLINK.type, id));
+		dummyDTDL.addChild(metadataCreator
+				.createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.RECORDLINK.type, id));
 
 		dummyDTDL.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "dummyLink"));
 		dummyDTDL.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
@@ -139,30 +160,47 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	 * starts
 	 */
 	private void bootstrapSystemMetadata() {
-		addMetadataTextVariableWithId(ID);
-		addMetadataTextVariableWithId(CREATED_BY);
-		addMetadataTextVariableWithId(METADATA_ID);
-		addMetadataTextVariableWithId(PARENT_ID);
-		addMetadataTextVariableWithIdAndRegEx(NAME_FOR_ABSTRACT, TRUE_OR_FALSE);
-		addMetadataTextVariableWithId(PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithId(PRESENTATION_FORM_ID);
-		addMetadataTextVariableWithId(NEW_METADATA_ID);
-		addMetadataTextVariableWithId(NEW_PRESENTATION_FORM_ID);
-		addMetadataTextVariableWithId(LIST_PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithId(SEARCH_METADATA_ID);
-		addMetadataTextVariableWithId(SEARCH_PRESENTATION_FORM_ID);
-		addMetadataTextVariableWithIdAndRegEx(USER_SUPPLIED_ID, TRUE_OR_FALSE);
-		addMetadataTextVariableWithIdAndRegEx(PERMISSION_KEY, A_Z);
-		addMetadataTextVariableWithId(SELF_PRESENTATION_VIEW_ID);
-		addMetadataTextVariableWithIdAndRegEx(EVERYTHING_REG_EXP, "regEx", ".+");
-		addMetadataTextVariableWithId(LINKED_RECORD_TYPE);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(ID_TEXT_VAR, ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData("createdByTextVar", CREATED_BY);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(METADATA_ID_TEXT_VAR,
+				METADATA_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(PARENT_ID_TEXT_VAR, PARENT_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(ABSTRACT_TEXT_VAR,
+				"abstract", TRUE_OR_FALSE);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(PRESENTATION_VIEW_ID_TEXT_VAR,
+				PRESENTATION_VIEW_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(PRESENTATION_FORM_ID_TEXT_VAR,
+				PRESENTATION_FORM_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(NEW_METADATA_ID_TEXT_VAR,
+				NEW_METADATA_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(NEW_PRESENTATION_FORM_ID_TEXT_VAR,
+				NEW_PRESENTATION_FORM_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(LIST_PRESENTATION_VIEW_ID_TEXT_VAR,
+				LIST_PRESENTATION_VIEW_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(SEARCH_METADATA_ID_TEXT_VAR,
+				SEARCH_METADATA_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(
+				SEARCH_PRESENTATION_FORM_ID_TEXT_VAR, SEARCH_PRESENTATION_FORM_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(USER_SUPPLIED_ID_TEXT_VAR,
+				USER_SUPPLIED_ID, TRUE_OR_FALSE);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(PERMISSION_KEY_TEXT_VAR,
+				PERMISSION_KEY, A_Z);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(SELF_PRESENTATION_VIEW_ID_TEXT_VAR,
+				SELF_PRESENTATION_VIEW_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(
+				EVERYTHING_REG_EXP_TEXT_VAR, "regEx", ".+");
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(LINKED_RECORD_TYPE_TEXT_VAR,
+				LINKED_RECORD_TYPE);
 		addTopLevelMetadataGroupsForTextVariable();
 
 		addTopLevelMetadataGroupsForCollectionVariable();
-		addMetadataTextVariableWithId(REF_PARENT_ID);
-		addMetadataTextVariableWithId(FINAL_VALUE);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(REF_PARENT_ID_TEXT_VAR,
+				REF_PARENT_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(FINAL_VALUE_TEXT_VAR,
+				FINAL_VALUE);
 		addTopLevelMetadataGroupsForItemCollection();
-		addMetadataTextVariableWithId(REF_COLLECTION_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(REF_COLLECTION_ID_TEXT_VAR,
+				REF_COLLECTION_ID);
 		addMetadataCollectionItemReferences();
 		addMetadataCollectionItemReference();
 		addTopLevelMetadataGroupsForCollectionItem();
@@ -171,36 +209,47 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		addMetadataLinkedPath();
 		addMetadataAttributes();
 		addMetadataAttribute();
-		addMetadataTextVariableWithId("attributeName");
-		addMetadataTextVariableWithId("attributeValue");
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData("attributeNameTextVar",
+				"attributeName");
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData("attributeValueTextVar",
+				"attributeValue");
 
 		addMetadataRecordInfoNew();
 		addMetadataRecordInfo();
 		addMetadataRecordTypeNew();
 		addMetadataRecordType();
 
-		addMetadataTextVariableWithId(NAME_IN_DATA);
-		addMetadataTextVariableWithId(TEXT_ID);
-		addMetadataTextVariableWithId(DEF_TEXT_ID);
-		addMetadataTextVariableWithId("ref");
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(NAME_IN_DATA_TEXT_VAR,
+				NAME_IN_DATA);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData("textIdTextVar", TEXT_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData("defTextIdTextVar", DEF_TEXT_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(REF_TEXT_VAR, "ref");
 		addMetadataAttributeReferences();
 
-		addMetadataTextVariableWithIdAndRegEx(REPEAT_MIN, "(^[0-9\\_]{1,3}$)");
-		addMetadataTextVariableWithIdAndRegEx("repeatMinKey", A_Z);
-		addMetadataTextVariableWithIdAndRegEx(REPEAT_MAX, "(^[0-9|X\\_]{1,3}$)");
-		addMetadataTextVariableWithIdAndRegEx("secret", TRUE_OR_FALSE);
-		addMetadataTextVariableWithIdAndRegEx("secretKey", A_Z);
-		addMetadataTextVariableWithIdAndRegEx("readOnly", TRUE_OR_FALSE);
-		addMetadataTextVariableWithIdAndRegEx("readOnlyKey", A_Z);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("repeatMinTextVar",
+				REPEAT_MIN, "(^[0-9\\_]{1,3}$)");
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("repeatMinKeyTextVar",
+				"repeatMinKey", A_Z);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("repeatMaxTextVar",
+				REPEAT_MAX, "(^[0-9|X\\_]{1,3}$)");
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("secretTextVar",
+				"secret", TRUE_OR_FALSE);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("secretKeyTextVar",
+				"secretKey", A_Z);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("readOnlyTextVar",
+				"readOnly", TRUE_OR_FALSE);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("readOnlyKeyTextVar",
+				"readOnlyKey", A_Z);
 		addMetadataChildReference();
 		addMetadataChildReferences();
 		addMetadataCollectionVariableMetadataType();
-		addMetadataTextVariableWithId(TYPE);
-		addMetadataMetadataGroupNew();
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData("typeTextVar", TYPE);
+		addTopLevelMetadataGroupsForMetadataGroup();
 
 		addRecordTypeRecordType();
 		addRecordTypeMetadata();
 		addRecordTypeForAllMetadataGroups();
+
 	}
 
 	@Override
@@ -233,55 +282,30 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		return new DataRecordLinkCollectorImp(metadataStorage);
 	}
 
-	private DataGroup createRecordInfoWithRecordTypeAndRecordId(String recordType, String id) {
-		DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
-		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
-		recordInfo.addChild(DataAtomic.withNameInDataAndValue(TYPE, recordType));
-		recordInfo.addChild(DataAtomic.withNameInDataAndValue("createdBy", "userId"));
-		recordInfo.addChild(DataAtomic.withNameInDataAndValue("updatedBy", "userId"));
-		return recordInfo;
-	}
-
-	private void addMetadataTextVariableWithId(String id) {
-		addMetadataTextVariableWithIdAndRegEx(id, "(^[0-9A-Za-z:-_]{2,50}$)");
-	}
-
-	private void addMetadataTextVariableWithIdAndRegEx(String id, String regEx) {
-		addMetadataTextVariableWithIdAndRegEx(id, id, regEx);
-	}
-
-	private void addMetadataTextVariableWithIdAndRegEx(String id, String nameInData, String regEx) {
-		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-		dataGroup.addAttributeByIdWithValue(TYPE, "textVariable");
-		dataGroup.addChild(
-				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.TEXTVARIABLE.type, id));
-
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + DEF_TEXT));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue("regEx", regEx));
-		recordStorage.create(MetadataTypes.TEXTVARIABLE.type, id, dataGroup, emptyLinkList);
-	}
-
 	private void addTopLevelMetadataGroupsForTextVariable() {
-		String id = METADATA_TEXT_VARIABLE;
+		String id = "metadataTextVariableGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
-		addChildReferenceWithRef1to1(dataGroup, EVERYTHING_REG_EXP);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, EVERYTHING_REG_EXP_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_PARENT_ID_TEXT_VAR,
+				"0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, FINAL_VALUE_TEXT_VAR,
+				"0", "1");
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
-		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, true);
-		addChildReferenceWithRef1to1(dataGroupNew, EVERYTHING_REG_EXP);
-		recordStorage.create(MetadataTypes.GROUP.type, id + "New", dataGroupNew, emptyLinkList);
+		String idNew = "metadataTextVariableNewGroup";
+		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroupNew, EVERYTHING_REG_EXP_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
+				REF_PARENT_ID_TEXT_VAR, "0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
+				FINAL_VALUE_TEXT_VAR, "0", "1");
+		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
 	private DataGroup createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(String metadataGroupId,
 			boolean isNew) {
 		DataGroup dataGroup;
-		if (isNew) {
-			dataGroup = createDataGroupForMetadataWithGroupId(metadataGroupId + "New");
-		} else {
-			dataGroup = createDataGroupForMetadataWithGroupId(metadataGroupId);
-		}
+		dataGroup = metadataCreator.createDataGroupForMetadataWithRecordId(metadataGroupId);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, NAME_FOR_METADATA));
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
 		dataGroup.addChild(attributeReferences);
@@ -289,127 +313,128 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 				.addChild(DataAtomic.withNameInDataAndValue("ref", METADATA_TYPE_COLLECTION_VAR));
 
 		if (isNew) {
-			addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_NEW);
+			metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_NEW);
 		} else {
-			addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
+			metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
 		}
-		addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA);
-		addChildReferenceWithRef1to1(dataGroup, TEXT_ID);
-		addChildReferenceWithRef1to1(dataGroup, DEF_TEXT_ID);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "textIdTextVar");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "defTextIdTextVar");
 
 		return dataGroup;
 	}
 
 	private void addTopLevelMetadataGroupsForCollectionVariable() {
-		String id = "metadataCollectionVariable";
+		String id = "metadataCollectionVariableGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
-		addChildReferenceWithRef1to1(dataGroup, REF_COLLECTION_ID);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_PARENT_ID, "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, FINAL_VALUE, "0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, REF_COLLECTION_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_PARENT_ID_TEXT_VAR,
+				"0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, FINAL_VALUE_TEXT_VAR,
+				"0", "1");
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
-		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, true);
-		addChildReferenceWithRef1to1(dataGroupNew, REF_COLLECTION_ID);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, REF_PARENT_ID, "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, FINAL_VALUE, "0", "1");
-		recordStorage.create(MetadataTypes.GROUP.type, id + "New", dataGroupNew, emptyLinkList);
+		String idNew = "metadataCollectionVariableNewGroup";
+		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroupNew, REF_COLLECTION_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
+				REF_PARENT_ID_TEXT_VAR, "0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
+				FINAL_VALUE_TEXT_VAR, "0", "1");
+		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
 	private void addTopLevelMetadataGroupsForItemCollection() {
-		String id = "metadataItemCollection";
+		String id = "metadataItemCollectionGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
-		addChildReferenceWithRef1to1(dataGroup, COLLECTION_ITEM_REFERENCES);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, COLLECTION_ITEM_REFERENCES);
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
-		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, true);
-		addChildReferenceWithRef1to1(dataGroupNew, COLLECTION_ITEM_REFERENCES);
-		recordStorage.create(MetadataTypes.GROUP.type, id + "New", dataGroupNew, emptyLinkList);
+		String idNew = "metadataItemCollectionNewGroup";
+		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroupNew, COLLECTION_ITEM_REFERENCES);
+		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
 	private void addMetadataCollectionItemReferences() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(COLLECTION_ITEM_REFERENCES);
+		DataGroup dataGroup = metadataCreator
+				.createDataGroupForMetadataWithRecordId(COLLECTION_ITEM_REFERENCES);
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, COLLECTION_ITEM_REFERENCES));
 
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "ref", "1", "X");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_TEXT_VAR, "1",
+				"X");
 		recordStorage.create(MetadataTypes.GROUP.type, COLLECTION_ITEM_REFERENCES, dataGroup,
 				emptyLinkList);
 
 	}
 
 	private void addMetadataCollectionItemReference() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(COLLECTION_ITEM_REFERENCE);
+		DataGroup dataGroup = metadataCreator
+				.createDataGroupForMetadataWithRecordId(COLLECTION_ITEM_REFERENCE);
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, COLLECTION_ITEM_REFERENCE));
 
-		addChildReferenceWithRef1to1(dataGroup, "ref");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, REF_TEXT_VAR);
 		recordStorage.create(MetadataTypes.GROUP.type, COLLECTION_ITEM_REFERENCE, dataGroup,
 				emptyLinkList);
 	}
 
 	private void addTopLevelMetadataGroupsForCollectionItem() {
-		String id = "metadataCollectionItem";
+		String id = "metadataCollectionItemGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
-		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, true);
-		recordStorage.create(MetadataTypes.GROUP.type, id + "New", dataGroupNew, emptyLinkList);
+		String idNew = "metadataCollectionItemNewGroup";
+		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
+		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
 	private void addTopLevelMetadataGroupsForRecordLink() {
-		String id = "metadataRecordLink";
+		String id = "metadataRecordLinkGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
-		addChildReferenceWithRef1to1(dataGroup, LINKED_RECORD_TYPE);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, LINKED_PATH, "0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, LINKED_RECORD_TYPE_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, LINKED_PATH, "0",
+				"1");
 		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
-		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, true);
-		addChildReferenceWithRef1to1(dataGroupNew, LINKED_RECORD_TYPE);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, LINKED_PATH, "0", "1");
-		recordStorage.create(MetadataTypes.GROUP.type, id + "New", dataGroupNew, emptyLinkList);
+		String idNew = "metadataRecordLinkNewGroup";
+		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroupNew, LINKED_RECORD_TYPE_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew, LINKED_PATH, "0",
+				"1");
+		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
 	private void addMetadataLinkedPath() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(LINKED_PATH);
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordId(LINKED_PATH);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, LINKED_PATH));
 
-		addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTES, "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, LINKED_PATH, "0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTES, "0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, LINKED_PATH, "0",
+				"1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, LINKED_PATH, dataGroup, emptyLinkList);
 	}
 
 	private void addMetadataAttributes() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(ATTRIBUTES);
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordId(ATTRIBUTES);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTES));
 
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTE, "1", "X");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTE, "1", "X");
 
 		recordStorage.create(MetadataTypes.GROUP.type, ATTRIBUTES, dataGroup, emptyLinkList);
 	}
 
 	private void addMetadataAttribute() {
-		DataGroup dataGroup = createDataGroupForMetadataWithGroupId(ATTRIBUTE);
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordId(ATTRIBUTE);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTE));
 
-		addChildReferenceWithRef1to1(dataGroup, "attributeName");
-		addChildReferenceWithRef1to1(dataGroup, "attributeValue");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "attributeNameTextVar");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "attributeValueTextVar");
 
 		recordStorage.create(MetadataTypes.GROUP.type, ATTRIBUTE, dataGroup, emptyLinkList);
-	}
-
-	private DataGroup createDataGroupForMetadataWithGroupId(final String name) {
-		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-
-		dataGroup.addChild(
-				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type, name));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, name + "Text"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, name + DEF_TEXT));
-		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
-		dataGroup.addChild(childReferences);
-		return dataGroup;
 	}
 
 	private void addMetadataCollectionVariableMetadataType() {
@@ -427,48 +452,16 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		createMetadataTypeCollectionItem("collectionVariable");
 	}
 
-	// private void createMetadataTypeCollectionItem(String id) {
-	// String idWithCapitalFirst = id.substring(0, 1).toUpperCase() +
-	// id.substring(1);
-	// DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-	// dataGroup.addAttributeByIdWithValue(TYPE, COLLECTION_ITEM);
-	// dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
-	// MetadataTypes.COLLECTIONITEM.type, "metadataType" + idWithCapitalFirst +
-	// "Item"));
-	//
-	// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, id));
-	// dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID,
-	// "recordTypeType" + idWithCapitalFirst + "TextId"));
-	// dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID,
-	// "recordTypeType" + idWithCapitalFirst + "DefTextId"));
-	// recordStorage.create(MetadataTypes.COLLECTIONITEM.type,
-	// "metadataType" + idWithCapitalFirst + "Item", dataGroup, emptyLinkList);
-	// }
 	private void createMetadataTypeCollectionItem(String id) {
 		String idWithCapitalFirst = id.substring(0, 1).toUpperCase() + id.substring(1);
-		createCollectionItem("metadataType" + idWithCapitalFirst, id);
-		// metadataTypeGroupItem
-	}
-
-	private void createCollectionItem(String id, String nameInData) {
-		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-		dataGroup.addAttributeByIdWithValue(TYPE, COLLECTION_ITEM);
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
-				MetadataTypes.COLLECTIONITEM.type, id + "Item"));
-
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "ItemTextId"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + "ItemDefTextId"));
-
-		recordStorage.create(MetadataTypes.COLLECTIONITEM.type, id + "Item", dataGroup,
-				emptyLinkList);
+		metadataCreator.createCollectionItem("metadataType" + idWithCapitalFirst, id);
 	}
 
 	private void addMetadataTypeItemCollection() {
 		// collection
 		DataGroup dataGroup2 = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup2.addAttributeByIdWithValue(TYPE, "itemCollection");
-		dataGroup2.addChild(createRecordInfoWithRecordTypeAndRecordId(
+		dataGroup2.addChild(metadataCreator.createRecordInfoWithRecordTypeAndRecordId(
 				MetadataTypes.ITEMCOLLECTION.type, METADATA_TYPE_COLLECTION));
 
 		dataGroup2.addChild(
@@ -502,7 +495,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataTypeCollectionVariable() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, "collectionVariable");
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
+		dataGroup.addChild(metadataCreator.createRecordInfoWithRecordTypeAndRecordId(
 				MetadataTypes.COLLECTIONVARIABLE.type, METADATA_TYPE_COLLECTION_VAR));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, TYPE));
@@ -518,64 +511,20 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataRecordInfoNew() {
-		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
-				RECORD_INFO_NEW));
-
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_INFO));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordInfoText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordInfoDefText"));
-
-		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
-		dataGroup.addChild(childReferences);
-
-		addChildReferenceWithRef1to1(dataGroup, ID);
-
-		recordStorage.create(MetadataTypes.GROUP.type, RECORD_INFO_NEW, dataGroup, emptyLinkList);
-	}
-
-	private void addChildReferenceWithRef1to1(DataGroup dataGroup, String ref) {
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ref, "1", "1");
-	}
-
-	private void addChildReferenceWithRefRepeatMinRepeatMax(DataGroup dataGroup, String ref,
-			String repeatMin, String repeatMax) {
-		DataGroup childReferences = (DataGroup) dataGroup
-				.getFirstChildWithNameInData(CHILD_REFERENCES);
-		DataGroup childReference = DataGroup.withNameInData(CHILD_REFERENCE);
-		childReference.setRepeatId(String.valueOf(childReferences.getChildren().size() + 1));
-		childReference.addChild(DataAtomic.withNameInDataAndValue("ref", ref));
-		childReference.addChild(DataAtomic.withNameInDataAndValue(REPEAT_MIN, repeatMin));
-		childReference.addChild(DataAtomic.withNameInDataAndValue(REPEAT_MAX, repeatMax));
-		childReferences.addChild(childReference);
+		metadataCreator.addMetadataRecordInfoNewWithRecordInfoIdAndRefMetadataIdUsedAsId(
+				RECORD_INFO_NEW, ID_TEXT_VAR);
 	}
 
 	private void addMetadataRecordInfo() {
-		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-		dataGroup.addChild(
-				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type, RECORD_INFO));
-
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_INFO));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordInfoText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "recordInfoDefText"));
-
-		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
-		dataGroup.addChild(childReferences);
-
-		addChildReferenceWithRef1to1(dataGroup, ID);
-		addChildReferenceWithRef1to1(dataGroup, TYPE);
-		addChildReferenceWithRef1to1(dataGroup, CREATED_BY);
-
-		recordStorage.create(MetadataTypes.GROUP.type, RECORD_INFO, dataGroup, emptyLinkList);
+		metadataCreator.addMetadataRecordInfoWithRecordInfoIdAndRefMetadataIdUsedAsId(RECORD_INFO,
+				ID_TEXT_VAR);
 	}
 
 	private void addMetadataRecordTypeNew() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
-				RECORD_TYPE_NEW));
+		dataGroup.addChild(metadataCreator.createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.GROUP.type, "recordTypeNewGroup"));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_TYPE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordTypeText"));
@@ -584,29 +533,31 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 
-		addChildReferenceWithRef1to1(dataGroup, METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, NAME_FOR_ABSTRACT);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, PARENT_ID, "0", "1");
-		addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_NEW);
-		addChildReferenceWithRef1to1(dataGroup, PRESENTATION_VIEW_ID);
-		addChildReferenceWithRef1to1(dataGroup, PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, NEW_METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, NEW_PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, LIST_PRESENTATION_VIEW_ID);
-		addChildReferenceWithRef1to1(dataGroup, SEARCH_METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, SEARCH_PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, USER_SUPPLIED_ID);
-		addChildReferenceWithRef1to1(dataGroup, PERMISSION_KEY);
-		addChildReferenceWithRef1to1(dataGroup, SELF_PRESENTATION_VIEW_ID);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, METADATA_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, ABSTRACT_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, PARENT_ID_TEXT_VAR,
+				"0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_NEW);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_VIEW_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_FORM_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NEW_METADATA_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NEW_PRESENTATION_FORM_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, LIST_PRESENTATION_VIEW_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, SEARCH_METADATA_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, SEARCH_PRESENTATION_FORM_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, USER_SUPPLIED_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PERMISSION_KEY_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, SELF_PRESENTATION_VIEW_ID_TEXT_VAR);
 
-		recordStorage.create(MetadataTypes.GROUP.type, RECORD_TYPE_NEW, dataGroup, emptyLinkList);
+		recordStorage.create(MetadataTypes.GROUP.type, "recordTypeNewGroup", dataGroup,
+				emptyLinkList);
 	}
 
 	private void addMetadataRecordType() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-		dataGroup.addChild(
-				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type, RECORD_TYPE));
+		dataGroup.addChild(metadataCreator.createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.GROUP.type, "recordTypeGroup"));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, RECORD_TYPE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "recordTypeText"));
@@ -615,29 +566,30 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 
-		addChildReferenceWithRef1to1(dataGroup, METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, NAME_FOR_ABSTRACT);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, PARENT_ID, "0", "1");
-		addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
-		addChildReferenceWithRef1to1(dataGroup, PRESENTATION_VIEW_ID);
-		addChildReferenceWithRef1to1(dataGroup, PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, NEW_METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, NEW_PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, LIST_PRESENTATION_VIEW_ID);
-		addChildReferenceWithRef1to1(dataGroup, SEARCH_METADATA_ID);
-		addChildReferenceWithRef1to1(dataGroup, SEARCH_PRESENTATION_FORM_ID);
-		addChildReferenceWithRef1to1(dataGroup, USER_SUPPLIED_ID);
-		addChildReferenceWithRef1to1(dataGroup, PERMISSION_KEY);
-		addChildReferenceWithRef1to1(dataGroup, SELF_PRESENTATION_VIEW_ID);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, METADATA_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, ABSTRACT_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, PARENT_ID_TEXT_VAR,
+				"0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_VIEW_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_FORM_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NEW_METADATA_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NEW_PRESENTATION_FORM_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, LIST_PRESENTATION_VIEW_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, SEARCH_METADATA_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, SEARCH_PRESENTATION_FORM_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, USER_SUPPLIED_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PERMISSION_KEY_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, SELF_PRESENTATION_VIEW_ID_TEXT_VAR);
 
-		recordStorage.create(MetadataTypes.GROUP.type, RECORD_TYPE, dataGroup, emptyLinkList);
+		recordStorage.create(MetadataTypes.GROUP.type, "recordTypeGroup", dataGroup, emptyLinkList);
 	}
 
 	private void addMetadataAttributeReferences() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
-				ATTRIBUTE_REFERENCES));
+		dataGroup.addChild(metadataCreator.createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.GROUP.type, ATTRIBUTE_REFERENCES));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTE_REFERENCES));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "attributeReferencesText"));
@@ -646,7 +598,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "ref", "1", "X");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_TEXT_VAR, "1",
+				"X");
 
 		recordStorage.create(MetadataTypes.GROUP.type, ATTRIBUTE_REFERENCES, dataGroup,
 				emptyLinkList);
@@ -655,8 +608,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataChildReferences() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
-				CHILD_REFERENCES));
+		dataGroup.addChild(metadataCreator.createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.GROUP.type, CHILD_REFERENCES));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, CHILD_REFERENCES));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "childReferencesText"));
@@ -665,7 +618,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, CHILD_REFERENCE, "1", "X");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, CHILD_REFERENCE, "1",
+				"X");
 
 		recordStorage.create(MetadataTypes.GROUP.type, CHILD_REFERENCES, dataGroup, emptyLinkList);
 	}
@@ -673,8 +627,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addMetadataChildReference() {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
-				CHILD_REFERENCE));
+		dataGroup.addChild(metadataCreator.createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.GROUP.type, CHILD_REFERENCE));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, CHILD_REFERENCE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "childReferenceText"));
@@ -683,87 +637,51 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dataGroup.addChild(childReferences);
 
-		addChildReferenceWithRef1to1(dataGroup, "ref");
-		addChildReferenceWithRef1to1(dataGroup, REPEAT_MIN);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "repeatMinKey", "0", "1");
-		addChildReferenceWithRef1to1(dataGroup, REPEAT_MAX);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "secret", "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "secretKey", "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "readOnly", "0", "1");
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "readOnlyKey", "0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, REF_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "repeatMinTextVar");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "repeatMinKeyTextVar",
+				"0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "repeatMaxTextVar");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "secretTextVar", "0",
+				"1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "secretKeyTextVar",
+				"0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "readOnlyTextVar",
+				"0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "readOnlyKeyTextVar",
+				"0", "1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, CHILD_REFERENCE, dataGroup, emptyLinkList);
 	}
 
-	private void addMetadataMetadataGroupNew() {
-		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
-		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type,
-				"metadataGroupNew"));
+	private void addTopLevelMetadataGroupsForMetadataGroup() {
+		String id = "metadataGroupGroup";
+		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_PARENT_ID_TEXT_VAR,
+				"0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTE_REFERENCES,
+				"0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, CHILD_REFERENCES);
+		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
 
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, NAME_FOR_METADATA));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, "metadataText"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, "metadataDefText"));
-
-		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
-		dataGroup.addChild(attributeReferences);
-		attributeReferences
-				.addChild(DataAtomic.withNameInDataAndValue("ref", METADATA_TYPE_COLLECTION_VAR));
-
-		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
-		dataGroup.addChild(childReferences);
-
-		// what does a metadata group contain
-		addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_NEW);
-		addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA);
-		addChildReferenceWithRef1to1(dataGroup, TEXT_ID);
-		addChildReferenceWithRef1to1(dataGroup, DEF_TEXT_ID);
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_PARENT_ID, "0", "1");
-
-		addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTE_REFERENCES, "0", "1");
-		// dataGroup
-		addChildReferenceWithRef1to1(dataGroup, CHILD_REFERENCES);
-
-		recordStorage.create(MetadataTypes.GROUP.type, "metadataGroupNew", dataGroup,
-				emptyLinkList);
-	}
-
-	private DataGroup createRecordTypeWithId(String id) {
-		String idWithCapitalFirst = id.substring(0, 1).toUpperCase() + id.substring(1);
-
-		DataGroup dataGroup = DataGroup.withNameInData(RECORD_TYPE);
-		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(RECORD_TYPE, id));
-
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(METADATA_ID, id));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PRESENTATION_VIEW_ID,
-				"pg" + idWithCapitalFirst + "View"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PRESENTATION_FORM_ID,
-				"pg" + idWithCapitalFirst + "Form"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NEW_METADATA_ID, id + "New"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NEW_PRESENTATION_FORM_ID,
-				"pg" + idWithCapitalFirst + "FormNew"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(LIST_PRESENTATION_VIEW_ID,
-				"pg" + idWithCapitalFirst + "List"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(SEARCH_METADATA_ID, id + "Search"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(SEARCH_PRESENTATION_FORM_ID,
-				"pg" + idWithCapitalFirst + "SearchForm"));
-
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(USER_SUPPLIED_ID, "true"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PERMISSION_KEY,
-				"RECORDTYPE_" + id.toUpperCase()));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(SELF_PRESENTATION_VIEW_ID,
-				"pg" + idWithCapitalFirst + "Self"));
-		return dataGroup;
+		String idNew = "metadataGroupNewGroup";
+		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
+				REF_PARENT_ID_TEXT_VAR, "0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
+				ATTRIBUTE_REFERENCES, "0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroupNew, CHILD_REFERENCES);
+		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
 	private void addRecordTypeRecordType() {
-		DataGroup dataGroup = createRecordTypeWithId(RECORD_TYPE);
+		DataGroup dataGroup = metadataCreator.createRecordTypeWithId(RECORD_TYPE);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "false"));
 		recordStorage.create(RECORD_TYPE, RECORD_TYPE, dataGroup, emptyLinkList);
 	}
 
 	private void addRecordTypeMetadata() {
-		DataGroup dataGroup = createRecordTypeWithId(NAME_FOR_METADATA);
+		DataGroup dataGroup = metadataCreator.createRecordTypeWithId(NAME_FOR_METADATA);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "true"));
 		recordStorage.create(RECORD_TYPE, METADATA, dataGroup, emptyLinkList);
 	}
@@ -771,10 +689,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private void addRecordTypeForAllMetadataGroups() {
 		for (MetadataTypes metadataType : MetadataTypes.values()) {
 			String type = metadataType.type;
-			DataGroup dataGroup = createRecordTypeWithId(type);
+			DataGroup dataGroup = metadataCreator.createRecordTypeWithId(type);
 			dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "false"));
 			dataGroup.addChild(DataAtomic.withNameInDataAndValue(PARENT_ID, METADATA));
 			recordStorage.create(RECORD_TYPE, type, dataGroup, emptyLinkList);
 		}
 	}
+
 }
