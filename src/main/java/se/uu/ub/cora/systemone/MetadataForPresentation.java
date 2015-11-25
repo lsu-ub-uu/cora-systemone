@@ -26,6 +26,8 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class MetadataForPresentation {
 
+	private static final String ID_S_CONTAINER_TEXT_VAR = "idSContainerTextVar";
+	private static final String ID_R_CONTAINER_TEXT_VAR = "idRContainerTextVar";
 	private static final String ID = "id";
 	private static final String ID_TEXT_VAR = "idTextVar";
 	private static final String REPEAT = "repeat";
@@ -42,8 +44,8 @@ public class MetadataForPresentation {
 	private static final String PRESENTATION_GROUP = "presentationGroup";
 	private static final String PRESENTATION = "presentation";
 	private static final String PRESENTATION_TYPE_COLLECTION = "presentationTypeCollection";
-	private static final String PRESENTATION_CHILD_REFERENCES = "presentationChildReferences";
-	private static final String PRESENTATION_CHILD_REFERENCE = "presentationChildReference";
+	private static final String PRESENTATION_CHILD_REFERENCES_GROUP = "presentationChildReferencesGroup";
+	private static final String PRESENTATION_CHILD_REFERENCE_GROUP = "presentationChildReferenceGroup";
 	private static final String ID_P_VAR_TEXT_VAR = "idPVarTextVar";
 	private static final String ID_CONTAINER_TEXT_VAR = "idContainerTextVar";
 	private static final String ID_PGROUP_TEXT_VAR = "idPGroupTextVar";
@@ -55,6 +57,7 @@ public class MetadataForPresentation {
 	private static final String FINAL_VALUE = "finalValue";
 	private static final String PARENT_ID = "parentId";
 	private static final String ATTRIBUTE_REFERENCES = "attributeReferences";
+	private static final String PRESENTATIONS_OF_GROUP = "presentationsOfGroup";
 	private DataGroup emptyLinkList = DataGroup.withNameInData("collectedDataLinks");
 	private RecordStorage recordStorage;
 	private MetadataCreator metadataCreator;
@@ -68,16 +71,24 @@ public class MetadataForPresentation {
 		createRepeatCollectionItems();
 		createRepeatItemCollection();
 		createRepeatVar();
+		createRepeatThisVar();
+		createRepeatChildrenVar();
 
 		createModeCollectionItems();
 		createModeItemCollection();
 		createModeVar();
+
+		createDefaultPresentationCollectionItems();
+		createDefaultPresentationItemCollection();
+		createDefaultPresentationVar();
 
 		createRecordInfoPVarGroup();
 
 		createRecordInfoPGroupGroup();
 
 		createRecordInfoContainerGroup();
+		createRecordInfoSurroundingContainerGroup();
+		createRecordInfoRepeatingContainerGroup();
 
 		addPresentationChildReferences();
 		addPresentationChildReference();
@@ -89,14 +100,16 @@ public class MetadataForPresentation {
 		createPresentationTypePVarVar();
 		createPresentationTypeContainerVar();
 
+		addPresentationsOfGroup();
 		createPresentationGroup();
 		addRecordTypePresentation();
 		createPresentationVarGroup();
 		addRecordTypePresentationVar();
 		createPresentationGroupGroup();
 		addRecordTypePresentationGroup();
-		createPresentationContainerGroup();
-		addRecordTypePresentationContainer();
+		createPresentationContainerGroups();
+		addRecordTypePresentationSurroundingContainer();
+		addRecordTypePresentationRepeatingContainer();
 	}
 
 	private void createRepeatCollectionItems() {
@@ -118,6 +131,28 @@ public class MetadataForPresentation {
 		DataGroup dataGroup = metadataCreator
 				.createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(collectionId,
 						"repeatCollection", REPEAT);
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + COLLECTION_VAR,
+				dataGroup, emptyLinkList);
+	}
+
+	private void createRepeatThisVar() {
+		String collectionId = "repeatThis";
+		DataGroup dataGroup = metadataCreator
+				.createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(collectionId,
+						"repeatCollection", "repeat");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "repeatCollectionVar"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(FINAL_VALUE, "this"));
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + COLLECTION_VAR,
+				dataGroup, emptyLinkList);
+	}
+
+	private void createRepeatChildrenVar() {
+		String collectionId = "repeatChildren";
+		DataGroup dataGroup = metadataCreator
+				.createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(collectionId,
+						"repeatCollection", "repeat");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "repeatCollectionVar"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(FINAL_VALUE, "children"));
 		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + COLLECTION_VAR,
 				dataGroup, emptyLinkList);
 	}
@@ -145,6 +180,29 @@ public class MetadataForPresentation {
 				dataGroup, emptyLinkList);
 	}
 
+	private void createDefaultPresentationCollectionItems() {
+		metadataCreator.createCollectionItem("ref", "ref");
+		metadataCreator.createCollectionItem("refMinimized", "refMinimized");
+	}
+
+	private void createDefaultPresentationItemCollection() {
+		String id = "defaultPresentation";
+		DataGroup dataGroup = metadataCreator.createDataGroupForItemCollectionWithId(id);
+		metadataCreator.addCollectionItemReferenceByCollectionItemId(dataGroup, "refItem");
+		metadataCreator.addCollectionItemReferenceByCollectionItemId(dataGroup, "refMinimizedItem");
+		recordStorage.create(MetadataTypes.ITEMCOLLECTION.type, id + COLLECTION, dataGroup,
+				emptyLinkList);
+	}
+
+	private void createDefaultPresentationVar() {
+		String collectionId = "defaultPresentation";
+		DataGroup dataGroup = metadataCreator
+				.createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(collectionId,
+						"defaultPresentationCollection", "default");
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + COLLECTION_VAR,
+				dataGroup, emptyLinkList);
+	}
+
 	private void createRecordInfoPVarGroup() {
 		metadataCreator.addMetadataTextVariableChildWithIdAndNameInDataAndRegExAndRefParentId(
 				ID_P_VAR_TEXT_VAR, ID, "(.*PVar$)", ID_TEXT_VAR);
@@ -166,33 +224,56 @@ public class MetadataForPresentation {
 	private void createRecordInfoContainerGroup() {
 		metadataCreator.addMetadataTextVariableChildWithIdAndNameInDataAndRegExAndRefParentId(
 				ID_CONTAINER_TEXT_VAR, ID, "(.*Container$)", ID_TEXT_VAR);
-		metadataCreator.addMetadataRecordInfoNewWithRecordInfoIdAndRefMetadataIdUsedAsId(
-				"recordInfoNewContainerGroup", ID_CONTAINER_TEXT_VAR);
+		// metadataCreator.addMetadataRecordInfoNewWithRecordInfoIdAndRefMetadataIdUsedAsId(
+		// "recordInfoNewContainerGroup", ID_CONTAINER_TEXT_VAR);
 		metadataCreator.addMetadataRecordInfoWithRecordInfoIdAndRefMetadataIdUsedAsId(
 				"recordInfoContainerGroup", ID_CONTAINER_TEXT_VAR);
 	}
 
+	private void createRecordInfoSurroundingContainerGroup() {
+		metadataCreator.addMetadataTextVariableChildWithIdAndNameInDataAndRegExAndRefParentId(
+				ID_S_CONTAINER_TEXT_VAR, ID, "(.*SContainer$)", ID_TEXT_VAR);
+		metadataCreator.addMetadataRecordInfoNewWithRecordInfoIdAndRefMetadataIdUsedAsId(
+				"recordInfoNewSurroundingContainerGroup", ID_S_CONTAINER_TEXT_VAR);
+		metadataCreator.addMetadataRecordInfoWithRecordInfoIdAndRefMetadataIdUsedAsId(
+				"recordInfoSurroundingContainerGroup", ID_S_CONTAINER_TEXT_VAR);
+	}
+
+	private void createRecordInfoRepeatingContainerGroup() {
+		metadataCreator.addMetadataTextVariableChildWithIdAndNameInDataAndRegExAndRefParentId(
+				ID_R_CONTAINER_TEXT_VAR, ID, "(.*RContainer$)", ID_TEXT_VAR);
+		metadataCreator.addMetadataRecordInfoNewWithRecordInfoIdAndRefMetadataIdUsedAsId(
+				"recordInfoNewRepeatingContainerGroup", ID_R_CONTAINER_TEXT_VAR);
+		metadataCreator.addMetadataRecordInfoWithRecordInfoIdAndRefMetadataIdUsedAsId(
+				"recordInfoRepeatingContainerGroup", ID_R_CONTAINER_TEXT_VAR);
+	}
+
 	private void addPresentationChildReference() {
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData("presentationRef", "ref");
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData("presentationRefMinimized",
+				"refMinimized");
+
 		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
-				PRESENTATION_CHILD_REFERENCE, "childReference");
+				PRESENTATION_CHILD_REFERENCE_GROUP, "childReference");
 
-		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "ref");
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "refMinimized", "0",
-				"1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "presentationRef");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
+				"presentationRefMinimized", "0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "defaultPresentationCollectionVar");
 
-		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_CHILD_REFERENCE, dataGroup,
-				emptyLinkList);
+		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_CHILD_REFERENCE_GROUP,
+				dataGroup, emptyLinkList);
 	}
 
 	private void addPresentationChildReferences() {
 		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
-				PRESENTATION_CHILD_REFERENCES, "childReferences");
+				PRESENTATION_CHILD_REFERENCES_GROUP, "childReferences");
 
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
-				PRESENTATION_CHILD_REFERENCE, "1", "X");
+				PRESENTATION_CHILD_REFERENCE_GROUP, "1", "X");
 
-		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_CHILD_REFERENCES, dataGroup,
-				emptyLinkList);
+		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_CHILD_REFERENCES_GROUP,
+				dataGroup, emptyLinkList);
 	}
 
 	private void createPresentationTypeCollectionItems() {
@@ -262,7 +343,20 @@ public class MetadataForPresentation {
 				collectionVarId + COLLECTION_VAR, dataGroup, emptyLinkList);
 	}
 
+	private void addPresentationsOfGroup() {
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
+				PRESENTATIONS_OF_GROUP, "presentationsOf");
+
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
+				PRESENTATION_OF_TEXT_VAR, "1", "X");
+
+		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATIONS_OF_GROUP, dataGroup,
+				emptyLinkList);
+	}
+
 	private void createPresentationGroup() {
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(PRESENTATION_OF_TEXT_VAR,
+				"presentationOf", "(.*)");
 		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				PRESENTATION_GROUP, PRESENTATION);
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
@@ -272,13 +366,15 @@ public class MetadataForPresentation {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "recordInfoGroup");
 
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
+				PRESENTATIONS_OF_GROUP, "0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
 				PRESENTATION_OF_TEXT_VAR, "0", "X");
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, MODE_COLLECTION_VAR,
 				"0", "1");
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REPEAT_COLLECTION_VAR,
 				"0", "1");
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
-				PRESENTATION_CHILD_REFERENCES, "0", "1");
+				PRESENTATION_CHILD_REFERENCES_GROUP, "0", "1");
 		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_GROUP, dataGroup,
 				emptyLinkList);
 
@@ -307,6 +403,10 @@ public class MetadataForPresentation {
 
 		DataGroup dataGroup2 = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				"presentationVarNewGroup", PRESENTATION);
+		DataGroup attributeReferences2 = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup2.addChild(attributeReferences2);
+		attributeReferences2.addChild(
+				DataAtomic.withNameInDataAndValue("ref", "presentationTypePVarCollectionVar"));
 		dataGroup2
 				.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_VAR_GROUP));
 
@@ -336,20 +436,24 @@ public class MetadataForPresentation {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "recordInfoPGroupGroup");
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_OF_TEXT_VAR);
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
-				PRESENTATION_CHILD_REFERENCES, "1", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup,
+				PRESENTATION_CHILD_REFERENCES_GROUP);
 		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_GROUP_GROUP, dataGroup,
 				emptyLinkList);
 
 		DataGroup dataGroup2 = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				"presentationGroupNewGroup", PRESENTATION);
+		DataGroup attributeReferences2 = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup2.addChild(attributeReferences2);
+		attributeReferences2.addChild(
+				DataAtomic.withNameInDataAndValue("ref", "presentationTypePGroupCollectionVar"));
 		dataGroup2.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_GROUP_GROUP));
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, "recordInfoNewPGroupGroup");
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, PRESENTATION_OF_TEXT_VAR);
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2,
-				PRESENTATION_CHILD_REFERENCES, "1", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup2,
+				PRESENTATION_CHILD_REFERENCES_GROUP);
 
 		recordStorage.create(MetadataTypes.GROUP.type, "presentationGroupNewGroup", dataGroup2,
 				emptyLinkList);
@@ -362,44 +466,117 @@ public class MetadataForPresentation {
 		recordStorage.create(RECORD_TYPE, PRESENTATION_GROUP, dataGroup, emptyLinkList);
 	}
 
-	private void createPresentationContainerGroup() {
+	private void createPresentationContainerGroups() {
 		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				PRESENTATION_CONTAINER_GROUP, PRESENTATION);
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
 		dataGroup.addChild(attributeReferences);
 		attributeReferences.addChild(
 				DataAtomic.withNameInDataAndValue("ref", "presentationTypeContainerCollectionVar"));
+		attributeReferences
+				.addChild(DataAtomic.withNameInDataAndValue("ref", "repeatCollectionVar"));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_GROUP));
-		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "recordInfoPContainerGroup");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "recordInfoContainerGroup");
 
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
-				PRESENTATION_OF_TEXT_VAR, "1", "X");
-		metadataCreator.addChildReferenceWithRef1to1(dataGroup, REPEAT_COLLECTION_VAR);
+				PRESENTATIONS_OF_GROUP, "0", "1");
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
-				PRESENTATION_CHILD_REFERENCES, "1", "1");
+				PRESENTATION_OF_TEXT_VAR, "0", "1");
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup,
+				PRESENTATION_CHILD_REFERENCES_GROUP);
 		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_CONTAINER_GROUP, dataGroup,
 				emptyLinkList);
 
-		DataGroup dataGroup2 = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
-				"presentationContainerNewGroup", PRESENTATION);
-		dataGroup2.addChild(
+		// DataGroup dataGroup2 =
+		// metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
+		// "presentationContainerNewGroup", PRESENTATION);
+		// DataGroup attributeReferences2 =
+		// DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		// dataGroup2.addChild(attributeReferences2);
+		// attributeReferences2.addChild(
+		// DataAtomic.withNameInDataAndValue("ref",
+		// "presentationTypeContainerCollectionVar"));
+		// dataGroup2.addChild(
+		// DataAtomic.withNameInDataAndValue(REF_PARENT_ID,
+		// PRESENTATION_CONTAINER_GROUP));
+		//
+		// metadataCreator.addChildReferenceWithRef1to1(dataGroup2,
+		// "recordInfoNewContainerGroup");
+		// metadataCreator.addChildReferenceWithRef1to1(dataGroup2,
+		// PRESENTATIONS_OF_GROUP);
+		// metadataCreator.addChildReferenceWithRef1to1(dataGroup2,
+		// REPEAT_COLLECTION_VAR);
+		// metadataCreator.addChildReferenceWithRef1to1(dataGroup2,
+		// PRESENTATION_CHILD_REFERENCES_GROUP);
+		//
+		// recordStorage.create(MetadataTypes.GROUP.type,
+		// "presentationContainerNewGroup", dataGroup2,
+		// emptyLinkList);
+		createPresentationContainerGroup("presentationRepeatingContainer",
+				"repeatThisCollectionVar", "Repeating");
+		createPresentationContainerGroup("presentationSurroundingContainer",
+				"repeatChildrenCollectionVar", "Surrounding");
+	}
+
+	private void createPresentationContainerGroup(String id, String repeat, String type) {
+		DataGroup dataGroup = metadataCreator
+				.createDataGroupForMetadataWithRecordIdAndNameInData(id + "Group", PRESENTATION);
+		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup.addChild(attributeReferences);
+		attributeReferences.addChild(
+				DataAtomic.withNameInDataAndValue("ref", "presentationTypeContainerCollectionVar"));
+		attributeReferences.addChild(DataAtomic.withNameInDataAndValue("ref", repeat));
+		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_CONTAINER_GROUP));
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup,
+				"recordInfo" + type + "ContainerGroup");
 
-		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, "recordInfoNewPContainerGroup");
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2,
-				PRESENTATION_OF_TEXT_VAR, "1", "X");
-		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, REPEAT_COLLECTION_VAR);
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2,
-				PRESENTATION_CHILD_REFERENCES, "1", "1");
+		if (type.equals("Surrounding")) {
+			metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATIONS_OF_GROUP);
+		} else {
+			metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_OF_TEXT_VAR);
+		}
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup,
+				PRESENTATION_CHILD_REFERENCES_GROUP);
+		recordStorage.create(MetadataTypes.GROUP.type, id + "Group", dataGroup, emptyLinkList);
 
-		recordStorage.create(MetadataTypes.GROUP.type, "presentationContainerNewGroup", dataGroup2,
+		DataGroup dataGroup2 = metadataCreator
+				.createDataGroupForMetadataWithRecordIdAndNameInData(id + "NewGroup", PRESENTATION);
+		DataGroup attributeReferences2 = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
+		dataGroup2.addChild(attributeReferences2);
+		attributeReferences2.addChild(
+				DataAtomic.withNameInDataAndValue("ref", "presentationTypeContainerCollectionVar"));
+		attributeReferences2.addChild(DataAtomic.withNameInDataAndValue("ref", repeat));
+		dataGroup2.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, id + "Group"));
+
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup2,
+				"recordInfoNew" + type + "ContainerGroup");
+		if (type.equals("Surrounding")) {
+			metadataCreator.addChildReferenceWithRef1to1(dataGroup2, PRESENTATIONS_OF_GROUP);
+		} else {
+			metadataCreator.addChildReferenceWithRef1to1(dataGroup2, PRESENTATION_OF_TEXT_VAR);
+		}
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup2,
+				PRESENTATION_CHILD_REFERENCES_GROUP);
+
+		recordStorage.create(MetadataTypes.GROUP.type, id + "NewGroup", dataGroup2, emptyLinkList);
+	}
+
+	private void addRecordTypePresentationSurroundingContainer() {
+		DataGroup dataGroup = metadataCreator
+				.createRecordTypeWithId("presentationSurroundingContainer");
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, FALSE));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PARENT_ID, PRESENTATION));
+		recordStorage.create(RECORD_TYPE, "presentationSurroundingContainer", dataGroup,
 				emptyLinkList);
 	}
 
-	private void addRecordTypePresentationContainer() {
-		DataGroup dataGroup = metadataCreator.createRecordTypeWithId("presentationContainer");
+	private void addRecordTypePresentationRepeatingContainer() {
+		DataGroup dataGroup = metadataCreator
+				.createRecordTypeWithId("presentationRepeatingContainer");
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, FALSE));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PARENT_ID, PRESENTATION));
-		recordStorage.create(RECORD_TYPE, "presentationContainer", dataGroup, emptyLinkList);
+		recordStorage.create(RECORD_TYPE, "presentationRepeatingContainer", dataGroup,
+				emptyLinkList);
 	}
 }
