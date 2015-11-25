@@ -309,9 +309,10 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	private DataGroup createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(String metadataGroupId,
 			boolean isNew) {
-		DataGroup dataGroup;
-		dataGroup = metadataCreator.createDataGroupForMetadataWithRecordId(metadataGroupId);
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, NAME_FOR_METADATA));
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
+				metadataGroupId, NAME_FOR_METADATA);
+		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
+		// NAME_FOR_METADATA));
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
 		dataGroup.addChild(attributeReferences);
 		attributeReferences
@@ -362,10 +363,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataCollectionItemReferences() {
-		DataGroup dataGroup = metadataCreator
-				.createDataGroupForMetadataWithRecordId(COLLECTION_ITEM_REFERENCES);
-		dataGroup.addChild(
-				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, COLLECTION_ITEM_REFERENCES));
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
+				COLLECTION_ITEM_REFERENCES, COLLECTION_ITEM_REFERENCES);
+		// dataGroup.addChild(
+		// DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
+		// COLLECTION_ITEM_REFERENCES));
 
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, REF_TEXT_VAR, "1",
 				"X");
@@ -375,10 +377,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataCollectionItemReference() {
-		DataGroup dataGroup = metadataCreator
-				.createDataGroupForMetadataWithRecordId(COLLECTION_ITEM_REFERENCE);
-		dataGroup.addChild(
-				DataAtomic.withNameInDataAndValue(NAME_IN_DATA, COLLECTION_ITEM_REFERENCE));
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
+				COLLECTION_ITEM_REFERENCE, COLLECTION_ITEM_REFERENCE);
+		// dataGroup.addChild(
+		// DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
+		// COLLECTION_ITEM_REFERENCE));
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, REF_TEXT_VAR);
 		recordStorage.create(MetadataTypes.GROUP.type, COLLECTION_ITEM_REFERENCE, dataGroup,
@@ -412,8 +415,10 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataLinkedPath() {
-		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordId(LINKED_PATH);
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, LINKED_PATH));
+		DataGroup dataGroup = metadataCreator
+				.createDataGroupForMetadataWithRecordIdAndNameInData(LINKED_PATH, LINKED_PATH);
+		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
+		// LINKED_PATH));
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NAME_IN_DATA_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTES, "0", "1");
@@ -424,8 +429,10 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataAttributes() {
-		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordId(ATTRIBUTES);
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTES));
+		DataGroup dataGroup = metadataCreator
+				.createDataGroupForMetadataWithRecordIdAndNameInData(ATTRIBUTES, ATTRIBUTES);
+		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
+		// ATTRIBUTES));
 
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, ATTRIBUTE, "1", "X");
 
@@ -433,8 +440,10 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	private void addMetadataAttribute() {
-		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordId(ATTRIBUTE);
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, ATTRIBUTE));
+		DataGroup dataGroup = metadataCreator
+				.createDataGroupForMetadataWithRecordIdAndNameInData(ATTRIBUTE, ATTRIBUTE);
+		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
+		// ATTRIBUTE));
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "attributeNameTextVar");
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "attributeValueTextVar");
@@ -630,8 +639,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		// DataGroup.withNameInData(CHILD_REFERENCES);
 		// dataGroup.addChild(childReferences);
 
-		DataGroup dataGroup = metadataCreator
-				.createDataGroupForMetadataWithRecordId(CHILD_REFERENCES);
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
+				CHILD_REFERENCES, CHILD_REFERENCES);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, CHILD_REFERENCE, "1",
 				"X");
 
@@ -654,9 +663,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		// DataGroup childReferences =
 		// DataGroup.withNameInData(CHILD_REFERENCES);
 		// dataGroup.addChild(childReferences);
-		DataGroup dataGroup = metadataCreator
-				.createDataGroupForMetadataWithRecordId(CHILD_REFERENCE);
-
+		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
+				CHILD_REFERENCE, CHILD_REFERENCE);
+		// TODO: move name in data to
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, REF_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "repeatMinTextVar");
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "repeatMinKeyTextVar",

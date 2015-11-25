@@ -99,10 +99,11 @@ public class MetadataCreator {
 		recordStorage.create(MetadataTypes.TEXTVARIABLE.type, id, dataGroup, emptyLinkList);
 	}
 
-	public DataGroup createDataGroupForMetadataWithRecordId(final String name) {
+	public DataGroup createDataGroupForMetadataWithRecordIdAndNameInData(final String name,
+			String nameInData) {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
 		dataGroup.addChild(
 				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type, name));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, name + "Text"));
