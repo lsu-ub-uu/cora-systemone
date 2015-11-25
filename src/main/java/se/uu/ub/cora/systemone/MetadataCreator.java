@@ -51,6 +51,11 @@ public class MetadataCreator {
 	private static final String NAME_FOR_METADATA = "metadata";
 	private static final String RECORD_INFO = "recordInfo";
 	private static final String RECORD_TYPE = "recordType";
+	private static final String REF_PARENT_ID = "refParentId";
+	private static final String COLLECTION = "Collection";
+	private static final String COLLECTION_ITEM_REFERENCES = "collectionItemReferences";
+	private static final String REF_COLLECTION_ID = "refCollectionId";
+	private static final String COLLECTION_VAR = "CollectionVar";
 	private DataGroup emptyLinkList = DataGroup.withNameInData("collectedDataLinks");
 
 	public MetadataCreator(RecordStorage recordStorage) {
@@ -94,10 +99,11 @@ public class MetadataCreator {
 		recordStorage.create(MetadataTypes.TEXTVARIABLE.type, id, dataGroup, emptyLinkList);
 	}
 
-	public DataGroup createDataGroupForMetadataWithRecordId(final String name) {
+	public DataGroup createDataGroupForMetadataWithRecordIdAndNameInData(final String name,
+			String nameInData) {
 		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
 		dataGroup.addAttributeByIdWithValue(TYPE, GROUP);
-
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
 		dataGroup.addChild(
 				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.GROUP.type, name));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, name + "Text"));
@@ -195,5 +201,60 @@ public class MetadataCreator {
 	public void addMetadataTextVariableWithIdAndNameInData(String id, String nameInData) {
 		addMetadataTextVariableWithIdAndNameInDataAndRegEx(id, nameInData,
 				"(^[0-9A-Za-z:-_]{2,50}$)");
+	}
+
+	public void addMetadataTextVariableChildWithIdAndNameInDataAndRegExAndRefParentId(String id,
+			String nameInData, String regEx, String refParentId) {
+		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
+		dataGroup.addAttributeByIdWithValue(TYPE, "textVariable");
+		dataGroup.addChild(
+				createRecordInfoWithRecordTypeAndRecordId(MetadataTypes.TEXTVARIABLE.type, id));
+
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + DEF_TEXT));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue("regEx", regEx));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, refParentId));
+		recordStorage.create(MetadataTypes.TEXTVARIABLE.type, id, dataGroup, emptyLinkList);
+	}
+
+	public DataGroup createDataGroupForItemCollectionWithId(String id) {
+		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
+		dataGroup.addAttributeByIdWithValue(TYPE, "itemCollection");
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.ITEMCOLLECTION.type, id + COLLECTION));
+
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, id + COLLECTION));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "CollectionTextId"));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + "CollectionDefTextId"));
+
+		DataGroup collectionItemReferences = DataGroup.withNameInData(COLLECTION_ITEM_REFERENCES);
+		dataGroup.addChild(collectionItemReferences);
+		return dataGroup;
+	}
+
+	public void addCollectionItemReferenceByCollectionItemId(DataGroup dataGroup,
+			String collectionItemId) {
+		DataGroup collectionItemReferences = dataGroup
+				.getFirstGroupWithNameInData(COLLECTION_ITEM_REFERENCES);
+		collectionItemReferences
+				.addChild(DataAtomic.withNameInDataAndValue("ref", collectionItemId));
+	}
+
+	public DataGroup createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(
+			String collectionId, String refCollectionId, String nameInData) {
+		DataGroup dataGroup = DataGroup.withNameInData(NAME_FOR_METADATA);
+		dataGroup.addAttributeByIdWithValue(TYPE, "collectionVariable");
+		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(
+				MetadataTypes.COLLECTIONVARIABLE.type, collectionId + COLLECTION_VAR));
+
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, nameInData));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(TEXT_ID, collectionId + "CollectionVarTextId"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID,
+				collectionId + "CollectionVarDefTextId"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_COLLECTION_ID, refCollectionId));
+		return dataGroup;
 	}
 }
