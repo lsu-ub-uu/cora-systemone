@@ -49,7 +49,6 @@ public class MetadataForTexts {
 	private static final String NAME_FOR_ABSTRACT = "abstract";
 	private static final String PARENT_ID = "parentId";
 	private static final String ATTRIBUTE_REFERENCES = "attributeReferences";
-	private static final String NAME_IN_DATA = "nameInData";
 	private static final String RECORD_TYPE = "recordType";
 	private DataGroup emptyLinkList = DataGroup.withNameInData("collectedDataLinks");
 	private RecordStorage recordStorage;
@@ -170,8 +169,6 @@ public class MetadataForTexts {
 	private void createTextPartGroup() {
 		DataGroup dataGroup = metadataCreator
 				.createDataGroupForMetadataWithRecordIdAndNameInData(TEXT_PART_GROUP, TEXT_PART);
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// TEXT_PART));
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
 		dataGroup.addChild(attributeReferences);
 		attributeReferences
@@ -215,8 +212,6 @@ public class MetadataForTexts {
 	private void createTextPartDefaultGroup() {
 		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				TEXT_PART_DEFAULT_GROUP, TEXT_PART);
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// TEXT_PART));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, TEXT_PART_GROUP));
 
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
@@ -235,8 +230,6 @@ public class MetadataForTexts {
 	private void createTextPartAlternativeGroup() {
 		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				TEXT_PART_ALTERNATIVE_GROUP, TEXT_PART);
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// TEXT_PART));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, TEXT_PART_GROUP));
 
 		DataGroup attributeReferences = DataGroup.withNameInData(ATTRIBUTE_REFERENCES);
@@ -255,8 +248,6 @@ public class MetadataForTexts {
 	private void createTextPartSvGroup() {
 		DataGroup dataGroup = metadataCreator
 				.createDataGroupForMetadataWithRecordIdAndNameInData(TEXT_PART_SV_GROUP, TEXT_PART);
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// TEXT_PART));
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, TEXT_PART_DEFAULT_GROUP));
 
@@ -276,8 +267,6 @@ public class MetadataForTexts {
 	private void createTextPartEnGroup() {
 		DataGroup dataGroup = metadataCreator
 				.createDataGroupForMetadataWithRecordIdAndNameInData(TEXT_PART_EN_GROUP, TEXT_PART);
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// TEXT_PART));
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, TEXT_PART_ALTERNATIVE_GROUP));
 
@@ -306,8 +295,6 @@ public class MetadataForTexts {
 	private void createTextGroup() {
 		DataGroup dataGroup = metadataCreator
 				.createDataGroupForMetadataWithRecordIdAndNameInData("textGroup", "text");
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// "text"));
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_TEXT_GROUP);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, TEXT_PART_GROUP, "1",
@@ -320,8 +307,6 @@ public class MetadataForTexts {
 	private void createTextDefaultAlternativeGroup() {
 		DataGroup dataGroup = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				TEXT_DEFAULT_ALTERNATIVE_GROUP, "text");
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// "text"));
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_TEXT_GROUP);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "text"));
 
@@ -337,8 +322,6 @@ public class MetadataForTexts {
 	private void createTextSystemOneGroup() {
 		DataGroup dataGroup = metadataCreator
 				.createDataGroupForMetadataWithRecordIdAndNameInData(TEXT_SYSTEM_ONE_GROUP, "text");
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// "text"));
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_TEXT_GROUP);
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, TEXT_DEFAULT_ALTERNATIVE_GROUP));
@@ -353,8 +336,6 @@ public class MetadataForTexts {
 
 		DataGroup dataGroup2 = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				"textSystemOneNewGroup", "text");
-		// dataGroup2.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// "text"));
 		dataGroup2
 				.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, TEXT_SYSTEM_ONE_GROUP));
 

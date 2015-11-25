@@ -49,7 +49,6 @@ public class MetadataForPresentation {
 	private static final String ID_PGROUP_TEXT_VAR = "idPGroupTextVar";
 	private static final String COLLECTION = "Collection";
 	private static final String COLLECTION_VAR = "CollectionVar";
-	private static final String NAME_IN_DATA = "nameInData";
 	private static final String REF_PARENT_ID = "refParentId";
 	private static final String NAME_FOR_ABSTRACT = "abstract";
 	private static final String RECORD_TYPE = "recordType";
@@ -270,8 +269,6 @@ public class MetadataForPresentation {
 		dataGroup.addChild(attributeReferences);
 		attributeReferences.addChild(
 				DataAtomic.withNameInDataAndValue("ref", PRESENTATION_TYPE_COLLECTION_VAR));
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// PRESENTATION));
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "recordInfoGroup");
 
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
@@ -300,8 +297,6 @@ public class MetadataForPresentation {
 		dataGroup.addChild(attributeReferences);
 		attributeReferences.addChild(
 				DataAtomic.withNameInDataAndValue("ref", "presentationTypePVarCollectionVar"));
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// PRESENTATION));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_GROUP));
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "recordInfoPVarGroup");
 
@@ -312,8 +307,6 @@ public class MetadataForPresentation {
 
 		DataGroup dataGroup2 = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				"presentationVarNewGroup", PRESENTATION);
-		// dataGroup2.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// PRESENTATION));
 		dataGroup2
 				.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_VAR_GROUP));
 
@@ -339,8 +332,6 @@ public class MetadataForPresentation {
 		dataGroup.addChild(attributeReferences);
 		attributeReferences.addChild(
 				DataAtomic.withNameInDataAndValue("ref", "presentationTypePGroupCollectionVar"));
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// PRESENTATION));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_GROUP));
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "recordInfoPGroupGroup");
 
@@ -352,8 +343,6 @@ public class MetadataForPresentation {
 
 		DataGroup dataGroup2 = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				"presentationGroupNewGroup", PRESENTATION);
-		// dataGroup2.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// PRESENTATION));
 		dataGroup2.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_GROUP_GROUP));
 
@@ -380,8 +369,6 @@ public class MetadataForPresentation {
 		dataGroup.addChild(attributeReferences);
 		attributeReferences.addChild(
 				DataAtomic.withNameInDataAndValue("ref", "presentationTypeContainerCollectionVar"));
-		// dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// PRESENTATION));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_GROUP));
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, "recordInfoPContainerGroup");
 
@@ -395,8 +382,6 @@ public class MetadataForPresentation {
 
 		DataGroup dataGroup2 = metadataCreator.createDataGroupForMetadataWithRecordIdAndNameInData(
 				"presentationContainerNewGroup", PRESENTATION);
-		// dataGroup2.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA,
-		// PRESENTATION));
 		dataGroup2.addChild(
 				DataAtomic.withNameInDataAndValue(REF_PARENT_ID, PRESENTATION_CONTAINER_GROUP));
 
