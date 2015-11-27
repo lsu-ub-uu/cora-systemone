@@ -34,11 +34,11 @@ import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
-import se.uu.ub.cora.spider.record.RecordPermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorageInMemory;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
+import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
