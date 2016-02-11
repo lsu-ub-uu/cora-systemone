@@ -405,6 +405,11 @@ public class MetadataForPresentation {
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_OF_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, MODE_COLLECTION_VAR);
+
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("emptyTextIdTextVar",
+				"emptyTextId", "(.*Text$)");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "emptyTextIdTextVar","0","1");
+		
 		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_VAR_GROUP, dataGroup,
 				emptyLinkList);
 
@@ -420,6 +425,7 @@ public class MetadataForPresentation {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, "recordInfoNewPVarGroup");
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, PRESENTATION_OF_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, MODE_COLLECTION_VAR);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2, "emptyTextIdTextVar","0","1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, "presentationVarNewGroup", dataGroup2,
 				emptyLinkList);
