@@ -26,6 +26,7 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class MetadataForPresentation {
 
+	private static final String EMPTY_TEXT_ID_TEXT_VAR = "emptyTextIdTextVar";
 	private static final String REPEAT_COLLECTION = "repeatCollection";
 	private static final String CHILDREN = "children";
 	private static final String REF_MINIMIZED = "refMinimized";
@@ -406,9 +407,9 @@ public class MetadataForPresentation {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_OF_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, MODE_COLLECTION_VAR);
 
-		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx("emptyTextIdTextVar",
+		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(EMPTY_TEXT_ID_TEXT_VAR,
 				"emptyTextId", "(.*Text$)");
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, "emptyTextIdTextVar","0","1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, EMPTY_TEXT_ID_TEXT_VAR,"0","1");
 		
 		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_VAR_GROUP, dataGroup,
 				emptyLinkList);
@@ -425,7 +426,7 @@ public class MetadataForPresentation {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, "recordInfoNewPVarGroup");
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, PRESENTATION_OF_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, MODE_COLLECTION_VAR);
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2, "emptyTextIdTextVar","0","1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2, EMPTY_TEXT_ID_TEXT_VAR,"0","1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, "presentationVarNewGroup", dataGroup2,
 				emptyLinkList);
