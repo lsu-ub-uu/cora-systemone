@@ -170,31 +170,29 @@ public class MetadataCreator {
 	}
 
 	public DataGroup createRecordTypeWithId(String id) {
-		String idWithCapitalFirst = id.substring(0, 1).toUpperCase() + id.substring(1);
-
 		DataGroup dataGroup = DataGroup.withNameInData(RECORD_TYPE);
 		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(RECORD_TYPE, id));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(METADATA_ID, id + "Group"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PRESENTATION_VIEW_ID,
-				"pg" + idWithCapitalFirst + "View"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PRESENTATION_FORM_ID,
-				"pg" + idWithCapitalFirst + "Form"));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(PRESENTATION_VIEW_ID, id + "ViewPGroup"));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(PRESENTATION_FORM_ID, id + "FormPGroup"));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NEW_METADATA_ID, id + "NewGroup"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NEW_PRESENTATION_FORM_ID,
-				"pg" + idWithCapitalFirst + "FormNew"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(LIST_PRESENTATION_VIEW_ID,
-				"pg" + idWithCapitalFirst + "List"));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(NEW_PRESENTATION_FORM_ID, id + "FormNewPGroup"));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(LIST_PRESENTATION_VIEW_ID, id + "ListPGroup"));
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(SEARCH_METADATA_ID, id + "SearchGroup"));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(SEARCH_PRESENTATION_FORM_ID,
-				"pg" + idWithCapitalFirst + "SearchForm"));
+				id + "FormSearchPGroup"));
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(USER_SUPPLIED_ID, "true"));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PERMISSION_KEY,
 				"RECORDTYPE_" + id.toUpperCase()));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(SELF_PRESENTATION_VIEW_ID,
-				"pg" + idWithCapitalFirst + "Self"));
+				id + "ViewSelfPGroup"));
 		return dataGroup;
 	}
 
