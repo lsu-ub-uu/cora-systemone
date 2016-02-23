@@ -34,6 +34,7 @@ public class MetadataCreator {
 	private static final String USER_SUPPLIED_ID = "userSuppliedId";
 	private static final String SEARCH_PRESENTATION_FORM_ID = "searchPresentationFormId";
 	private static final String SEARCH_METADATA_ID = "searchMetadataId";
+	private static final String MENU_PRESENTATION_VIEW_ID = "menuPresentationViewId";
 	private static final String LIST_PRESENTATION_VIEW_ID = "listPresentationViewId";
 	private static final String NEW_PRESENTATION_FORM_ID = "newPresentationFormId";
 	private static final String PRESENTATION_FORM_ID = "presentationFormId";
@@ -181,6 +182,8 @@ public class MetadataCreator {
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NEW_METADATA_ID, id + "NewGroup"));
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(NEW_PRESENTATION_FORM_ID, id + "FormNewPGroup"));
+		dataGroup.addChild(
+				DataAtomic.withNameInDataAndValue(MENU_PRESENTATION_VIEW_ID, id + "MenuPGroup"));
 		dataGroup.addChild(
 				DataAtomic.withNameInDataAndValue(LIST_PRESENTATION_VIEW_ID, id + "ListPGroup"));
 		dataGroup.addChild(

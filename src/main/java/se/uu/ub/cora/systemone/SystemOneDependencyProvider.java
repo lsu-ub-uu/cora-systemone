@@ -61,6 +61,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private static final String USER_SUPPLIED_ID_TEXT_VAR = "userSuppliedIdTextVar";
 	private static final String SEARCH_PRESENTATION_FORM_ID_TEXT_VAR = "searchPresentationFormIdTextVar";
 	private static final String SEARCH_METADATA_ID_TEXT_VAR = "searchMetadataIdTextVar";
+	private static final String MENU_PRESENTATION_VIEW_ID_TEXT_VAR = "menuPresentationViewIdTextVar";
 	private static final String LIST_PRESENTATION_VIEW_ID_TEXT_VAR = "listPresentationViewIdTextVar";
 	private static final String NEW_PRESENTATION_FORM_ID_TEXT_VAR = "newPresentationFormIdTextVar";
 	private static final String NEW_METADATA_ID_TEXT_VAR = "newMetadataIdTextVar";
@@ -91,6 +92,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private static final String USER_SUPPLIED_ID = "userSuppliedId";
 	private static final String SEARCH_PRESENTATION_FORM_ID = "searchPresentationFormId";
 	private static final String SEARCH_METADATA_ID = "searchMetadataId";
+	private static final String MENU_PRESENTATION_VIEW_ID = "menuPresentationViewId";
 	private static final String LIST_PRESENTATION_VIEW_ID = "listPresentationViewId";
 	private static final String NEW_PRESENTATION_FORM_ID = "newPresentationFormId";
 	private static final String PRESENTATION_FORM_ID = "presentationFormId";
@@ -180,6 +182,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 				NEW_METADATA_ID);
 		metadataCreator.addMetadataTextVariableWithIdAndNameInData(
 				NEW_PRESENTATION_FORM_ID_TEXT_VAR, NEW_PRESENTATION_FORM_ID);
+		metadataCreator.addMetadataTextVariableWithIdAndNameInData(
+				MENU_PRESENTATION_VIEW_ID_TEXT_VAR, MENU_PRESENTATION_VIEW_ID);
 		metadataCreator.addMetadataTextVariableWithIdAndNameInData(
 				LIST_PRESENTATION_VIEW_ID_TEXT_VAR, LIST_PRESENTATION_VIEW_ID);
 		metadataCreator.addMetadataTextVariableWithIdAndNameInData(SEARCH_METADATA_ID_TEXT_VAR,
@@ -542,6 +546,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_FORM_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NEW_METADATA_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NEW_PRESENTATION_FORM_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, MENU_PRESENTATION_VIEW_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, LIST_PRESENTATION_VIEW_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, SEARCH_METADATA_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup,
@@ -576,6 +581,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_FORM_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NEW_METADATA_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, NEW_PRESENTATION_FORM_ID_TEXT_VAR);
+		metadataCreator.addChildReferenceWithRef1to1(dataGroup, MENU_PRESENTATION_VIEW_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, LIST_PRESENTATION_VIEW_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, SEARCH_METADATA_ID_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup,
