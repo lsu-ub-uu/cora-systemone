@@ -37,7 +37,7 @@
 	<properties>
 		<bookkeeper.version>0.7-SNAPSHOT</bookkeeper.version>
 		<beefeater.version>0.4-SNAPSHOT</beefeater.version>
-        <spider.version>0.8-SNAPSHOT</spider.version>
+        <spider.version>0.9-SNAPSHOT</spider.version>
 	</properties>
 
 	<scm>
