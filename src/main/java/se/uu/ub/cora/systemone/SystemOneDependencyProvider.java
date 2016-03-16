@@ -145,6 +145,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 				metadataCreator);
 		metadataForPresentation.createMetadataForPresentation();
 
+		MetadataForBinary metadataForBinary = new MetadataForBinary(recordStorage, metadataCreator);
+		metadataForBinary.createMetadataForBinary();
+
 		createDummyRecordLink();
 	}
 

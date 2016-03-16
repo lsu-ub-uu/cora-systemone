@@ -171,6 +171,10 @@ public class MetadataCreator {
 	}
 
 	public DataGroup createRecordTypeWithId(String id) {
+		return createRecordTypeWithIdAndUserSuppliedId(id, true);
+	}
+
+	public DataGroup createRecordTypeWithIdAndUserSuppliedId(String id, boolean userSuppliedId) {
 		DataGroup dataGroup = DataGroup.withNameInData(RECORD_TYPE);
 		dataGroup.addChild(createRecordInfoWithRecordTypeAndRecordId(RECORD_TYPE, id));
 
@@ -191,7 +195,11 @@ public class MetadataCreator {
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(SEARCH_PRESENTATION_FORM_ID,
 				id + "FormSearchPGroup"));
 
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(USER_SUPPLIED_ID, "true"));
+		if (userSuppliedId) {
+			dataGroup.addChild(DataAtomic.withNameInDataAndValue(USER_SUPPLIED_ID, "true"));
+		} else {
+			dataGroup.addChild(DataAtomic.withNameInDataAndValue(USER_SUPPLIED_ID, "false"));
+		}
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PERMISSION_KEY,
 				"RECORDTYPE_" + id.toUpperCase()));
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(SELF_PRESENTATION_VIEW_ID,
