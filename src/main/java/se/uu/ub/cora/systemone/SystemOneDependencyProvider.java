@@ -19,9 +19,6 @@
 
 package se.uu.ub.cora.systemone;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import se.uu.ub.cora.beefeater.Authorizator;
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
@@ -39,6 +36,9 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorageInMemory;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
@@ -702,7 +702,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, REF_RECORD_LINK_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
 				REF_METADATA_GROUP_TEXT_VAR, "0", "1");
-		recordStorage.create(MetadataTypes.GROUP.type, id, dataGroup, emptyLinkList);
+		recordStorage.create(MetadataTypes.RECORDRELATION.type, id, dataGroup, emptyLinkList);
 
 		String idNew = "metadataRecordRelationNewGroup";
 		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
@@ -715,7 +715,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroupNew, REF_RECORD_LINK_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
 				REF_METADATA_GROUP_TEXT_VAR, "0", "1");
-		recordStorage.create(MetadataTypes.GROUP.type, idNew, dataGroupNew, emptyLinkList);
+		recordStorage.create(MetadataTypes.RECORDRELATION.type, idNew, dataGroupNew, emptyLinkList);
 	}
 
 	private void addRecordTypeRecordType() {
