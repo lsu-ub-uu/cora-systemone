@@ -19,9 +19,6 @@
 
 package se.uu.ub.cora.systemone;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import se.uu.ub.cora.beefeater.Authorizator;
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
@@ -39,6 +36,9 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.RecordStorageInMemory;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
@@ -178,6 +178,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dummyRR.addChild(DataAtomic.withNameInDataAndValue(NAME_IN_DATA, "dummyRelation"));
 		dummyRR.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
 		dummyRR.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + DEF_TEXT));
+		dummyRR.addChild(DataAtomic.withNameInDataAndValue("refRecordLinkId", id + "refRecordLinkId"));
+		dummyRR.addChild(DataAtomic.withNameInDataAndValue("refMetadataGroupId", id + "refMetadataGroupId"));
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dummyRR.addChild(childReferences);
 
