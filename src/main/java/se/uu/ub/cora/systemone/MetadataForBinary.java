@@ -25,6 +25,8 @@ import se.uu.ub.cora.bookkeeper.metadata.MetadataTypes;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class MetadataForBinary {
+	private static final String BINARY_GROUP = "binaryGroup";
+	private static final String BINARY = "binary";
 	private static final String IMAGE_GROUP = "imageGroup";
 	private static final String ID_BINARY_TEXT_VAR = "idBinaryTextVar";
 	private static final String RECORD_INFO_BINARY_GROUP = "recordInfoBinaryGroup";
@@ -68,26 +70,26 @@ public class MetadataForBinary {
 
 	private void createBinaryGroup() {
 		DataGroup dataGroup = metadataCreator
-				.createDataGroupForMetadataWithRecordIdAndNameInData("binaryGroup", "binary");
+				.createDataGroupForMetadataWithRecordIdAndNameInData(BINARY_GROUP, BINARY);
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_BINARY_GROUP);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, FILENAME_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, FILESIZE_TEXT_VAR);
 
-		recordStorage.create(MetadataTypes.GROUP.type, "binaryGroup", dataGroup, emptyLinkList);
+		recordStorage.create(MetadataTypes.GROUP.type, BINARY_GROUP, dataGroup, emptyLinkList);
 	}
 
 	private void createImageGroup() {
 		DataGroup dataGroup = metadataCreator
-				.createDataGroupForMetadataWithRecordIdAndNameInData(IMAGE_GROUP, "binary");
+				.createDataGroupForMetadataWithRecordIdAndNameInData(IMAGE_GROUP, BINARY);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, RECORD_INFO_BINARY_GROUP);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, FILENAME_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, FILESIZE_TEXT_VAR);
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, "binaryGroup"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, BINARY_GROUP));
 		recordStorage.create(MetadataTypes.GROUP.type, IMAGE_GROUP, dataGroup, emptyLinkList);
 
 		DataGroup dataGroup2 = metadataCreator
-				.createDataGroupForMetadataWithRecordIdAndNameInData("imageNewGroup", "binary");
+				.createDataGroupForMetadataWithRecordIdAndNameInData("imageNewGroup", BINARY);
 		dataGroup2.addChild(DataAtomic.withNameInDataAndValue(REF_PARENT_ID, IMAGE_GROUP));
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, FILENAME_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, FILESIZE_TEXT_VAR);
@@ -95,16 +97,16 @@ public class MetadataForBinary {
 	}
 
 	private void addRecordTypeBinary() {
-		DataGroup dataGroup = metadataCreator.createRecordTypeWithId("binary");
+		DataGroup dataGroup = metadataCreator.createRecordTypeWithId(BINARY);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "true"));
-		recordStorage.create(RECORD_TYPE, "binary", dataGroup, emptyLinkList);
+		recordStorage.create(RECORD_TYPE, BINARY, dataGroup, emptyLinkList);
 	}
 
 	private void addRecordTypeImage() {
 		DataGroup dataGroup = metadataCreator.createRecordTypeWithIdAndUserSuppliedId("image",
 				false);
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue(NAME_FOR_ABSTRACT, "false"));
-		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PARENT_ID, "binary"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(PARENT_ID, BINARY));
 		recordStorage.create(RECORD_TYPE, "image", dataGroup, emptyLinkList);
 	}
 }

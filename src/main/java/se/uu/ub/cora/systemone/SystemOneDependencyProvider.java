@@ -49,6 +49,8 @@ import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
  * @since 0.1
  */
 public class SystemOneDependencyProvider implements SpiderDependencyProvider {
+	private static final String REF_RECORD_LINK_ID = "refRecordLinkId";
+	private static final String REF_METADATA_GROUP_ID = "refMetadataGroupId";
 	private static final String REF_METADATA_GROUP_TEXT_VAR = "refMetadataGroupTextVar";
 	private static final String REF_RECORD_LINK_TEXT_VAR = "refRecordLinkTextVar";
 	private static final String REF_TEXT_VAR = "refTextVar";
@@ -179,9 +181,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		dummyRR.addChild(DataAtomic.withNameInDataAndValue(TEXT_ID, id + "Text"));
 		dummyRR.addChild(DataAtomic.withNameInDataAndValue(DEF_TEXT_ID, id + DEF_TEXT));
 		dummyRR.addChild(
-				DataAtomic.withNameInDataAndValue("refRecordLinkId", id + "refRecordLinkId"));
-		dummyRR.addChild(
-				DataAtomic.withNameInDataAndValue("refMetadataGroupId", id + "refMetadataGroupId"));
+				DataAtomic.withNameInDataAndValue(REF_RECORD_LINK_ID, id + REF_RECORD_LINK_ID));
+		dummyRR.addChild(DataAtomic.withNameInDataAndValue(REF_METADATA_GROUP_ID,
+				id + REF_METADATA_GROUP_ID));
 		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
 		dummyRR.addChild(childReferences);
 
@@ -692,19 +694,14 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	private void addTopLevelMetadataGroupsForMetadataRecordRelation() {
 		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(REF_RECORD_LINK_TEXT_VAR,
-				"refRecordLinkId", "^.+Link$");
+				REF_RECORD_LINK_ID, "^.+Link$");
 		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(
-				REF_METADATA_GROUP_TEXT_VAR, "refMetadataGroupId", "^.+Group$");
+				REF_METADATA_GROUP_TEXT_VAR, REF_METADATA_GROUP_ID, "^.+Group$");
 
 		String id = "metadataRecordRelationGroup";
 		DataGroup dataGroup = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(id, false);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
 				REF_PARENT_ID_TEXT_VAR, "0", "1");
-		// metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
-		// ATTRIBUTE_REFERENCES,
-		// "0", "1");
-		// metadataCreator.addChildReferenceWithRef1to1(dataGroup,
-		// CHILD_REFERENCES);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, REF_RECORD_LINK_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
 				REF_METADATA_GROUP_TEXT_VAR, "0", "1");
@@ -714,10 +711,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		DataGroup dataGroupNew = createDataGroupForTopLevelMetadataGroupWithIdAndIsNew(idNew, true);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
 				REF_PARENT_ID_TEXT_VAR, "0", "1");
-		// metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
-		// ATTRIBUTE_REFERENCES, "0", "1");
-		// metadataCreator.addChildReferenceWithRef1to1(dataGroupNew,
-		// CHILD_REFERENCES);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroupNew, REF_RECORD_LINK_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroupNew,
 				REF_METADATA_GROUP_TEXT_VAR, "0", "1");
