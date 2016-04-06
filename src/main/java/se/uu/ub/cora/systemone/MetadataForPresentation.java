@@ -26,6 +26,7 @@ import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class MetadataForPresentation {
 
+	private static final String OUTPUT_FORMAT = "outputFormat";
 	private static final String EMPTY_TEXT_ID_TEXT_VAR = "emptyTextIdTextVar";
 	private static final String REPEAT_COLLECTION = "repeatCollection";
 	private static final String CHILDREN = "children";
@@ -68,6 +69,7 @@ public class MetadataForPresentation {
 	private static final String PARENT_ID = "parentId";
 	private static final String ATTRIBUTE_REFERENCES = "attributeReferences";
 	private static final String PRESENTATIONS_OF_GROUP = "presentationsOfGroup";
+	private static final String OUTPUT_FORMAT_COLLECTION_VAR = "outputFormatCollectionVar";
 	private DataGroup emptyLinkList = DataGroup.withNameInData("collectedDataLinks");
 	private RecordStorage recordStorage;
 	private MetadataCreator metadataCreator;
@@ -87,6 +89,10 @@ public class MetadataForPresentation {
 		createModeCollectionItems();
 		createModeItemCollection();
 		createModeVar();
+
+		createOutputFormatCollectionItems();
+		createOutputFormatItemCollection();
+		createOutputFormatVar();
 
 		createDefaultPresentationCollectionItems();
 		createDefaultPresentationItemCollection();
@@ -186,6 +192,35 @@ public class MetadataForPresentation {
 		DataGroup dataGroup = metadataCreator
 				.createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(collectionId,
 						"modeCollection", "mode");
+		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + COLLECTION_VAR,
+				dataGroup, emptyLinkList);
+	}
+
+	private void createOutputFormatCollectionItems() {
+		metadataCreator.createCollectionItem("text", "text");
+		metadataCreator.createCollectionItem("image", "image");
+		metadataCreator.createCollectionItem("video", "video");
+		metadataCreator.createCollectionItem("sound", "sound");
+		metadataCreator.createCollectionItem("download", "download");
+	}
+
+	private void createOutputFormatItemCollection() {
+		String id = OUTPUT_FORMAT;
+		DataGroup dataGroup = metadataCreator.createDataGroupForItemCollectionWithId(id);
+		metadataCreator.addCollectionItemReferenceByCollectionItemId(dataGroup, "textItem");
+		metadataCreator.addCollectionItemReferenceByCollectionItemId(dataGroup, "imageItem");
+		metadataCreator.addCollectionItemReferenceByCollectionItemId(dataGroup, "videoItem");
+		metadataCreator.addCollectionItemReferenceByCollectionItemId(dataGroup, "soundItem");
+		metadataCreator.addCollectionItemReferenceByCollectionItemId(dataGroup, "downloadItem");
+		recordStorage.create(MetadataTypes.ITEMCOLLECTION.type, id + COLLECTION, dataGroup,
+				emptyLinkList);
+	}
+
+	private void createOutputFormatVar() {
+		String collectionId = OUTPUT_FORMAT;
+		DataGroup dataGroup = metadataCreator
+				.createCollectionVarDataGroupWithIdAndRefCollectionIdAndNameInData(collectionId,
+						"outputFormatCollection", OUTPUT_FORMAT);
 		recordStorage.create(MetadataTypes.COLLECTIONVARIABLE.type, collectionId + COLLECTION_VAR,
 				dataGroup, emptyLinkList);
 	}
@@ -409,8 +444,11 @@ public class MetadataForPresentation {
 
 		metadataCreator.addMetadataTextVariableWithIdAndNameInDataAndRegEx(EMPTY_TEXT_ID_TEXT_VAR,
 				"emptyTextId", "(.*Text$)");
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup, EMPTY_TEXT_ID_TEXT_VAR,"0","1");
-		
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
+				EMPTY_TEXT_ID_TEXT_VAR, "0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
+				OUTPUT_FORMAT_COLLECTION_VAR, "0", "1");
+
 		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_VAR_GROUP, dataGroup,
 				emptyLinkList);
 
@@ -426,7 +464,10 @@ public class MetadataForPresentation {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, "recordInfoNewPVarGroup");
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, PRESENTATION_OF_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, MODE_COLLECTION_VAR);
-		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2, EMPTY_TEXT_ID_TEXT_VAR,"0","1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2,
+				EMPTY_TEXT_ID_TEXT_VAR, "0", "1");
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2,
+				OUTPUT_FORMAT_COLLECTION_VAR, "0", "1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, "presentationVarNewGroup", dataGroup2,
 				emptyLinkList);
