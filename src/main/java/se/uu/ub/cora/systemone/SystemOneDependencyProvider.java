@@ -36,8 +36,8 @@ import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
-import se.uu.ub.cora.spider.record.storage.RecordStorageInMemory;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
+import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 /**
@@ -133,7 +133,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	public SystemOneDependencyProvider() {
 		Map<String, Map<String, DataGroup>> records = new HashMap<>();
 
-		recordStorage = new RecordStorageInMemory(records);
+		// recordStorage = new RecordStorageInMemory(records);
+		String basePath = "/tmp/recordStorageOnDisk/";
+		recordStorage = RecordStorageOnDisk.createRecordStorageOnDiskWithBasePath(basePath);
 		metadataStorage = (MetadataStorage) recordStorage;
 		authorizator = new AuthorizatorImp();
 		idGenerator = new TimeStampIdGenerator();
@@ -141,19 +143,22 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 		metadataCreator = new MetadataCreator(recordStorage);
 
-		bootstrapSystemMetadata();
-		MetadataForTexts metadataForTexts = new MetadataForTexts(recordStorage, metadataCreator);
-		metadataForTexts.createMetadataForTexts();
-
-		MetadataForPresentation metadataForPresentation = new MetadataForPresentation(recordStorage,
-				metadataCreator);
-		metadataForPresentation.createMetadataForPresentation();
-
-		MetadataForBinary metadataForBinary = new MetadataForBinary(recordStorage, metadataCreator);
-		metadataForBinary.createMetadataForBinary();
-
-		createDummyRecordLink();
-		createDummyRecordRelation();
+		// bootstrapSystemMetadata();
+		// MetadataForTexts metadataForTexts = new
+		// MetadataForTexts(recordStorage, metadataCreator);
+		// metadataForTexts.createMetadataForTexts();
+		//
+		// MetadataForPresentation metadataForPresentation = new
+		// MetadataForPresentation(recordStorage,
+		// metadataCreator);
+		// metadataForPresentation.createMetadataForPresentation();
+		//
+		// MetadataForBinary metadataForBinary = new
+		// MetadataForBinary(recordStorage, metadataCreator);
+		// metadataForBinary.createMetadataForBinary();
+		//
+		// createDummyRecordLink();
+		// createDummyRecordRelation();
 	}
 
 	private void createDummyRecordLink() {
@@ -184,8 +189,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 				DataAtomic.withNameInDataAndValue(REF_RECORD_LINK_ID, id + REF_RECORD_LINK_ID));
 		dummyRR.addChild(DataAtomic.withNameInDataAndValue(REF_METADATA_GROUP_ID,
 				id + REF_METADATA_GROUP_ID));
-		DataGroup childReferences = DataGroup.withNameInData(CHILD_REFERENCES);
-		dummyRR.addChild(childReferences);
+		// DataGroup childReferences =
+		// DataGroup.withNameInData(CHILD_REFERENCES);
+		// dummyRR.addChild(childReferences);
 
 		recordStorage.create(MetadataTypes.RECORDRELATION.type, id, dummyRR, emptyLinkList);
 	}
