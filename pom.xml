@@ -38,7 +38,7 @@
 		<bookkeeper.version>0.7-SNAPSHOT</bookkeeper.version>
 		<beefeater.version>0.4-SNAPSHOT</beefeater.version>
         <spider.version>0.9-SNAPSHOT</spider.version>
-        <diskstorage.version>0.1-SNAPSHOT</diskstorage.version>
+        <basicstorage.version>0.1-SNAPSHOT</basicstorage.version>
 	</properties>
 
 	<scm>
@@ -91,8 +91,8 @@
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>diskstorage</artifactId>
-			<version>${diskstorage.version}</version>
+			<artifactId>basicstorage</artifactId>
+			<version>${basicstorage.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
