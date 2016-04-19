@@ -669,7 +669,8 @@ public class MetadataForPresentation {
 
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, PRESENTATION_OF_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup, MODE_COLLECTION_VAR);
-		metadataCreator.addChildReferenceWithRef1to1(dataGroup, LINKED_RECORD_PRESENTATIONS_GROUP);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup,
+				LINKED_RECORD_PRESENTATIONS_GROUP, "0", "1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, PRESENTATION_RECORD_LINK_GROUP, dataGroup,
 				emptyLinkList);
@@ -686,7 +687,8 @@ public class MetadataForPresentation {
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, "recordInfoNewPRecordLinkGroup");
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, PRESENTATION_OF_TEXT_VAR);
 		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, MODE_COLLECTION_VAR);
-		metadataCreator.addChildReferenceWithRef1to1(dataGroup2, LINKED_RECORD_PRESENTATIONS_GROUP);
+		metadataCreator.addChildReferenceWithRefRepeatMinRepeatMax(dataGroup2,
+				LINKED_RECORD_PRESENTATIONS_GROUP, "0", "1");
 
 		recordStorage.create(MetadataTypes.GROUP.type, "presentationRecordLinkNewGroup", dataGroup2,
 				emptyLinkList);
