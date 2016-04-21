@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016 Uppsala University Library
+ * Copyright 2015 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -31,28 +31,20 @@ import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
-import se.uu.ub.cora.storage.RecordStorageOnDisk;
+import se.uu.ub.cora.storage.RecordStorageInMemoryReadFromDisk;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
-/**
- * SystemOneDependencyProvider wires up the system for use in "production", as
- * this is in SystemOne production currently means using all in memory storage,
- * so do NOT use this class in production as it is written today. :)
- *
- * @author <a href="mailto:olov.mckie@ub.uu.se">Olov McKie</a>
- * @since 0.1
- */
-public class SystemOneDependencyProvider implements SpiderDependencyProvider {
-
+public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyProvider {
 	private RecordStorage recordStorage;
 	private MetadataStorage metadataStorage;
 	private Authorizator authorizator;
 	private RecordIdGenerator idGenerator;
 	private PermissionKeyCalculator keyCalculator;
 
-	public SystemOneDependencyProvider() {
-		String basePath = "/mnt/data/basicstorage/";
-		recordStorage = RecordStorageOnDisk.createRecordStorageOnDiskWithBasePath(basePath);
+	public SystemOneDependencyProviderForFitnesse() {
+		String basePath = "/mnt/data/basicstorage-fitnesse/";
+		recordStorage = RecordStorageInMemoryReadFromDisk
+				.createRecordStorageOnDiskWithBasePath(basePath);
 		metadataStorage = (MetadataStorage) recordStorage;
 		authorizator = new AuthorizatorImp();
 		idGenerator = new TimeStampIdGenerator();
@@ -89,4 +81,5 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	public DataRecordLinkCollector getDataRecordLinkCollector() {
 		return new DataRecordLinkCollectorImp(metadataStorage);
 	}
+
 }
