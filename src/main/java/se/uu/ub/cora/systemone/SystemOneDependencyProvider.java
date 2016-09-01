@@ -27,6 +27,7 @@ import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
+import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
@@ -88,5 +89,11 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	@Override
 	public DataRecordLinkCollector getDataRecordLinkCollector() {
 		return new DataRecordLinkCollectorImp(metadataStorage);
+	}
+
+	@Override
+	public ExtendedFunctionalityProvider getExtendedFunctionalityProvider() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
