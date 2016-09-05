@@ -27,6 +27,7 @@ import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
+import se.uu.ub.cora.spider.extended.BaseExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
@@ -36,9 +37,9 @@ import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 /**
- * SystemOneDependencyProvider wires up the system for use in "production", as
- * this is in SystemOne production currently means using all in memory storage,
- * so do NOT use this class in production as it is written today. :)
+ * SystemOneDependencyProvider wires up the system for use in "production", as this is in SystemOne
+ * production currently means using all in memory storage, so do NOT use this class in production as
+ * it is written today. :)
  *
  * @author <a href="mailto:olov.mckie@ub.uu.se">Olov McKie</a>
  * @since 0.1
@@ -93,7 +94,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	@Override
 	public ExtendedFunctionalityProvider getExtendedFunctionalityProvider() {
-		// TODO Auto-generated method stub
-		return null;
+		return new BaseExtendedFunctionalityProvider();
 	}
 }
