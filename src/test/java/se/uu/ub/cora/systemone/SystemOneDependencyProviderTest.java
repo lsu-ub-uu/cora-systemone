@@ -19,9 +19,9 @@
 
 package se.uu.ub.cora.systemone;
 
-import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertNotNull;
+
+import org.testng.annotations.Test;
 
 public class SystemOneDependencyProviderTest {
 	@Test
@@ -33,5 +33,6 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getPermissionKeyCalculator());
 		assertNotNull(dependencyProvider.getDataValidator());
 		assertNotNull(dependencyProvider.getDataRecordLinkCollector());
+		assertNotNull(dependencyProvider.getStreamStorage());
 	}
 }

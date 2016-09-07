@@ -31,7 +31,9 @@ import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
+import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
+import se.uu.ub.cora.storage.StreamStorageOnDisk;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 /**
@@ -49,6 +51,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private Authorizator authorizator;
 	private RecordIdGenerator idGenerator;
 	private PermissionKeyCalculator keyCalculator;
+	private StreamStorage streamStorage;
 
 	public SystemOneDependencyProvider() {
 		String basePath = "/mnt/data/basicstorage/";
@@ -57,7 +60,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		authorizator = new AuthorizatorImp();
 		idGenerator = new TimeStampIdGenerator();
 		keyCalculator = new RecordPermissionKeyCalculator();
-
+		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
 	}
 
 	@Override
@@ -88,5 +91,10 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	@Override
 	public DataRecordLinkCollector getDataRecordLinkCollector() {
 		return new DataRecordLinkCollectorImp(metadataStorage);
+	}
+
+	@Override
+	public StreamStorage getStreamStorage() {
+		return streamStorage;
 	}
 }

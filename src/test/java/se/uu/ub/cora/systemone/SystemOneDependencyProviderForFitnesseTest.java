@@ -35,5 +35,6 @@ public class SystemOneDependencyProviderForFitnesseTest {
 		assertNotNull(dependencyProvider.getPermissionKeyCalculator());
 		assertNotNull(dependencyProvider.getDataValidator());
 		assertNotNull(dependencyProvider.getDataRecordLinkCollector());
+		assertNotNull(dependencyProvider.getStreamStorage());
 	}
 }
