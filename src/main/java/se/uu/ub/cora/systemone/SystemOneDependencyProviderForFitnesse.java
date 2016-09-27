@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2016 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -33,7 +33,9 @@ import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
+import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageInMemoryReadFromDisk;
+import se.uu.ub.cora.storage.StreamStorageOnDisk;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyProvider {
@@ -42,6 +44,7 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 	private Authorizator authorizator;
 	private RecordIdGenerator idGenerator;
 	private PermissionKeyCalculator keyCalculator;
+	private StreamStorage streamStorage;
 
 	public SystemOneDependencyProviderForFitnesse() {
 		String basePath = "/mnt/data/basicstorage-fitnesse/";
@@ -51,7 +54,7 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 		authorizator = new AuthorizatorImp();
 		idGenerator = new TimeStampIdGenerator();
 		keyCalculator = new RecordPermissionKeyCalculator();
-
+		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
 	}
 
 	@Override
@@ -82,6 +85,11 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 	@Override
 	public DataRecordLinkCollector getDataRecordLinkCollector() {
 		return new DataRecordLinkCollectorImp(metadataStorage);
+	}
+
+	@Override
+	public StreamStorage getStreamStorage() {
+		return streamStorage;
 	}
 
 	@Override

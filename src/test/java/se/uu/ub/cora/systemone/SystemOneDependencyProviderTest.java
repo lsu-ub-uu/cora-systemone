@@ -33,6 +33,7 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getPermissionKeyCalculator());
 		assertNotNull(dependencyProvider.getDataValidator());
 		assertNotNull(dependencyProvider.getDataRecordLinkCollector());
+		assertNotNull(dependencyProvider.getStreamStorage());
 		// assertNotNull(dependencyProvider.getExtendedFunctionalityProvider());
 	}
 }
