@@ -35,7 +35,6 @@
 	<name>System One</name>
 
 	<properties>
-        <json.version>0.3-SNAPSHOT</json.version>
         <bookkeeper.version>0.9-SNAPSHOT</bookkeeper.version>
 		<beefeater.version>0.4-SNAPSHOT</beefeater.version>
         <spider.version>0.11-SNAPSHOT</spider.version>
@@ -75,12 +74,6 @@
 	</repositories>
 
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 			<groupId>se.uu.ub.cora</groupId> -->
-<!-- 			<artifactId>json</artifactId> -->
-<!-- 			<version>${json.version}</version> -->
-<!--             <scope>compile</scope> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>bookkeeper</artifactId>
