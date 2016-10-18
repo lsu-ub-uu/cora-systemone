@@ -26,6 +26,9 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
 import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
+import se.uu.ub.cora.spider.authentication.Authenticator;
+import se.uu.ub.cora.spider.authentication.AuthenticatorImp;
+import se.uu.ub.cora.spider.authentication.UserPicker;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.extended.BaseExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
@@ -36,15 +39,15 @@ import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
+import se.uu.ub.cora.systemone.authentication.SystemOneUserPicker;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 /**
- * SystemOneDependencyProvider wires up the system for use in "production", as this is in SystemOne
- * production currently means using all in memory storage, so do NOT use this class in production as
- * it is written today. :)
+ * SystemOneDependencyProvider wires up the system for use in "production", as
+ * this is in SystemOne production currently means using all in memory storage
+ * (stored on disk), so do NOT use this class in production as it is written
+ * today. :)
  *
- * @author <a href="mailto:olov.mckie@ub.uu.se">Olov McKie</a>
- * @since 0.1
  */
 public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
@@ -102,6 +105,12 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	@Override
 	public ExtendedFunctionalityProvider getExtendedFunctionalityProvider() {
-		return new BaseExtendedFunctionalityProvider();
+		return new BaseExtendedFunctionalityProvider(this);
+	}
+
+	@Override
+	public Authenticator getAuthenticator() {
+		UserPicker userPicker = new SystemOneUserPicker();
+		return new AuthenticatorImp(userPicker);
 	}
 }

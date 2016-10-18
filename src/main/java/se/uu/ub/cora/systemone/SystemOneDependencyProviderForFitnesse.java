@@ -26,6 +26,9 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
 import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
+import se.uu.ub.cora.spider.authentication.Authenticator;
+import se.uu.ub.cora.spider.authentication.AuthenticatorImp;
+import se.uu.ub.cora.spider.authentication.UserPicker;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.extended.BaseExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
@@ -36,6 +39,7 @@ import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageInMemoryReadFromDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
+import se.uu.ub.cora.systemone.authentication.SystemOneUserPicker;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyProvider {
@@ -94,6 +98,12 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 
 	@Override
 	public ExtendedFunctionalityProvider getExtendedFunctionalityProvider() {
-		return new BaseExtendedFunctionalityProvider();
+		return new BaseExtendedFunctionalityProvider(this);
+	}
+
+	@Override
+	public Authenticator getAuthenticator() {
+		UserPicker userPicker = new SystemOneUserPicker();
+		return new AuthenticatorImp(userPicker);
 	}
 }
