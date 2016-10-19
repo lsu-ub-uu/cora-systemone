@@ -35,5 +35,6 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getDataRecordLinkCollector());
 		assertNotNull(dependencyProvider.getStreamStorage());
 		assertNotNull(dependencyProvider.getExtendedFunctionalityProvider());
+		assertNotNull(dependencyProvider.getAuthenticator());
 	}
 }
