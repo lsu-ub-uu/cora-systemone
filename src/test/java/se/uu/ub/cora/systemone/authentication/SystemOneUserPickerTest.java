@@ -29,10 +29,26 @@ import se.uu.ub.cora.spider.authentication.UserPicker;
 
 public class SystemOneUserPickerTest {
 	@Test
-	public void testInit() {
+	public void testGuest() {
 		UserPicker userPicker = new SystemOneUserPicker();
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("guest", "system");
 		User user = userPicker.pickUser(userInfo);
 		assertEquals(user.id, "12345");
+	}
+
+	@Test
+	public void testSystemAdmin() {
+		UserPicker userPicker = new SystemOneUserPicker();
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("systemAdmin", "system");
+		User user = userPicker.pickUser(userInfo);
+		assertEquals(user.id, "99999");
+	}
+
+	@Test
+	public void testUser() {
+		UserPicker userPicker = new SystemOneUserPicker();
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("user", "system");
+		User user = userPicker.pickUser(userInfo);
+		assertEquals(user.id, "10000");
 	}
 }
