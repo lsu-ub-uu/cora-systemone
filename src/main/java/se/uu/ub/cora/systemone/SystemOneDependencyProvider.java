@@ -29,10 +29,11 @@ import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorImp;
 import se.uu.ub.cora.spider.authentication.UserPicker;
+import se.uu.ub.cora.spider.authorization.BasePermissionRuleCalculator;
+import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.extended.BaseExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
-import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
@@ -40,7 +41,6 @@ import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
 import se.uu.ub.cora.systemone.authentication.SystemOneUserPicker;
-import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
@@ -55,7 +55,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private MetadataStorage metadataStorage;
 	private Authorizator authorizator;
 	private RecordIdGenerator idGenerator;
-	private PermissionKeyCalculator keyCalculator;
+	private PermissionRuleCalculator ruleCalculator;
 	private StreamStorage streamStorage;
 
 	public SystemOneDependencyProvider() {
@@ -64,7 +64,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		metadataStorage = (MetadataStorage) recordStorage;
 		authorizator = new AuthorizatorImp();
 		idGenerator = new TimeStampIdGenerator();
-		keyCalculator = new RecordPermissionKeyCalculator();
+		ruleCalculator = new BasePermissionRuleCalculator();
 		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
 	}
 
@@ -84,8 +84,8 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	}
 
 	@Override
-	public PermissionKeyCalculator getPermissionKeyCalculator() {
-		return keyCalculator;
+	public PermissionRuleCalculator getPermissionKeyCalculator() {
+		return ruleCalculator;
 	}
 
 	@Override

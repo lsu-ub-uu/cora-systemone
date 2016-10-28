@@ -25,13 +25,13 @@ import java.util.Set;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
+import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 public class RecordPermissionKeyCalculatorTest {
 	@Test
 	public void testGeneratePermissionKey() {
-		PermissionKeyCalculator keyCalculator = new RecordPermissionKeyCalculator();
+		PermissionRuleCalculator keyCalculator = new RecordPermissionKeyCalculator();
 
 		DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
 
@@ -43,7 +43,7 @@ public class RecordPermissionKeyCalculatorTest {
 
 	@Test
 	public void testCalculateKeyForList() {
-		PermissionKeyCalculator keyCalculator = new RecordPermissionKeyCalculator();
+		PermissionRuleCalculator keyCalculator = new RecordPermissionKeyCalculator();
 		Set<String> keys = keyCalculator.calculateKeysForList("READ", "recordType");
 		Optional<String> key = keys.stream().findFirst();
 		Assert.assertEquals(key.get(), "READ:RECORDTYPE:SYSTEM:*",
