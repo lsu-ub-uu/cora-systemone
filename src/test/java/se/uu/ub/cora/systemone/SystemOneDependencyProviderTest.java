@@ -27,10 +27,10 @@ public class SystemOneDependencyProviderTest {
 	@Test
 	public void testInit() {
 		SystemOneDependencyProvider dependencyProvider = new SystemOneDependencyProvider();
-		assertNotNull(dependencyProvider.getAuthorizator());
+		assertNotNull(dependencyProvider.getSpiderAuthorizator());
 		assertNotNull(dependencyProvider.getRecordStorage());
 		assertNotNull(dependencyProvider.getIdGenerator());
-		assertNotNull(dependencyProvider.getPermissionKeyCalculator());
+		assertNotNull(dependencyProvider.getPermissionRuleCalculator());
 		assertNotNull(dependencyProvider.getDataValidator());
 		assertNotNull(dependencyProvider.getDataRecordLinkCollector());
 		assertNotNull(dependencyProvider.getStreamStorage());

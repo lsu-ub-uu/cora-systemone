@@ -29,10 +29,10 @@ public class SystemOneDependencyProviderForFitnesseTest {
 	@Test
 	public void testInit() {
 		SpiderDependencyProvider dependencyProvider = new SystemOneDependencyProviderForFitnesse();
-		assertNotNull(dependencyProvider.getAuthorizator());
+		assertNotNull(dependencyProvider.getSpiderAuthorizator());
 		assertNotNull(dependencyProvider.getRecordStorage());
 		assertNotNull(dependencyProvider.getIdGenerator());
-		assertNotNull(dependencyProvider.getPermissionKeyCalculator());
+		assertNotNull(dependencyProvider.getPermissionRuleCalculator());
 		assertNotNull(dependencyProvider.getDataValidator());
 		assertNotNull(dependencyProvider.getDataRecordLinkCollector());
 		assertNotNull(dependencyProvider.getStreamStorage());
