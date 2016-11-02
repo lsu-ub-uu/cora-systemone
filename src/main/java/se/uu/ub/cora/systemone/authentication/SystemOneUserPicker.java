@@ -38,7 +38,7 @@ public class SystemOneUserPicker implements UserPicker {
 		if ("user".equals(userInfo.idFromLogin)) {
 			User user = new User("10000");
 			setInfoFromUserInfo(userInfo, user);
-			user.roles.add(GUEST);
+			user.roles.add("user");
 			return user;
 
 		}

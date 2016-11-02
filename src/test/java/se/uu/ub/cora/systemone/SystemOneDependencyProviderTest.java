@@ -19,14 +19,25 @@
 
 package se.uu.ub.cora.systemone;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
+
 public class SystemOneDependencyProviderTest {
+	private SystemOneDependencyProvider dependencyProvider;
+
+	@BeforeMethod
+	public void setUp() {
+		dependencyProvider = new SystemOneDependencyProvider();
+
+	}
+
 	@Test
 	public void testInit() {
-		SystemOneDependencyProvider dependencyProvider = new SystemOneDependencyProvider();
 		assertNotNull(dependencyProvider.getSpiderAuthorizator());
 		assertNotNull(dependencyProvider.getRecordStorage());
 		assertNotNull(dependencyProvider.getIdGenerator());
@@ -36,5 +47,14 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getStreamStorage());
 		assertNotNull(dependencyProvider.getExtendedFunctionalityProvider());
 		assertNotNull(dependencyProvider.getAuthenticator());
+	}
+
+	@Test
+	public void testGetPermissionRuleCalculator() {
+		PermissionRuleCalculator permissionRuleCalculator = dependencyProvider
+				.getPermissionRuleCalculator();
+		PermissionRuleCalculator permissionRuleCalculator2 = dependencyProvider
+				.getPermissionRuleCalculator();
+		assertNotEquals(permissionRuleCalculator, permissionRuleCalculator2);
 	}
 }

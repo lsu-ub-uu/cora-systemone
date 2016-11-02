@@ -38,6 +38,8 @@ import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
+import se.uu.ub.cora.spider.role.RulesProvider;
+import se.uu.ub.cora.spider.role.RulesProviderImp;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
@@ -55,7 +57,6 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	private RecordStorage recordStorage;
 	private MetadataStorage metadataStorage;
 	private RecordIdGenerator idGenerator;
-	private PermissionRuleCalculator ruleCalculator;
 	private StreamStorage streamStorage;
 
 	public SystemOneDependencyProvider() {
@@ -63,14 +64,14 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 		recordStorage = RecordStorageOnDisk.createRecordStorageOnDiskWithBasePath(basePath);
 		metadataStorage = (MetadataStorage) recordStorage;
 		idGenerator = new TimeStampIdGenerator();
-		ruleCalculator = new BasePermissionRuleCalculator();
 		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
 	}
 
 	@Override
 	public SpiderAuthorizator getSpiderAuthorizator() {
-		return SpiderAuthorizatorImp.usingSpiderDependencyProviderAndAuthorizator(this,
-				new AuthorizatorImp());
+		RulesProvider rulesProvider = new RulesProviderImp(recordStorage);
+		return SpiderAuthorizatorImp.usingSpiderDependencyProviderAndAuthorizatorAndRulesProvider(
+				this, new AuthorizatorImp(), rulesProvider);
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	@Override
 	public PermissionRuleCalculator getPermissionRuleCalculator() {
-		return ruleCalculator;
+		return new BasePermissionRuleCalculator();
 	}
 
 	@Override
