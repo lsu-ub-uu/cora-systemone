@@ -25,21 +25,26 @@ import se.uu.ub.cora.spider.authentication.UserPicker;
 
 public class SystemOneUserPicker implements UserPicker {
 
+	private static final String GUEST = "guest";
+
 	@Override
 	public User pickUser(UserInfo userInfo) {
 		if ("systemAdmin".equals(userInfo.idFromLogin)) {
 			User user = new User("99999");
 			setInfoFromUserInfo(userInfo, user);
+			user.roles.add(GUEST);
 			return user;
 		}
 		if ("user".equals(userInfo.idFromLogin)) {
 			User user = new User("10000");
 			setInfoFromUserInfo(userInfo, user);
+			user.roles.add("user");
 			return user;
 
 		}
 		User user = new User("12345");
 		setInfoFromUserInfo(userInfo, user);
+		user.roles.add(GUEST);
 		return user;
 	}
 

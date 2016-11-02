@@ -19,7 +19,6 @@
 
 package se.uu.ub.cora.systemone;
 
-import se.uu.ub.cora.beefeater.Authorizator;
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
@@ -29,25 +28,27 @@ import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorImp;
 import se.uu.ub.cora.spider.authentication.UserPicker;
+import se.uu.ub.cora.spider.authorization.BasePermissionRuleCalculator;
+import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
+import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
+import se.uu.ub.cora.spider.authorization.SpiderAuthorizatorImp;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.extended.BaseExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
-import se.uu.ub.cora.spider.record.PermissionKeyCalculator;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
+import se.uu.ub.cora.spider.role.RulesProvider;
+import se.uu.ub.cora.spider.role.RulesProviderImp;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageInMemoryReadFromDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
 import se.uu.ub.cora.systemone.authentication.SystemOneUserPicker;
-import se.uu.ub.cora.systemone.record.RecordPermissionKeyCalculator;
 
 public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyProvider {
 	private RecordStorage recordStorage;
 	private MetadataStorage metadataStorage;
-	private Authorizator authorizator;
 	private RecordIdGenerator idGenerator;
-	private PermissionKeyCalculator keyCalculator;
 	private StreamStorage streamStorage;
 
 	public SystemOneDependencyProviderForFitnesse() {
@@ -55,15 +56,15 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 		recordStorage = RecordStorageInMemoryReadFromDisk
 				.createRecordStorageOnDiskWithBasePath(basePath);
 		metadataStorage = (MetadataStorage) recordStorage;
-		authorizator = new AuthorizatorImp();
 		idGenerator = new TimeStampIdGenerator();
-		keyCalculator = new RecordPermissionKeyCalculator();
 		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
 	}
 
 	@Override
-	public Authorizator getAuthorizator() {
-		return authorizator;
+	public SpiderAuthorizator getSpiderAuthorizator() {
+		RulesProvider rulesProvider = new RulesProviderImp(recordStorage);
+		return SpiderAuthorizatorImp.usingSpiderDependencyProviderAndAuthorizatorAndRulesProvider(
+				this, new AuthorizatorImp(), rulesProvider);
 	}
 
 	@Override
@@ -77,8 +78,8 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 	}
 
 	@Override
-	public PermissionKeyCalculator getPermissionKeyCalculator() {
-		return keyCalculator;
+	public PermissionRuleCalculator getPermissionRuleCalculator() {
+		return new BasePermissionRuleCalculator();
 	}
 
 	@Override
