@@ -21,6 +21,7 @@ package se.uu.ub.cora.systemone.authentication;
 
 import static org.testng.Assert.assertEquals;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.beefeater.authentication.User;
@@ -28,27 +29,65 @@ import se.uu.ub.cora.spider.authentication.UserInfo;
 import se.uu.ub.cora.spider.authentication.UserPicker;
 
 public class SystemOneUserPickerTest {
+	private UserPicker userPicker;
+	private User user;
+
+	@BeforeMethod
+	public void setUp() {
+		userPicker = new SystemOneUserPicker();
+
+	}
+
 	@Test
 	public void testGuest() {
-		UserPicker userPicker = new SystemOneUserPicker();
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("guest", "system");
+		user = pickUserUsingIdFromLoginAndDomainFromLogin("guest", "system");
+		assertUserId("12345");
+		assertOnlyOneUserRole("guest");
+	}
+
+	private User pickUserUsingIdFromLoginAndDomainFromLogin(String idFromLogin,
+			String domainFromLogin) {
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(idFromLogin, domainFromLogin);
 		User user = userPicker.pickUser(userInfo);
-		assertEquals(user.id, "12345");
+		return user;
+	}
+
+	private void assertUserId(String expectedUserId) {
+		assertEquals(user.id, expectedUserId);
+	}
+
+	private void assertOnlyOneUserRole(String expectedRole) {
+		assertFirstUserRole(expectedRole);
+		assertOnlyOneUserRole();
+	}
+
+	private void assertFirstUserRole(String expectedFirstRole) {
+		String firstRole = user.roles.iterator().next();
+		assertEquals(firstRole, expectedFirstRole);
+	}
+
+	private void assertOnlyOneUserRole() {
+		assertEquals(user.roles.size(), 1);
 	}
 
 	@Test
 	public void testSystemAdmin() {
-		UserPicker userPicker = new SystemOneUserPicker();
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("systemAdmin", "system");
-		User user = userPicker.pickUser(userInfo);
-		assertEquals(user.id, "99999");
+		user = pickUserUsingIdFromLoginAndDomainFromLogin("systemAdmin", "system");
+		assertUserId("99999");
+		assertOnlyOneUserRole("guest");
 	}
 
 	@Test
 	public void testUser() {
-		UserPicker userPicker = new SystemOneUserPicker();
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("user", "system");
-		User user = userPicker.pickUser(userInfo);
-		assertEquals(user.id, "10000");
+		user = pickUserUsingIdFromLoginAndDomainFromLogin("user", "system");
+		assertUserId("10000");
+		assertOnlyOneUserRole("user");
+	}
+
+	@Test
+	public void testFitnesse() {
+		user = pickUserUsingIdFromLoginAndDomainFromLogin("fitnesse", "system");
+		assertUserId("121212");
+		assertOnlyOneUserRole("fitnesse");
 	}
 }
