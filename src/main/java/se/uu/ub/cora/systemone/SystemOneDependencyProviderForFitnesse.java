@@ -104,7 +104,7 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 
 	@Override
 	public Authenticator getAuthenticator() {
-		UserPicker userPicker = new SystemOneUserPicker();
+		UserPicker userPicker = SystemOneUserPicker.usingRecordStorage(recordStorage);
 		return new AuthenticatorImp(userPicker);
 	}
 }

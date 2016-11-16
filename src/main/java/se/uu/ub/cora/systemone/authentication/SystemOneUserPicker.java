@@ -19,44 +19,94 @@
 
 package se.uu.ub.cora.systemone.authentication;
 
+import java.util.List;
+
 import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.spider.authentication.UserInfo;
 import se.uu.ub.cora.spider.authentication.UserPicker;
+import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
+import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class SystemOneUserPicker implements UserPicker {
+public final class SystemOneUserPicker implements UserPicker {
 
-	private static final String GUEST = "guest";
+	private static final String USER_RECORDTYPE = "systemOneUser";
+	private static final String GUEST_ID = "12345";
+	private RecordStorage recordStorage;
+	private DataGroup dataGroupUser;
+	private User user;
+
+	public static SystemOneUserPicker usingRecordStorage(RecordStorage recordStorage) {
+		return new SystemOneUserPicker(recordStorage);
+	}
+
+	private SystemOneUserPicker(RecordStorage recordStorage) {
+		this.recordStorage = recordStorage;
+	}
 
 	@Override
 	public User pickUser(UserInfo userInfo) {
-		if ("systemAdmin".equals(userInfo.idFromLogin)) {
-			User user = new User("99999");
-			setInfoFromUserInfo(userInfo, user);
-			user.roles.add(GUEST);
-			return user;
-		}
-		if ("user".equals(userInfo.idFromLogin)) {
-			User user = new User("10000");
-			setInfoFromUserInfo(userInfo, user);
-			user.roles.add("user");
-			return user;
-		}
-		if ("fitnesse".equals(userInfo.idFromLogin)) {
-			User user = new User("121212");
-			setInfoFromUserInfo(userInfo, user);
-			user.roles.add("fitnesse");
-			return user;
-		}
-
-		User user = new User("12345");
-		setInfoFromUserInfo(userInfo, user);
-		user.roles.add(GUEST);
+		ensureActiveUserOrGuest(userInfo);
+		createNewUserWithUserId();
+		possiblyAddUserRoles();
 		return user;
 	}
 
-	private void setInfoFromUserInfo(UserInfo userInfo, User user) {
-		user.loginId = userInfo.idFromLogin;
-		user.loginDomain = userInfo.domainFromLogin;
+	private void ensureActiveUserOrGuest(UserInfo userInfo) {
+		try {
+			tryToReadActiveUserOrGuest(userInfo);
+		} catch (RecordNotFoundException e) {
+			readGuestUserFromStorage();
+		}
 	}
 
+	private void readGuestUserFromStorage() {
+		dataGroupUser = recordStorage.read(USER_RECORDTYPE, GUEST_ID);
+	}
+
+	private void tryToReadActiveUserOrGuest(UserInfo userInfo) {
+		tryToReadLoggedInUser(userInfo);
+		if (!userIsActive()) {
+			readGuestUserFromStorage();
+		}
+	}
+
+	private void tryToReadLoggedInUser(UserInfo userInfo) {
+		dataGroupUser = recordStorage.read(USER_RECORDTYPE, userInfo.idFromLogin);
+	}
+
+	private void createNewUserWithUserId() {
+		String id = extractUserIdFromUserFromStorage();
+		user = new User(id);
+	}
+
+	private String extractUserIdFromUserFromStorage() {
+		DataGroup recordInfo = dataGroupUser.getFirstGroupWithNameInData("recordInfo");
+		return recordInfo.getFirstAtomicValueWithNameInData("id");
+	}
+
+	private void possiblyAddUserRoles() {
+		if (userIsActive()) {
+			addUserRoleIdsToUserRoles();
+		}
+	}
+
+	private boolean userIsActive() {
+		String activeStatus = dataGroupUser.getFirstAtomicValueWithNameInData("activeStatus");
+		return "active".equals(activeStatus);
+	}
+
+	private void addUserRoleIdsToUserRoles() {
+		List<DataGroup> allGroupsWithNameInData = dataGroupUser
+				.getAllGroupsWithNameInData("userRole");
+		for (DataGroup extractedRole : allGroupsWithNameInData) {
+			addUserRoleIdToUserRoles(extractedRole);
+		}
+	}
+
+	private void addUserRoleIdToUserRoles(DataGroup extractedRole) {
+		DataGroup extractedRoleLink = extractedRole.getFirstGroupWithNameInData("userRole");
+		String roleId = extractedRoleLink.getFirstAtomicValueWithNameInData("linkedRecordId");
+		user.roles.add(roleId);
+	}
 }

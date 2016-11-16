@@ -25,23 +25,32 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.bookkeeper.data.DataAtomic;
+import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.spider.authentication.UserInfo;
 import se.uu.ub.cora.spider.authentication.UserPicker;
+import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class SystemOneUserPickerTest {
+	private static final String SYSTEM = "system";
+	private static final String FITNESSE_USER_ID = "121212";
+	private static final String GUEST_ID = "12345";
 	private UserPicker userPicker;
 	private User user;
 
+	private RecordStorage recordStorage;
+
 	@BeforeMethod
 	public void setUp() {
-		userPicker = new SystemOneUserPicker();
+		recordStorage = TestDataRecordInMemoryStorage.createRecordStorageInMemoryWithUserTestData();
+		userPicker = SystemOneUserPicker.usingRecordStorage(recordStorage);
 
 	}
 
 	@Test
 	public void testGuest() {
-		user = pickUserUsingIdFromLoginAndDomainFromLogin("guest", "system");
-		assertUserId("12345");
+		user = pickUserUsingIdFromLoginAndDomainFromLogin(GUEST_ID, SYSTEM);
+		assertUserId(GUEST_ID);
 		assertOnlyOneUserRole("guest");
 	}
 
@@ -71,23 +80,51 @@ public class SystemOneUserPickerTest {
 	}
 
 	@Test
-	public void testSystemAdmin() {
-		user = pickUserUsingIdFromLoginAndDomainFromLogin("systemAdmin", "system");
-		assertUserId("99999");
+	public void testUnknownUserIsGuest() {
+		user = pickUserUsingIdFromLoginAndDomainFromLogin("unknownUser", SYSTEM);
+		assertUserId(GUEST_ID);
 		assertOnlyOneUserRole("guest");
 	}
 
 	@Test
-	public void testUser() {
-		user = pickUserUsingIdFromLoginAndDomainFromLogin("user", "system");
-		assertUserId("10000");
-		assertOnlyOneUserRole("user");
+	public void testUserWithTwoRoles() {
+		user = pickUserUsingIdFromLoginAndDomainFromLogin(FITNESSE_USER_ID, SYSTEM);
+		assertUserId(FITNESSE_USER_ID);
+		assertNumberOfRoles(2);
+		assertUserRoles("fitnesse", "metadataAdmin");
+	}
+
+	private void assertNumberOfRoles(int numberOfRoles) {
+		assertEquals(user.roles.size(), numberOfRoles);
+	}
+
+	private void assertUserRoles(String... userRoles) {
+		int i = 0;
+		for (String userRole : user.roles) {
+			assertEquals(userRole, userRoles[i]);
+			i++;
+		}
 	}
 
 	@Test
-	public void testFitnesse() {
-		user = pickUserUsingIdFromLoginAndDomainFromLogin("fitnesse", "system");
-		assertUserId("121212");
-		assertOnlyOneUserRole("fitnesse");
+	public void testInactiveUserReturnsGuest() {
+		user = pickUserUsingIdFromLoginAndDomainFromLogin("666666", SYSTEM);
+		assertUserId(GUEST_ID);
 	}
+
+	@Test
+	public void testGuestInactive() {
+		updateUserGuestInStorageToBeInactive();
+		user = pickUserUsingIdFromLoginAndDomainFromLogin(GUEST_ID, SYSTEM);
+		assertNumberOfRoles(0);
+	}
+
+	private void updateUserGuestInStorageToBeInactive() {
+		DataGroup guestGroup = recordStorage.read("systemOneUser", GUEST_ID);
+		guestGroup.removeFirstChildWithNameInData("activeStatus");
+		guestGroup.addChild(DataAtomic.withNameInDataAndValue("activeStatus", "inactive"));
+		recordStorage.update("systemOneUser", GUEST_ID, guestGroup,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
+	}
+
 }
