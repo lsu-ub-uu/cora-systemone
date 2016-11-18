@@ -29,16 +29,16 @@
 	</parent>
 
 	<artifactId>systemone</artifactId>
-    <version>0.10-SNAPSHOT</version>
+    <version>0.11-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>System One</name>
 
 	<properties>
-        <bookkeeper.version>0.9-SNAPSHOT</bookkeeper.version>
-		<beefeater.version>0.4-SNAPSHOT</beefeater.version>
-        <spider.version>0.11-SNAPSHOT</spider.version>
-        <basicstorage.version>0.2-SNAPSHOT</basicstorage.version>
+        <bookkeeper.version>0.10-SNAPSHOT</bookkeeper.version>
+		<beefeater.version>0.5-SNAPSHOT</beefeater.version>
+        <spider.version>0.12-SNAPSHOT</spider.version>
+        <basicstorage.version>0.3-SNAPSHOT</basicstorage.version>
 	</properties>
 
 	<scm>
