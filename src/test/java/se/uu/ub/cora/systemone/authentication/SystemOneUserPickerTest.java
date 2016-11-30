@@ -32,7 +32,6 @@ import se.uu.ub.cora.gatekeeper.UserPicker;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class SystemOneUserPickerTest {
-	private static final String SYSTEM = "system";
 	private static final String FITNESSE_USER_ID = "121212";
 	private static final String GUEST_ID = "12345";
 	private UserPicker userPicker;
@@ -49,14 +48,13 @@ public class SystemOneUserPickerTest {
 
 	@Test
 	public void testGuest() {
-		user = pickUserUsingIdFromLoginAndDomainFromLogin(GUEST_ID, SYSTEM);
+		user = pickUserUsingIdInStorage(GUEST_ID);
 		assertUserId(GUEST_ID);
 		assertOnlyOneUserRole("guest");
 	}
 
-	private User pickUserUsingIdFromLoginAndDomainFromLogin(String idFromLogin,
-			String domainFromLogin) {
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(idFromLogin, domainFromLogin);
+	private User pickUserUsingIdInStorage(String idInStorage) {
+		UserInfo userInfo = UserInfo.withIdInUserStorage(idInStorage);
 		User user = userPicker.pickUser(userInfo);
 		return user;
 	}
@@ -81,14 +79,14 @@ public class SystemOneUserPickerTest {
 
 	@Test
 	public void testUnknownUserIsGuest() {
-		user = pickUserUsingIdFromLoginAndDomainFromLogin("unknownUser", SYSTEM);
+		user = pickUserUsingIdInStorage("unknownUser");
 		assertUserId(GUEST_ID);
 		assertOnlyOneUserRole("guest");
 	}
 
 	@Test
 	public void testUserWithTwoRoles() {
-		user = pickUserUsingIdFromLoginAndDomainFromLogin(FITNESSE_USER_ID, SYSTEM);
+		user = pickUserUsingIdInStorage(FITNESSE_USER_ID);
 		assertUserId(FITNESSE_USER_ID);
 		assertNumberOfRoles(2);
 		assertUserRoles("fitnesse", "metadataAdmin");
@@ -108,14 +106,14 @@ public class SystemOneUserPickerTest {
 
 	@Test
 	public void testInactiveUserReturnsGuest() {
-		user = pickUserUsingIdFromLoginAndDomainFromLogin("666666", SYSTEM);
+		user = pickUserUsingIdInStorage("666666");
 		assertUserId(GUEST_ID);
 	}
 
 	@Test
 	public void testGuestInactive() {
 		updateUserGuestInStorageToBeInactive();
-		user = pickUserUsingIdFromLoginAndDomainFromLogin(GUEST_ID, SYSTEM);
+		user = pickUserUsingIdInStorage(GUEST_ID);
 		assertNumberOfRoles(0);
 	}
 

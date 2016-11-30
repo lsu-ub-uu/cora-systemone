@@ -72,7 +72,7 @@ public final class SystemOneUserPicker implements UserPicker {
 	}
 
 	private void tryToReadLoggedInUser(UserInfo userInfo) {
-		dataGroupUser = recordStorage.read(USER_RECORDTYPE, userInfo.idFromLogin);
+		dataGroupUser = recordStorage.read(USER_RECORDTYPE, userInfo.idInUserStorage);
 	}
 
 	private void createNewUserWithUserId() {
