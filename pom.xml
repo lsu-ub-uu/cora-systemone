@@ -97,7 +97,7 @@
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>gatekeeperconnection</artifactId>
+			<artifactId>gatekeeper</artifactId>
 			<version>${gatekeeper.version}</version>
 		</dependency>
 		<dependency>
