@@ -26,6 +26,8 @@ import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
 import se.uu.ub.cora.gatekeeper.authentication.AuthenticatorImp;
+import se.uu.ub.cora.gatekeeper.authentication.HttpHandlerFactory;
+import se.uu.ub.cora.gatekeeper.authentication.HttpHandlerFactoryImp;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.BasePermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
@@ -102,6 +104,7 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 
 	@Override
 	public Authenticator getAuthenticator() {
-		return new AuthenticatorImp();
+		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
+		return AuthenticatorImp.usingHttpHandlerFactory(httpHandlerFactory);
 	}
 }
