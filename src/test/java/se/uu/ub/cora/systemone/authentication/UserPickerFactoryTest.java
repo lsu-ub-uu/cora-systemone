@@ -23,8 +23,8 @@ import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.gatekeeper.UserPicker;
-import se.uu.ub.cora.gatekeeper.UserPickerFactory;
+import se.uu.ub.cora.gatekeeperclient.UserPicker;
+import se.uu.ub.cora.gatekeeperclient.UserPickerFactory;
 
 public class UserPickerFactoryTest {
 	@Test
