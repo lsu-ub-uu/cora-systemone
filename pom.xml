@@ -29,7 +29,7 @@
 		<beefeater.version>0.5-SNAPSHOT</beefeater.version>
 		<spider.version>0.12-SNAPSHOT</spider.version>
 		<basicstorage.version>0.3-SNAPSHOT</basicstorage.version>
-		<gatekeeperinterface.version>0.1-SNAPSHOT</gatekeeperinterface.version>
+		<userpicker.version>0.1-SNAPSHOT</userpicker.version>
 		<gatekeeperclient.version>0.2-SNAPSHOT</gatekeeperclient.version>
 	</properties>
 
@@ -88,8 +88,8 @@
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>gatekeeperinterface</artifactId>
-			<version>${gatekeeperinterface.version}</version>
+			<artifactId>userpicker</artifactId>
+			<version>${userpicker.version}</version>
 <!-- 			<scope>provided</scope> -->
 		</dependency>
 		<dependency>

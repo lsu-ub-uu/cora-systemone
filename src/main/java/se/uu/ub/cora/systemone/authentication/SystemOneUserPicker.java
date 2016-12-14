@@ -22,9 +22,9 @@ package se.uu.ub.cora.systemone.authentication;
 import java.util.List;
 
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.gatekeeperinterface.User;
-import se.uu.ub.cora.gatekeeperinterface.UserInfo;
-import se.uu.ub.cora.gatekeeperinterface.UserPicker;
+import se.uu.ub.cora.userpicker.User;
+import se.uu.ub.cora.userpicker.UserInfo;
+import se.uu.ub.cora.userpicker.UserPicker;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 

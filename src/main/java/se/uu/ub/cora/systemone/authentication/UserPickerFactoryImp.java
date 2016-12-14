@@ -19,8 +19,8 @@
 
 package se.uu.ub.cora.systemone.authentication;
 
-import se.uu.ub.cora.gatekeeperinterface.UserPicker;
-import se.uu.ub.cora.gatekeeperinterface.UserPickerFactory;
+import se.uu.ub.cora.userpicker.UserPicker;
+import se.uu.ub.cora.userpicker.UserPickerFactory;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
