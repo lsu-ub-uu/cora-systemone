@@ -39,6 +39,7 @@
 		<beefeater.version>0.5-SNAPSHOT</beefeater.version>
         <spider.version>0.12-SNAPSHOT</spider.version>
         <basicstorage.version>0.3-SNAPSHOT</basicstorage.version>
+        <gatekeeper.version>0.1-SNAPSHOT</gatekeeper.version>
         <gatekeeperclient.version>0.2-SNAPSHOT</gatekeeperclient.version>
 	</properties>
 
@@ -94,6 +95,11 @@
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>basicstorage</artifactId>
 			<version>${basicstorage.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>se.uu.ub.cora</groupId>
+			<artifactId>gatekeeper</artifactId>
+			<version>${gatekeeper.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
