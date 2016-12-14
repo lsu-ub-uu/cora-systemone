@@ -26,9 +26,9 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.gatekeeper.UserInfo;
-import se.uu.ub.cora.gatekeeper.UserPicker;
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import se.uu.ub.cora.gatekeeperinterface.User;
+import se.uu.ub.cora.gatekeeperinterface.UserInfo;
+import se.uu.ub.cora.gatekeeperinterface.UserPicker;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class SystemOneUserPickerTest {

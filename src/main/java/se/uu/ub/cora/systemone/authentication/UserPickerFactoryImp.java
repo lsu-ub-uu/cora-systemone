@@ -19,20 +19,25 @@
 
 package se.uu.ub.cora.systemone.authentication;
 
-import se.uu.ub.cora.gatekeeper.UserPicker;
-import se.uu.ub.cora.gatekeeper.UserPickerFactory;
+import se.uu.ub.cora.gatekeeperinterface.UserPicker;
+import se.uu.ub.cora.gatekeeperinterface.UserPickerFactory;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
 public class UserPickerFactoryImp implements UserPickerFactory {
 
-	@Override
-	public UserPicker factor() {
-		// TODO: use always read from disk recordStorage
+	private SystemOneUserPicker userPicker;
+
+	public UserPickerFactoryImp() {
 		String basePath = "/mnt/data/basicstorage/";
 		RecordStorage recordStorage = RecordStorageOnDisk
 				.createRecordStorageOnDiskWithBasePath(basePath);
-		return SystemOneUserPicker.usingRecordStorage(recordStorage);
+		userPicker = SystemOneUserPicker.usingRecordStorage(recordStorage);
+	}
+
+	@Override
+	public UserPicker factor() {
+		return userPicker;
 	}
 
 }
