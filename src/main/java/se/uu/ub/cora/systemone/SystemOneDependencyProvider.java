@@ -113,6 +113,7 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 	public Authenticator getAuthenticator() {
 
 		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
-		return AuthenticatorImp.usingHttpHandlerFactory(httpHandlerFactory);
+		return AuthenticatorImp.usingBaseUrlAndHttpHandlerFactory("http://localhost:8080/gatekeeper/",
+				httpHandlerFactory);
 	}
 }
