@@ -25,8 +25,9 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
 import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
-import se.uu.ub.cora.gatekeeper.AuthenticatorImp;
-import se.uu.ub.cora.gatekeeper.UserPicker;
+import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
+import se.uu.ub.cora.httphandler.HttpHandlerFactory;
+import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.BasePermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
@@ -43,7 +44,6 @@ import se.uu.ub.cora.spider.role.RulesProviderImp;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageInMemoryReadFromDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
-import se.uu.ub.cora.systemone.authentication.SystemOneUserPicker;
 
 public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyProvider {
 	private RecordStorage recordStorage;
@@ -104,7 +104,8 @@ public class SystemOneDependencyProviderForFitnesse implements SpiderDependencyP
 
 	@Override
 	public Authenticator getAuthenticator() {
-		UserPicker userPicker = SystemOneUserPicker.usingRecordStorage(recordStorage);
-		return new AuthenticatorImp(userPicker);
+		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
+		return AuthenticatorImp.usingBaseUrlAndHttpHandlerFactory(
+				"http://localhost:8080/gatekeeper/", httpHandlerFactory);
 	}
 }

@@ -21,10 +21,10 @@ package se.uu.ub.cora.systemone.authentication;
 
 import java.util.List;
 
-import se.uu.ub.cora.beefeater.authentication.User;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
-import se.uu.ub.cora.gatekeeper.UserInfo;
-import se.uu.ub.cora.gatekeeper.UserPicker;
+import se.uu.ub.cora.userpicker.User;
+import se.uu.ub.cora.userpicker.UserInfo;
+import se.uu.ub.cora.userpicker.UserPicker;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
@@ -72,7 +72,7 @@ public final class SystemOneUserPicker implements UserPicker {
 	}
 
 	private void tryToReadLoggedInUser(UserInfo userInfo) {
-		dataGroupUser = recordStorage.read(USER_RECORDTYPE, userInfo.idFromLogin);
+		dataGroupUser = recordStorage.read(USER_RECORDTYPE, userInfo.idInUserStorage);
 	}
 
 	private void createNewUserWithUserId() {
