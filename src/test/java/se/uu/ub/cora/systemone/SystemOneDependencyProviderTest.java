@@ -21,10 +21,15 @@ package se.uu.ub.cora.systemone;
 
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 
 public class SystemOneDependencyProviderTest {
@@ -32,7 +37,10 @@ public class SystemOneDependencyProviderTest {
 
 	@BeforeMethod
 	public void setUp() {
-		dependencyProvider = new SystemOneDependencyProvider();
+		Map<String, String> initInfo = new HashMap<>();
+		initInfo.put("gatekeeperURL", "http://localhost:8080/gatekeeper/");
+		initInfo.put("storageOnDiskBasePath", "/mnt/data/basicstorage/");
+		dependencyProvider = new SystemOneDependencyProvider(initInfo);
 
 	}
 
@@ -47,6 +55,7 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getStreamStorage());
 		assertNotNull(dependencyProvider.getExtendedFunctionalityProvider());
 		assertNotNull(dependencyProvider.getAuthenticator());
+		assertTrue(dependencyProvider.getAuthenticator() instanceof AuthenticatorImp);
 	}
 
 	@Test
@@ -56,5 +65,19 @@ public class SystemOneDependencyProviderTest {
 		PermissionRuleCalculator permissionRuleCalculator2 = dependencyProvider
 				.getPermissionRuleCalculator();
 		assertNotEquals(permissionRuleCalculator, permissionRuleCalculator2);
+	}
+
+	@Test(expectedExceptions = RuntimeException.class)
+	public void testMissingGatekeeperUrlInInitInfo() {
+		Map<String, String> initInfo = new HashMap<>();
+		initInfo.put("storageOnDiskBasePath", "/mnt/data/basicstorage/");
+		dependencyProvider = new SystemOneDependencyProvider(initInfo);
+	}
+
+	@Test(expectedExceptions = RuntimeException.class)
+	public void testMissingBasePathInInitInfo() {
+		Map<String, String> initInfo = new HashMap<>();
+		initInfo.put("gatekeeperURL", "http://localhost:8080/gatekeeper/");
+		dependencyProvider = new SystemOneDependencyProvider(initInfo);
 	}
 }

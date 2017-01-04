@@ -19,6 +19,8 @@
 
 package se.uu.ub.cora.systemone;
 
+import java.util.Map;
+
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
@@ -52,19 +54,44 @@ import se.uu.ub.cora.storage.StreamStorageOnDisk;
  * today. :)
  *
  */
-public class SystemOneDependencyProvider implements SpiderDependencyProvider {
+public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 
 	private RecordStorage recordStorage;
 	private MetadataStorage metadataStorage;
 	private RecordIdGenerator idGenerator;
 	private StreamStorage streamStorage;
+	private String gatekeeperUrl;
 
-	public SystemOneDependencyProvider() {
-		String basePath = "/mnt/data/basicstorage/";
+	public SystemOneDependencyProvider(Map<String, String> initInfo) {
+		super(initInfo);
+		tryToSetGatekeeperUrl();
+		String basePath = tryToGetStorageOnDiskBasePath();
 		recordStorage = RecordStorageOnDisk.createRecordStorageOnDiskWithBasePath(basePath);
 		metadataStorage = (MetadataStorage) recordStorage;
 		idGenerator = new TimeStampIdGenerator();
 		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
+	}
+
+	private void tryToSetGatekeeperUrl() {
+		throwErrorIfGatekeeperUrlIsMissing();
+		gatekeeperUrl = initInfo.get("gatekeeperURL");
+	}
+
+	private void throwErrorIfGatekeeperUrlIsMissing() {
+		if (!initInfo.containsKey("gatekeeperURL")) {
+			throw new RuntimeException("InitInfo must contain gatekeeperURL");
+		}
+	}
+
+	private String tryToGetStorageOnDiskBasePath() {
+		throwErrorIfStorageOnDiskBasePathIsMissing();
+		return initInfo.get("storageOnDiskBasePath");
+	}
+
+	private void throwErrorIfStorageOnDiskBasePathIsMissing() {
+		if (!initInfo.containsKey("storageOnDiskBasePath")) {
+			throw new RuntimeException("InitInfo must contain storageOnDiskBasePath");
+		}
 	}
 
 	@Override
@@ -111,9 +138,9 @@ public class SystemOneDependencyProvider implements SpiderDependencyProvider {
 
 	@Override
 	public Authenticator getAuthenticator() {
-
 		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
-		return AuthenticatorImp.usingBaseUrlAndHttpHandlerFactory("http://localhost:8080/gatekeeper/",
+		return AuthenticatorImp.usingBaseUrlAndHttpHandlerFactory(gatekeeperUrl,
 				httpHandlerFactory);
 	}
+
 }
