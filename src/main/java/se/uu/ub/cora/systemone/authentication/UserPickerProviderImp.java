@@ -33,13 +33,13 @@ public final class UserPickerProviderImp implements UserPickerProvider {
 
 	public UserPickerProviderImp(Map<String, String> initInfo) {
 		this.initInfo = initInfo;
-		String basePath = tryToGetStorageOnDiskBasePath(initInfo);
+		String basePath = tryToGetStorageOnDiskBasePath();
 		RecordStorage recordStorage = RecordStorageOnDisk
 				.createRecordStorageOnDiskWithBasePath(basePath);
 		userPicker = SystemOneUserPicker.usingRecordStorage(recordStorage);
 	}
 
-	private String tryToGetStorageOnDiskBasePath(Map<String, String> initInfo) {
+	private String tryToGetStorageOnDiskBasePath() {
 		if (!initInfo.containsKey("storageOnDiskBasePath")) {
 			throw new RuntimeException("Init info must contain storageOnDiskBasePath");
 		}
