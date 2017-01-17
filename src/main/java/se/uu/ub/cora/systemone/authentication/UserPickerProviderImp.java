@@ -19,24 +19,35 @@
 
 package se.uu.ub.cora.systemone.authentication;
 
-import se.uu.ub.cora.userpicker.UserPicker;
-import se.uu.ub.cora.userpicker.UserPickerFactory;
+import java.util.Map;
+
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
+import se.uu.ub.cora.userpicker.UserPicker;
+import se.uu.ub.cora.userpicker.UserPickerProvider;
 
-public class UserPickerFactoryImp implements UserPickerFactory {
+public final class UserPickerProviderImp implements UserPickerProvider {
 
 	private SystemOneUserPicker userPicker;
+	private Map<String, String> initInfo;
 
-	public UserPickerFactoryImp() {
-		String basePath = "/mnt/data/basicstorage/";
+	public UserPickerProviderImp(Map<String, String> initInfo) {
+		this.initInfo = initInfo;
+		String basePath = tryToGetStorageOnDiskBasePath(initInfo);
 		RecordStorage recordStorage = RecordStorageOnDisk
 				.createRecordStorageOnDiskWithBasePath(basePath);
 		userPicker = SystemOneUserPicker.usingRecordStorage(recordStorage);
 	}
 
+	private String tryToGetStorageOnDiskBasePath(Map<String, String> initInfo) {
+		if (!initInfo.containsKey("storageOnDiskBasePath")) {
+			throw new RuntimeException("Init info must contain storageOnDiskBasePath");
+		}
+		return initInfo.get("storageOnDiskBasePath");
+	}
+
 	@Override
-	public UserPicker factor() {
+	public UserPicker getUserPicker() {
 		return userPicker;
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2017 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,16 +21,30 @@ package se.uu.ub.cora.systemone.authentication;
 
 import static org.testng.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.userpicker.UserPicker;
-import se.uu.ub.cora.userpicker.UserPickerFactory;
+import se.uu.ub.cora.userpicker.UserPickerProvider;
 
-public class UserPickerFactoryTest {
+public class UserPickerProviderTest {
 	@Test
 	public void testFactor() {
-		UserPickerFactory userPickerFactory = new UserPickerFactoryImp();
-		UserPicker userPicker = userPickerFactory.factor();
+		Map<String, String> initInfo = new HashMap<>();
+		initInfo.put("storageOnDiskBasePath", "/mnt/data/basicstorage");
+		UserPickerProvider userPickerProvider = new UserPickerProviderImp(initInfo);
+		UserPicker userPicker = userPickerProvider.getUserPicker();
 		assertTrue(userPicker instanceof SystemOneUserPicker);
 	}
+
+	@Test(expectedExceptions = RuntimeException.class)
+	public void testFactorNoBasePath() {
+		Map<String, String> initInfo = new HashMap<>();
+		UserPickerProvider userPickerFactory = new UserPickerProviderImp(initInfo);
+		UserPicker userPicker = userPickerFactory.getUserPicker();
+		assertTrue(userPicker instanceof SystemOneUserPicker);
+	}
+
 }
