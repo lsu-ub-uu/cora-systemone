@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 Uppsala University Library
+ * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -23,9 +24,16 @@ import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -34,14 +42,46 @@ import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 
 public class SystemOneDependencyProviderTest {
 	private SystemOneDependencyProvider dependencyProvider;
+	private String basePath = "/tmp/recordStorageOnDiskTemp/";
 
 	@BeforeMethod
-	public void setUp() {
+	public void setUp() throws IOException {
+		makeSureBasePathExistsAndIsEmpty();
 		Map<String, String> initInfo = new HashMap<>();
 		initInfo.put("gatekeeperURL", "http://localhost:8080/gatekeeper/");
-		initInfo.put("storageOnDiskBasePath", "/mnt/data/basicstorage/");
+		initInfo.put("storageOnDiskBasePath", basePath);
 		dependencyProvider = new SystemOneDependencyProvider(initInfo);
 
+	}
+
+	public void makeSureBasePathExistsAndIsEmpty() throws IOException {
+		File dir = new File(basePath);
+		dir.mkdir();
+		deleteFiles();
+	}
+
+	private void deleteFiles() throws IOException {
+		Stream<Path> list;
+		list = Files.list(Paths.get(basePath));
+		list.forEach(p -> deleteFile(p));
+		list.close();
+	}
+
+	private void deleteFile(Path path) {
+		try {
+			Files.delete(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@AfterMethod
+	public void removeTempFiles() throws IOException {
+		if (Files.exists(Paths.get(basePath))) {
+			deleteFiles();
+			File dir = new File(basePath);
+			dir.delete();
+		}
 	}
 
 	@Test
@@ -70,7 +110,7 @@ public class SystemOneDependencyProviderTest {
 	@Test(expectedExceptions = RuntimeException.class)
 	public void testMissingGatekeeperUrlInInitInfo() {
 		Map<String, String> initInfo = new HashMap<>();
-		initInfo.put("storageOnDiskBasePath", "/mnt/data/basicstorage/");
+		initInfo.put("storageOnDiskBasePath", basePath);
 		dependencyProvider = new SystemOneDependencyProvider(initInfo);
 	}
 
