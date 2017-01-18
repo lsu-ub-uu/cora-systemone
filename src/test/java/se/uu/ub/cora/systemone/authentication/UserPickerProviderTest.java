@@ -21,19 +21,60 @@ package se.uu.ub.cora.systemone.authentication;
 
 import static org.testng.Assert.assertTrue;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.userpicker.UserPicker;
 import se.uu.ub.cora.userpicker.UserPickerProvider;
 
 public class UserPickerProviderTest {
+	private String basePath = "/tmp/recordStorageOnDiskTemp/";
+
+	@BeforeMethod
+	public void makeSureBasePathExistsAndIsEmpty() throws IOException {
+		File dir = new File(basePath);
+		dir.mkdir();
+		deleteFiles();
+	}
+
+	private void deleteFiles() throws IOException {
+		Stream<Path> list;
+		list = Files.list(Paths.get(basePath));
+		list.forEach(p -> deleteFile(p));
+		list.close();
+	}
+
+	private void deleteFile(Path path) {
+		try {
+			Files.delete(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@AfterMethod
+	public void removeTempFiles() throws IOException {
+		if (Files.exists(Paths.get(basePath))) {
+			deleteFiles();
+			File dir = new File(basePath);
+			dir.delete();
+		}
+	}
+
 	@Test
 	public void testFactor() {
 		Map<String, String> initInfo = new HashMap<>();
-		initInfo.put("storageOnDiskBasePath", "/mnt/data/basicstorage");
+		initInfo.put("storageOnDiskBasePath", basePath);
 		UserPickerProvider userPickerProvider = new UserPickerProviderImp(initInfo);
 		UserPicker userPicker = userPickerProvider.getUserPicker();
 		assertTrue(userPicker instanceof SystemOneUserPicker);
