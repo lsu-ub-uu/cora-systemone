@@ -21,29 +21,19 @@ package se.uu.ub.cora.systemone.authentication;
 
 import java.util.Map;
 
-import se.uu.ub.cora.spider.record.storage.RecordStorage;
-import se.uu.ub.cora.storage.RecordStorageOnDisk;
+import se.uu.ub.cora.storage.UserStorageImp;
+import se.uu.ub.cora.userpicker.UserInStorageUserPicker;
 import se.uu.ub.cora.userpicker.UserPicker;
 import se.uu.ub.cora.userpicker.UserPickerProvider;
+import se.uu.ub.cora.userpicker.UserStorage;
 
 public final class UserPickerProviderImp implements UserPickerProvider {
 
-	private SystemOneUserPicker userPicker;
-	private Map<String, String> initInfo;
+	private UserInStorageUserPicker userPicker;
 
 	public UserPickerProviderImp(Map<String, String> initInfo) {
-		this.initInfo = initInfo;
-		String basePath = tryToGetStorageOnDiskBasePath();
-		RecordStorage recordStorage = RecordStorageOnDisk
-				.createRecordStorageOnDiskWithBasePath(basePath);
-		userPicker = SystemOneUserPicker.usingRecordStorage(recordStorage);
-	}
-
-	private String tryToGetStorageOnDiskBasePath() {
-		if (!initInfo.containsKey("storageOnDiskBasePath")) {
-			throw new RuntimeException("Init info must contain storageOnDiskBasePath");
-		}
-		return initInfo.get("storageOnDiskBasePath");
+		UserStorage userStorage = new UserStorageImp(initInfo);
+		userPicker = UserInStorageUserPicker.usingUserStorage(userStorage);
 	}
 
 	@Override

@@ -34,6 +34,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.userpicker.UserInStorageUserPicker;
 import se.uu.ub.cora.userpicker.UserPicker;
 import se.uu.ub.cora.userpicker.UserPickerProvider;
 
@@ -45,6 +46,8 @@ public class UserPickerProviderTest {
 		File dir = new File(basePath);
 		dir.mkdir();
 		deleteFiles();
+		TestDataAppTokenStorage.createRecordStorageInMemoryWithTestData(basePath);
+
 	}
 
 	private void deleteFiles() throws IOException {
@@ -77,7 +80,7 @@ public class UserPickerProviderTest {
 		initInfo.put("storageOnDiskBasePath", basePath);
 		UserPickerProvider userPickerProvider = new UserPickerProviderImp(initInfo);
 		UserPicker userPicker = userPickerProvider.getUserPicker();
-		assertTrue(userPicker instanceof SystemOneUserPicker);
+		assertTrue(userPicker instanceof UserInStorageUserPicker);
 	}
 
 	@Test(expectedExceptions = RuntimeException.class)
@@ -85,7 +88,7 @@ public class UserPickerProviderTest {
 		Map<String, String> initInfo = new HashMap<>();
 		UserPickerProvider userPickerFactory = new UserPickerProviderImp(initInfo);
 		UserPicker userPicker = userPickerFactory.getUserPicker();
-		assertTrue(userPicker instanceof SystemOneUserPicker);
+		assertTrue(userPicker instanceof UserInStorageUserPicker);
 	}
 
 }
