@@ -19,19 +19,19 @@
 	</parent>
 
 	<artifactId>systemone</artifactId>
-	<version>0.11-SNAPSHOT</version>
+	<version>0.12-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>System One</name>
 
 	<properties>
-		<httphandler.version>0.1-SNAPSHOT</httphandler.version>
+		<httphandler.version>0.2-SNAPSHOT</httphandler.version>
 		<bookkeeper.version>0.10-SNAPSHOT</bookkeeper.version>
 		<beefeater.version>0.5-SNAPSHOT</beefeater.version>
-		<spider.version>0.12-SNAPSHOT</spider.version>
-		<basicstorage.version>0.3-SNAPSHOT</basicstorage.version>
-		<userpicker.version>0.1-SNAPSHOT</userpicker.version>
-		<gatekeeperclient.version>0.2-SNAPSHOT</gatekeeperclient.version>
+		<spider.version>0.13-SNAPSHOT</spider.version>
+		<basicstorage.version>0.4-SNAPSHOT</basicstorage.version>
+		<userpicker.version>0.2-SNAPSHOT</userpicker.version>
+		<gatekeeperclient.version>0.3-SNAPSHOT</gatekeeperclient.version>
 	</properties>
 
 	<scm>
