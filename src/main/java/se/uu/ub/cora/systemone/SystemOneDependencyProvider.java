@@ -146,7 +146,6 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 
 	@Override
 	public RecordSearch getRecordSearch() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
