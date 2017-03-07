@@ -22,6 +22,7 @@ package se.uu.ub.cora.systemone;
 
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
@@ -120,4 +121,10 @@ public class SystemOneDependencyProviderTest {
 		initInfo.put("gatekeeperURL", "http://localhost:8080/gatekeeper/");
 		dependencyProvider = new SystemOneDependencyProvider(initInfo);
 	}
+
+	@Test
+	public void testGetRecordSearch() {
+		assertNull(dependencyProvider.getRecordSearch());
+	}
+
 }

@@ -38,6 +38,7 @@ import se.uu.ub.cora.spider.authorization.SpiderAuthorizatorImp;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.extended.BaseExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
+import se.uu.ub.cora.spider.record.RecordSearch;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
@@ -141,6 +142,12 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
 		return AuthenticatorImp.usingBaseUrlAndHttpHandlerFactory(gatekeeperUrl,
 				httpHandlerFactory);
+	}
+
+	@Override
+	public RecordSearch getRecordSearch() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
