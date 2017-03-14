@@ -32,6 +32,7 @@
 		<basicstorage.version>0.5-SNAPSHOT</basicstorage.version>
 		<userpicker.version>0.2-SNAPSHOT</userpicker.version>
 		<gatekeeperclient.version>0.4-SNAPSHOT</gatekeeperclient.version>
+		<metacreator.version>0.1-SNAPSHOT</metacreator.version>
 	</properties>
 
 	<scm>
@@ -103,6 +104,11 @@
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>gatekeeperclient</artifactId>
 			<version>${gatekeeperclient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>se.uu.ub.cora</groupId>
+			<artifactId>metacreator</artifactId>
+			<version>${metacreator.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>

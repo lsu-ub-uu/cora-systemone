@@ -39,6 +39,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
+import se.uu.ub.cora.metacreator.extended.MetacreatorExtendedFunctionalityProvider;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 
 public class SystemOneDependencyProviderTest {
@@ -95,6 +96,8 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getDataRecordLinkCollector());
 		assertNotNull(dependencyProvider.getStreamStorage());
 		assertNotNull(dependencyProvider.getExtendedFunctionalityProvider());
+		assertTrue(dependencyProvider
+				.getExtendedFunctionalityProvider() instanceof MetacreatorExtendedFunctionalityProvider);
 		assertNotNull(dependencyProvider.getAuthenticator());
 		assertTrue(dependencyProvider.getAuthenticator() instanceof AuthenticatorImp);
 	}
