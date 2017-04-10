@@ -33,6 +33,7 @@
 		<userpicker.version>0.2-SNAPSHOT</userpicker.version>
 		<gatekeeperclient.version>0.4-SNAPSHOT</gatekeeperclient.version>
 		<metacreator.version>0.1-SNAPSHOT</metacreator.version>
+		<solrsearch.version>0.1-SNAPSHOT</solrsearch.version>
 	</properties>
 
 	<scm>
@@ -109,6 +110,11 @@
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>metacreator</artifactId>
 			<version>${metacreator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>se.uu.ub.cora</groupId>
+			<artifactId>solrsearch</artifactId>
+			<version>${solrsearch.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>

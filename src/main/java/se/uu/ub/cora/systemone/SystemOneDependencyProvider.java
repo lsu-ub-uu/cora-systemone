@@ -31,6 +31,7 @@ import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
 import se.uu.ub.cora.metacreator.extended.MetacreatorExtendedFunctionalityProvider;
+import se.uu.ub.cora.solrsearch.SolrRecordSearch;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.BasePermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
@@ -146,7 +147,7 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 
 	@Override
 	public RecordSearch getRecordSearch() {
-		return null;
+		return new SolrRecordSearch();
 	}
 
 }
