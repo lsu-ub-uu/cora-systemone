@@ -24,6 +24,7 @@ import java.util.Map;
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
+import se.uu.ub.cora.bookkeeper.searchtermcollector.DataGroupSearchTermCollector;
 import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
@@ -148,6 +149,12 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	@Override
 	public RecordSearch getRecordSearch() {
 		return new SolrRecordSearch();
+	}
+
+	@Override
+	public DataGroupSearchTermCollector getDataGroupSearchTermCollector() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
