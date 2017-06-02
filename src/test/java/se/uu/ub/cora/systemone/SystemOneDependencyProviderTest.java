@@ -99,6 +99,7 @@ public class SystemOneDependencyProviderTest {
 				.getExtendedFunctionalityProvider() instanceof MetacreatorExtendedFunctionalityProvider);
 		assertNotNull(dependencyProvider.getAuthenticator());
 		assertTrue(dependencyProvider.getAuthenticator() instanceof AuthenticatorImp);
+		assertNotNull(dependencyProvider.getDataGroupSearchTermCollector());
 	}
 
 	@Test
@@ -127,6 +128,11 @@ public class SystemOneDependencyProviderTest {
 	@Test
 	public void testGetRecordSearch() {
 		assertNotNull(dependencyProvider.getRecordSearch());
+	}
+
+	@Test
+	public void testGetRecordIndexer() {
+		assertNotNull(dependencyProvider.getRecordIndexer());
 	}
 
 }
