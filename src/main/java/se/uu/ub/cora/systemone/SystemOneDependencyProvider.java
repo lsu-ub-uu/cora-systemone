@@ -19,8 +19,6 @@
 
 package se.uu.ub.cora.systemone;
 
-import java.util.Map;
-
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
@@ -52,6 +50,8 @@ import se.uu.ub.cora.spider.search.RecordIndexer;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
+
+import java.util.Map;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
