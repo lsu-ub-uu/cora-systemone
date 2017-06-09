@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016 Uppsala University Library
+ * Copyright 2015, 2016, 2017 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,6 +19,8 @@
 
 package se.uu.ub.cora.systemone;
 
+import java.util.Map;
+
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
@@ -31,7 +33,8 @@ import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
 import se.uu.ub.cora.metacreator.extended.MetacreatorExtendedFunctionalityProvider;
-import se.uu.ub.cora.solrsearch.SolrRecordIndexer;
+import se.uu.ub.cora.solr.SolrClientProviderImp;
+import se.uu.ub.cora.solrindex.SolrRecordIndexer;
 import se.uu.ub.cora.solrsearch.SolrRecordSearch;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.BasePermissionRuleCalculator;
@@ -51,8 +54,6 @@ import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
 
-import java.util.Map;
-
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
  * this is in SystemOne production currently means using all in memory storage
@@ -67,23 +68,28 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	private RecordIdGenerator idGenerator;
 	private StreamStorage streamStorage;
 	private String gatekeeperUrl;
+	private String solrUrl;
+	private SolrRecordIndexer solrRecordIndexer;
 
 	public SystemOneDependencyProvider(Map<String, String> initInfo) {
 		super(initInfo);
 		tryToSetGatekeeperUrl();
 		String basePath = tryToGetStorageOnDiskBasePath();
+		tryToSetSolrUrl();
 		recordStorage = RecordStorageOnDisk.createRecordStorageOnDiskWithBasePath(basePath);
 		metadataStorage = (MetadataStorage) recordStorage;
 		idGenerator = new TimeStampIdGenerator();
 		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
+		solrRecordIndexer = SolrRecordIndexer.createSolrRecordIndexerUsingSolrClientProvider(
+				SolrClientProviderImp.usingBaseUrl(solrUrl));
 	}
 
 	private void tryToSetGatekeeperUrl() {
-		throwErrorIfGatekeeperUrlIsMissing();
+		throwErrorIfMissionGatekeeperUrl();
 		gatekeeperUrl = initInfo.get("gatekeeperURL");
 	}
 
-	private void throwErrorIfGatekeeperUrlIsMissing() {
+	private void throwErrorIfMissionGatekeeperUrl() {
 		if (!initInfo.containsKey("gatekeeperURL")) {
 			throw new RuntimeException("InitInfo must contain gatekeeperURL");
 		}
@@ -97,6 +103,17 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	private void throwErrorIfStorageOnDiskBasePathIsMissing() {
 		if (!initInfo.containsKey("storageOnDiskBasePath")) {
 			throw new RuntimeException("InitInfo must contain storageOnDiskBasePath");
+		}
+	}
+
+	private void tryToSetSolrUrl() {
+		throwErrorIfMissingSolrUrl();
+		solrUrl = initInfo.get("solrURL");
+	}
+
+	private void throwErrorIfMissingSolrUrl() {
+		if (!initInfo.containsKey("solrURL")) {
+			throw new RuntimeException("InitInfo must contain solrURL");
 		}
 	}
 
@@ -161,7 +178,7 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 
 	@Override
 	public RecordIndexer getRecordIndexer() {
-		return new SolrRecordIndexer();
+		return solrRecordIndexer;
 	}
 
 }
