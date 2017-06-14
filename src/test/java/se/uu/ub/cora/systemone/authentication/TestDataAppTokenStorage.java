@@ -22,14 +22,14 @@ package se.uu.ub.cora.systemone.authentication;
 import se.uu.ub.cora.bookkeeper.data.DataAtomic;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.bookkeeper.data.DataPart;
+import se.uu.ub.cora.bookkeeper.data.converter.JsonToDataConverter;
+import se.uu.ub.cora.bookkeeper.data.converter.JsonToDataConverterFactory;
+import se.uu.ub.cora.bookkeeper.data.converter.JsonToDataConverterFactoryImp;
 import se.uu.ub.cora.json.parser.JsonParser;
 import se.uu.ub.cora.json.parser.JsonValue;
 import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 import se.uu.ub.cora.storage.RecordStorageInMemory;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
-import se.uu.ub.cora.storage.data.converter.JsonToDataConverter;
-import se.uu.ub.cora.storage.data.converter.JsonToDataConverterFactory;
-import se.uu.ub.cora.storage.data.converter.JsonToDataConverterFactoryImp;
 
 public class TestDataAppTokenStorage {
 
