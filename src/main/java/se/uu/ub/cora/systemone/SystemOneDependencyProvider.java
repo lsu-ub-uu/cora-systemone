@@ -70,6 +70,7 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	private String gatekeeperUrl;
 	private String solrUrl;
 	private SolrRecordIndexer solrRecordIndexer;
+	private SolrRecordSearch solrRecordSearch;
 
 	public SystemOneDependencyProvider(Map<String, String> initInfo) {
 		super(initInfo);
@@ -80,8 +81,11 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 		metadataStorage = (MetadataStorage) recordStorage;
 		idGenerator = new TimeStampIdGenerator();
 		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
-		solrRecordIndexer = SolrRecordIndexer.createSolrRecordIndexerUsingSolrClientProvider(
-				SolrClientProviderImp.usingBaseUrl(solrUrl));
+		SolrClientProviderImp solrClientProvider = SolrClientProviderImp.usingBaseUrl(solrUrl);
+		solrRecordIndexer = SolrRecordIndexer
+				.createSolrRecordIndexerUsingSolrClientProvider(solrClientProvider);
+		solrRecordSearch = SolrRecordSearch
+				.createSolrRecordSearchUsingSolrClientProvider(solrClientProvider);
 	}
 
 	private void tryToSetGatekeeperUrl() {
@@ -168,7 +172,7 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 
 	@Override
 	public RecordSearch getRecordSearch() {
-		return new SolrRecordSearch();
+		return solrRecordSearch;
 	}
 
 	@Override

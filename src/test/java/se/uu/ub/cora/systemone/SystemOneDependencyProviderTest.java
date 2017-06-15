@@ -45,6 +45,7 @@ import se.uu.ub.cora.solr.SolrClientProviderImp;
 import se.uu.ub.cora.solrindex.SolrRecordIndexer;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
+import se.uu.ub.cora.spider.record.RecordSearch;
 import se.uu.ub.cora.spider.search.RecordIndexer;
 
 public class SystemOneDependencyProviderTest {
@@ -181,6 +182,29 @@ public class SystemOneDependencyProviderTest {
 			f.setAccessible(true);
 			SolrClientProviderImp solrClientProviderImp = (SolrClientProviderImp) f
 					.get(recordIndexer);
+
+			Field f2;
+			f2 = solrClientProviderImp.getClass().getDeclaredField("baseUrl");
+			f2.setAccessible(true);
+			String baseUrl = (String) f2.get(solrClientProviderImp);
+
+			assertEquals(baseUrl, "http://localhost:8983/solr/stuff");
+		} catch (Exception e) {
+			// if exception fail test
+			assertTrue(false);
+		}
+	}
+
+	@Test
+	public void testGetRecordSearchUsesSolrUrlWhenCreatingSolrClientProvider() {
+		RecordSearch recordSearcher = dependencyProvider.getRecordSearch();
+		assertNotNull(recordSearcher);
+		try {
+			Field f;
+			f = recordSearcher.getClass().getDeclaredField("solrClientProvider");
+			f.setAccessible(true);
+			SolrClientProviderImp solrClientProviderImp = (SolrClientProviderImp) f
+					.get(recordSearcher);
 
 			Field f2;
 			f2 = solrClientProviderImp.getClass().getDeclaredField("baseUrl");
