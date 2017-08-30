@@ -43,10 +43,12 @@ import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
 import se.uu.ub.cora.metacreator.extended.MetacreatorExtendedFunctionalityProvider;
 import se.uu.ub.cora.solr.SolrClientProviderImp;
 import se.uu.ub.cora.solrindex.SolrRecordIndexer;
+import se.uu.ub.cora.solrsearch.SolrRecordSearch;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.record.RecordSearch;
 import se.uu.ub.cora.spider.search.RecordIndexer;
+import se.uu.ub.cora.storage.SearchStorageImp;
 
 public class SystemOneDependencyProviderTest {
 	private SystemOneDependencyProvider dependencyProvider;
@@ -108,6 +110,8 @@ public class SystemOneDependencyProviderTest {
 				.getExtendedFunctionalityProvider() instanceof MetacreatorExtendedFunctionalityProvider);
 		assertNotNull(dependencyProvider.getDataGroupSearchTermCollector());
 		assertTrue(dependencyProvider.getRecordIndexer() instanceof SolrRecordIndexer);
+		SolrRecordSearch solrRecordSearch = (SolrRecordSearch) dependencyProvider.getRecordSearch();
+		assertTrue(solrRecordSearch.getSearchStorage() instanceof SearchStorageImp);
 	}
 
 	@Test

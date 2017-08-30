@@ -33,6 +33,7 @@ import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
 import se.uu.ub.cora.metacreator.extended.MetacreatorExtendedFunctionalityProvider;
+import se.uu.ub.cora.searchstorage.SearchStorage;
 import se.uu.ub.cora.solr.SolrClientProviderImp;
 import se.uu.ub.cora.solrindex.SolrRecordIndexer;
 import se.uu.ub.cora.solrsearch.SolrRecordSearch;
@@ -52,6 +53,7 @@ import se.uu.ub.cora.spider.role.RulesProviderImp;
 import se.uu.ub.cora.spider.search.RecordIndexer;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
+import se.uu.ub.cora.storage.SearchStorageImp;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
 
 /**
@@ -71,6 +73,7 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	private String solrUrl;
 	private SolrRecordIndexer solrRecordIndexer;
 	private SolrRecordSearch solrRecordSearch;
+	private SearchStorage searchStorage;
 
 	public SystemOneDependencyProvider(Map<String, String> initInfo) {
 		super(initInfo);
@@ -84,8 +87,10 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 		SolrClientProviderImp solrClientProvider = SolrClientProviderImp.usingBaseUrl(solrUrl);
 		solrRecordIndexer = SolrRecordIndexer
 				.createSolrRecordIndexerUsingSolrClientProvider(solrClientProvider);
+		searchStorage = new SearchStorageImp(initInfo);
 		solrRecordSearch = SolrRecordSearch
-				.createSolrRecordSearchUsingSolrClientProvider(solrClientProvider);
+				.createSolrRecordSearchUsingSolrClientProviderAndSearchStorage(solrClientProvider,
+						searchStorage);
 	}
 
 	private void tryToSetGatekeeperUrl() {
