@@ -20,19 +20,10 @@
 
 package se.uu.ub.cora.systemone;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
-import se.uu.ub.cora.metacreator.extended.MetacreatorExtendedFunctionalityProvider;
-import se.uu.ub.cora.solr.SolrClientProviderImp;
-import se.uu.ub.cora.solrindex.SolrRecordIndexer;
-import se.uu.ub.cora.solrsearch.SolrRecordSearch;
-import se.uu.ub.cora.spider.authentication.Authenticator;
-import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
-import se.uu.ub.cora.spider.record.RecordSearch;
-import se.uu.ub.cora.spider.search.RecordIndexer;
-import se.uu.ub.cora.storage.SearchStorageImp;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +35,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.testng.Assert.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import se.uu.ub.cora.gatekeeperclient.authentication.AuthenticatorImp;
+import se.uu.ub.cora.metacreator.extended.MetacreatorExtendedFunctionalityProvider;
+import se.uu.ub.cora.solr.SolrClientProviderImp;
+import se.uu.ub.cora.solrindex.SolrRecordIndexer;
+import se.uu.ub.cora.solrsearch.SolrRecordSearch;
+import se.uu.ub.cora.spider.authentication.Authenticator;
+import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
+import se.uu.ub.cora.spider.record.RecordSearch;
+import se.uu.ub.cora.spider.search.RecordIndexer;
+import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
 public class SystemOneDependencyProviderTest {
 	private SystemOneDependencyProvider dependencyProvider;
@@ -107,7 +111,7 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getDataGroupSearchTermCollector());
 		assertTrue(dependencyProvider.getRecordIndexer() instanceof SolrRecordIndexer);
 		SolrRecordSearch solrRecordSearch = (SolrRecordSearch) dependencyProvider.getRecordSearch();
-		assertTrue(solrRecordSearch.getSearchStorage() instanceof SearchStorageImp);
+		assertTrue(solrRecordSearch.getSearchStorage() instanceof RecordStorageOnDisk);
 	}
 
 	@Test

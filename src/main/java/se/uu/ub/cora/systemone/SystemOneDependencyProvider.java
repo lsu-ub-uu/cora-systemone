@@ -19,6 +19,8 @@
 
 package se.uu.ub.cora.systemone;
 
+import java.util.Map;
+
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
@@ -51,10 +53,7 @@ import se.uu.ub.cora.spider.role.RulesProviderImp;
 import se.uu.ub.cora.spider.search.RecordIndexer;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
-import se.uu.ub.cora.storage.SearchStorageImp;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
-
-import java.util.Map;
 
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
@@ -73,7 +72,6 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	private String solrUrl;
 	private SolrRecordIndexer solrRecordIndexer;
 	private SolrRecordSearch solrRecordSearch;
-	private SearchStorage searchStorage;
 
 	public SystemOneDependencyProvider(Map<String, String> initInfo) {
 		super(initInfo);
@@ -87,7 +85,7 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 		SolrClientProviderImp solrClientProvider = SolrClientProviderImp.usingBaseUrl(solrUrl);
 		solrRecordIndexer = SolrRecordIndexer
 				.createSolrRecordIndexerUsingSolrClientProvider(solrClientProvider);
-		searchStorage = new SearchStorageImp(initInfo);
+		SearchStorage searchStorage = (SearchStorage) recordStorage;
 		solrRecordSearch = SolrRecordSearch
 				.createSolrRecordSearchUsingSolrClientProviderAndSearchStorage(solrClientProvider,
 						searchStorage);
