@@ -24,8 +24,8 @@ import java.util.Map;
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
-import se.uu.ub.cora.bookkeeper.searchtermcollector.DataGroupSearchTermCollector;
-import se.uu.ub.cora.bookkeeper.searchtermcollector.DataGroupSearchTermCollectorImp;
+import se.uu.ub.cora.bookkeeper.searchtermcollector.DataGroupTermCollector;
+import se.uu.ub.cora.bookkeeper.searchtermcollector.DataGroupTermCollectorImp;
 import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.bookkeeper.validator.DataValidatorImp;
@@ -79,6 +79,7 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 		String basePath = tryToGetStorageOnDiskBasePath();
 		tryToSetSolrUrl();
 		recordStorage = RecordStorageOnDisk.createRecordStorageOnDiskWithBasePath(basePath);
+
 		metadataStorage = (MetadataStorage) recordStorage;
 		idGenerator = new TimeStampIdGenerator();
 		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
@@ -179,8 +180,8 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	}
 
 	@Override
-	public DataGroupSearchTermCollector getDataGroupSearchTermCollector() {
-		return new DataGroupSearchTermCollectorImp(metadataStorage);
+	public DataGroupTermCollector getDataGroupSearchTermCollector() {
+		return new DataGroupTermCollectorImp(metadataStorage);
 	}
 
 	@Override
