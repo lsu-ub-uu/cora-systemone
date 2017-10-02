@@ -19,6 +19,8 @@
 
 package se.uu.ub.cora.systemone;
 
+import java.util.Map;
+
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollectorImp;
@@ -53,8 +55,6 @@ import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
 
-import java.util.Map;
-
 /**
  * SystemOneDependencyProvider wires up the system for use in "production", as
  * this is in SystemOne production currently means using all in memory storage
@@ -71,7 +71,8 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	private String gatekeeperUrl;
 	private String solrUrl;
 	private SolrRecordIndexer solrRecordIndexer;
-	private SolrRecordSearch solrRecordSearch;
+	private SolrClientProviderImp solrClientProvider;
+	private SearchStorage searchStorage;
 
 	public SystemOneDependencyProvider(Map<String, String> initInfo) {
 		super(initInfo);
@@ -83,13 +84,11 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 		metadataStorage = (MetadataStorage) recordStorage;
 		idGenerator = new TimeStampIdGenerator();
 		streamStorage = StreamStorageOnDisk.usingBasePath(basePath + "streams/");
-		SolrClientProviderImp solrClientProvider = SolrClientProviderImp.usingBaseUrl(solrUrl);
+		solrClientProvider = SolrClientProviderImp.usingBaseUrl(solrUrl);
 		solrRecordIndexer = SolrRecordIndexer
 				.createSolrRecordIndexerUsingSolrClientProvider(solrClientProvider);
-		SearchStorage searchStorage = (SearchStorage) recordStorage;
-		solrRecordSearch = SolrRecordSearch
-				.createSolrRecordSearchUsingSolrClientProviderAndSearchStorage(solrClientProvider,
-						searchStorage);
+		searchStorage = (SearchStorage) recordStorage;
+
 	}
 
 	private void tryToSetGatekeeperUrl() {
@@ -176,7 +175,8 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 
 	@Override
 	public RecordSearch getRecordSearch() {
-		return solrRecordSearch;
+		return SolrRecordSearch.createSolrRecordSearchUsingSolrClientProviderAndSearchStorage(
+				solrClientProvider, searchStorage);
 	}
 
 	@Override

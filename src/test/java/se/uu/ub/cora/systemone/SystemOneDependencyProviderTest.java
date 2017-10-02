@@ -222,4 +222,11 @@ public class SystemOneDependencyProviderTest {
 		}
 	}
 
+	@Test
+	public void testDependencyProviderReturnsDifferentRecordSearch() {
+		RecordSearch recordSearch = dependencyProvider.getRecordSearch();
+		RecordSearch recordSearch2 = dependencyProvider.getRecordSearch();
+		assertNotEquals(recordSearch, recordSearch2);
+	}
+
 }
