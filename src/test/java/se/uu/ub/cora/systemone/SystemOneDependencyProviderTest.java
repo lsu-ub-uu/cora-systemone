@@ -48,20 +48,26 @@ import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.record.RecordSearch;
 import se.uu.ub.cora.spider.search.RecordIndexer;
-import se.uu.ub.cora.storage.RecordStorageOnDisk;
 
 public class SystemOneDependencyProviderTest {
 	private SystemOneDependencyProvider dependencyProvider;
 	private String basePath = "/tmp/recordStorageOnDiskTemp/";
+	private Map<String, String> initInfo;
 
 	@BeforeMethod
-	public void setUp() throws IOException {
-		makeSureBasePathExistsAndIsEmpty();
-		Map<String, String> initInfo = new HashMap<>();
-		initInfo.put("gatekeeperURL", "http://localhost:8080/gatekeeper/");
-		initInfo.put("storageOnDiskBasePath", basePath);
-		initInfo.put("solrURL", "http://localhost:8983/solr/stuff");
-		dependencyProvider = new SystemOneDependencyProvider(initInfo);
+	public void setUp() throws Exception {
+		try {
+			makeSureBasePathExistsAndIsEmpty();
+			initInfo = new HashMap<>();
+			initInfo.put("storageOnDiskClassName", "se.uu.ub.cora.systemone.RecordStorageSpy");
+			initInfo.put("gatekeeperURL", "http://localhost:8080/gatekeeper/");
+			initInfo.put("storageOnDiskBasePath", basePath);
+			initInfo.put("solrURL", "http://localhost:8983/solr/stuff");
+			dependencyProvider = new SystemOneDependencyProvider(initInfo);
+
+		} catch (Exception e) {
+			// Make the correct tests crash instead of all
+		}
 
 	}
 
@@ -111,7 +117,53 @@ public class SystemOneDependencyProviderTest {
 		assertNotNull(dependencyProvider.getDataGroupSearchTermCollector());
 		assertTrue(dependencyProvider.getRecordIndexer() instanceof SolrRecordIndexer);
 		SolrRecordSearch solrRecordSearch = (SolrRecordSearch) dependencyProvider.getRecordSearch();
-		assertTrue(solrRecordSearch.getSearchStorage() instanceof RecordStorageOnDisk);
+		assertTrue(solrRecordSearch.getSearchStorage() instanceof RecordStorageSpy);
+	}
+
+	@Test
+	public void testMissingStorageClassNameInInitInfo() {
+		initInfo.remove("storageOnDiskClassName");
+
+		Exception thrownException = callSystemOneDependencyProviderAndReturnResultingError();
+
+		assertTrue(thrownException instanceof RuntimeException);
+		assertEquals(thrownException.getMessage(), "InitInfo must contain storageOnDiskClassName");
+	}
+
+	private Exception callSystemOneDependencyProviderAndReturnResultingError() {
+		Exception thrownException = null;
+		try {
+			dependencyProvider = new SystemOneDependencyProvider(initInfo);
+		} catch (Exception e) {
+			thrownException = e;
+		}
+		return thrownException;
+	}
+
+	@Test
+	public void testNonExisitingStorageOnDiskClassNameInInitInfo() {
+		initInfo.put("storageOnDiskClassName", "se.uu.ub.cora.systemone.RecordStorageNON");
+
+		Exception thrownException = callSystemOneDependencyProviderAndReturnResultingError();
+
+		assertTrue(thrownException instanceof RuntimeException);
+		assertEquals(thrownException.getMessage(),
+				"Error starting The Rest: " + "se.uu.ub.cora.systemone.RecordStorageNON");
+	}
+
+	@Test
+	public void testCorrectStorageOnDiskClassInitialized() throws Exception {
+		assertEquals(dependencyProvider.getRecordStorage().getClass().getName(),
+				initInfo.get("storageOnDiskClassName"));
+		assertTrue(dependencyProvider.getRecordStorage() instanceof RecordStorageSpy);
+	}
+
+	@Test
+	public void testCorrectBasePathSentToStorageOnDisk() throws Exception {
+		assertEquals(dependencyProvider.getRecordStorage().getClass().getName(),
+				initInfo.get("storageOnDiskClassName"));
+		assertEquals(((RecordStorageSpy) dependencyProvider.getRecordStorage()).getBasePath(),
+				initInfo.get("storageOnDiskBasePath"));
 	}
 
 	@Test
@@ -123,20 +175,24 @@ public class SystemOneDependencyProviderTest {
 		assertNotEquals(permissionRuleCalculator, permissionRuleCalculator2);
 	}
 
-	@Test(expectedExceptions = RuntimeException.class)
+	@Test
 	public void testMissingBasePathInInitInfo() {
-		Map<String, String> initInfo = new HashMap<>();
-		initInfo.put("gatekeeperURL", "http://localhost:8080/gatekeeper/");
-		initInfo.put("solrURL", "http://localhost:8983/solr/stuff");
-		dependencyProvider = new SystemOneDependencyProvider(initInfo);
+		initInfo.remove("storageOnDiskBasePath");
+
+		Exception thrownException = callSystemOneDependencyProviderAndReturnResultingError();
+
+		assertEquals(thrownException.getMessage(), "InitInfo must contain storageOnDiskBasePath");
+		assertTrue(thrownException instanceof RuntimeException);
 	}
 
-	@Test(expectedExceptions = RuntimeException.class)
+	@Test
 	public void testMissingGatekeeperUrlInInitInfo() {
-		Map<String, String> initInfo = new HashMap<>();
-		initInfo.put("storageOnDiskBasePath", basePath);
-		initInfo.put("solrURL", "http://localhost:8983/solr/stuff");
-		dependencyProvider = new SystemOneDependencyProvider(initInfo);
+		initInfo.remove("gatekeeperURL");
+
+		Exception thrownException = callSystemOneDependencyProviderAndReturnResultingError();
+
+		assertTrue(thrownException instanceof RuntimeException);
+		assertEquals(thrownException.getMessage(), "InitInfo must contain gatekeeperURL");
 	}
 
 	@Test
@@ -174,6 +230,16 @@ public class SystemOneDependencyProviderTest {
 		RecordIndexer recordIndexer = dependencyProvider.getRecordIndexer();
 		RecordIndexer recordIndexer2 = dependencyProvider.getRecordIndexer();
 		assertEquals(recordIndexer, recordIndexer2);
+	}
+
+	@Test
+	public void testMissingSolrURLInInitInfo() {
+		initInfo.remove("solrURL");
+
+		Exception thrownException = callSystemOneDependencyProviderAndReturnResultingError();
+
+		assertEquals(thrownException.getMessage(), "InitInfo must contain solrURL");
+		assertTrue(thrownException instanceof RuntimeException);
 	}
 
 	@Test

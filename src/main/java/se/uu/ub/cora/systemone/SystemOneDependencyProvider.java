@@ -19,6 +19,8 @@
 
 package se.uu.ub.cora.systemone;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import se.uu.ub.cora.beefeater.AuthorizatorImp;
@@ -52,14 +54,12 @@ import se.uu.ub.cora.spider.role.RulesProvider;
 import se.uu.ub.cora.spider.role.RulesProviderImp;
 import se.uu.ub.cora.spider.search.RecordIndexer;
 import se.uu.ub.cora.spider.stream.storage.StreamStorage;
-import se.uu.ub.cora.storage.RecordStorageOnDisk;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
 
 /**
- * SystemOneDependencyProvider wires up the system for use in "production", as
- * this is in SystemOne production currently means using all in memory storage
- * (stored on disk), so do NOT use this class in production as it is written
- * today. :)
+ * SystemOneDependencyProvider wires up the system for use in "production", as this is in SystemOne
+ * production currently means using all in memory storage (stored on disk), so do NOT use this class
+ * in production as it is written today. :)
  *
  */
 public class SystemOneDependencyProvider extends SpiderDependencyProvider {
@@ -73,13 +73,43 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	private SolrRecordIndexer solrRecordIndexer;
 	private SolrClientProviderImp solrClientProvider;
 	private SearchStorage searchStorage;
+	private String basePath;
+	private String storageOnDiskClassName;
 
 	public SystemOneDependencyProvider(Map<String, String> initInfo) {
 		super(initInfo);
+		readInitInfo();
+		try {
+			tryToInitialize();
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(
+					"Error starting The Rest: " + e.getTargetException().getMessage());
+		} catch (Exception e) {
+			throw new RuntimeException("Error starting The Rest: " + e.getMessage());
+		}
+	}
+
+	private void readInitInfo() {
 		tryToSetGatekeeperUrl();
-		String basePath = tryToGetStorageOnDiskBasePath();
+		basePath = tryToGetStorageOnDiskBasePath();
+		storageOnDiskClassName = tryToGetStorageOnDiskClassName();
 		tryToSetSolrUrl();
-		recordStorage = RecordStorageOnDisk.createRecordStorageOnDiskWithBasePath(basePath);
+	}
+
+	private String tryToGetStorageOnDiskClassName() {
+		throwErrorIfMissingKeyIsMissingFromInitInfo("storageOnDiskClassName");
+		return initInfo.get("storageOnDiskClassName");
+	}
+
+	private void throwErrorIfMissingKeyIsMissingFromInitInfo(String key) {
+		if (!initInfo.containsKey(key)) {
+			throw new RuntimeException("InitInfo must contain " + key);
+		}
+	}
+
+	private void tryToInitialize() throws NoSuchMethodException, ClassNotFoundException,
+			IllegalAccessException, InvocationTargetException {
+		recordStorage = tryToCreateRecordStorage(basePath);
 
 		metadataStorage = (MetadataStorage) recordStorage;
 		idGenerator = new TimeStampIdGenerator();
@@ -88,40 +118,30 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 		solrRecordIndexer = SolrRecordIndexer
 				.createSolrRecordIndexerUsingSolrClientProvider(solrClientProvider);
 		searchStorage = (SearchStorage) recordStorage;
+	}
 
+	private RecordStorage tryToCreateRecordStorage(String basePath) throws NoSuchMethodException,
+			ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+		Class<?>[] cArg = new Class[1];
+		cArg[0] = String.class;
+		Method constructor = Class.forName(storageOnDiskClassName)
+				.getMethod("createRecordStorageOnDiskWithBasePath", cArg);
+		return (RecordStorage) constructor.invoke(null, basePath);
 	}
 
 	private void tryToSetGatekeeperUrl() {
-		throwErrorIfMissionGatekeeperUrl();
+		throwErrorIfMissingKeyIsMissingFromInitInfo("gatekeeperURL");
 		gatekeeperUrl = initInfo.get("gatekeeperURL");
 	}
 
-	private void throwErrorIfMissionGatekeeperUrl() {
-		if (!initInfo.containsKey("gatekeeperURL")) {
-			throw new RuntimeException("InitInfo must contain gatekeeperURL");
-		}
-	}
-
 	private String tryToGetStorageOnDiskBasePath() {
-		throwErrorIfStorageOnDiskBasePathIsMissing();
+		throwErrorIfMissingKeyIsMissingFromInitInfo("storageOnDiskBasePath");
 		return initInfo.get("storageOnDiskBasePath");
 	}
 
-	private void throwErrorIfStorageOnDiskBasePathIsMissing() {
-		if (!initInfo.containsKey("storageOnDiskBasePath")) {
-			throw new RuntimeException("InitInfo must contain storageOnDiskBasePath");
-		}
-	}
-
 	private void tryToSetSolrUrl() {
-		throwErrorIfMissingSolrUrl();
+		throwErrorIfMissingKeyIsMissingFromInitInfo("solrURL");
 		solrUrl = initInfo.get("solrURL");
-	}
-
-	private void throwErrorIfMissingSolrUrl() {
-		if (!initInfo.containsKey("solrURL")) {
-			throw new RuntimeException("InitInfo must contain solrURL");
-		}
 	}
 
 	@Override
