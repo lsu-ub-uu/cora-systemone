@@ -26,8 +26,8 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage, SearchS
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup record, DataGroup linkList,
-			String dataDivider) {
+	public void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider) {
 		// TODO Auto-generated method stub
 
 	}
@@ -52,7 +52,7 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage, SearchS
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type) {
+	public Collection<DataGroup> readList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
