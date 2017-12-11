@@ -58,7 +58,7 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage, SearchS
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type) {
+	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -82,8 +82,7 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage, SearchS
 	}
 
 	@Override
-	public boolean recordExistsForAbstractOrImplementingRecordTypeAndRecordId(String type,
-			String id) {
+	public boolean recordExistsForAbstractOrImplementingRecordTypeAndRecordId(String type, String id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
