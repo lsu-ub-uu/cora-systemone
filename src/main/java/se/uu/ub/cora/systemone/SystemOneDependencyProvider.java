@@ -197,7 +197,7 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 	}
 
 	@Override
-	public DataGroupTermCollector getDataGroupSearchTermCollector() {
+	public DataGroupTermCollector getDataGroupTermCollector() {
 		return new DataGroupTermCollectorImp(metadataStorage);
 	}
 
