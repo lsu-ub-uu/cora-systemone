@@ -25,7 +25,7 @@
 	<name>System One</name>
 
 	<properties>
-		<httphandler.version>0.2-SNAPSHOT</httphandler.version>
+		<httphandler.version>0.3-SNAPSHOT</httphandler.version>
 		<bookkeeper.version>0.10-SNAPSHOT</bookkeeper.version>
 		<beefeater.version>0.6-SNAPSHOT</beefeater.version>
 		<spider.version>0.14-SNAPSHOT</spider.version>
