@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,6 +19,7 @@
 
 package se.uu.ub.cora.systemone.authentication;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
@@ -34,12 +35,16 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.storage.UserStorageImp;
 import se.uu.ub.cora.userpicker.UserInStorageUserPicker;
 import se.uu.ub.cora.userpicker.UserPicker;
 import se.uu.ub.cora.userpicker.UserPickerProvider;
 
 public class UserPickerProviderTest {
 	private String basePath = "/tmp/recordStorageOnDiskTemp/";
+	private Map<String, String> initInfo;
+	private UserPickerProvider userPickerProvider;
+	private UserInStorageUserPicker userPicker;
 
 	@BeforeMethod
 	public void makeSureBasePathExistsAndIsEmpty() throws IOException {
@@ -48,6 +53,10 @@ public class UserPickerProviderTest {
 		deleteFiles(basePath);
 		TestDataAppTokenStorage.createRecordStorageInMemoryWithTestData(basePath);
 
+		initInfo = new HashMap<>();
+		initInfo.put("storageOnDiskBasePath", basePath);
+		userPickerProvider = new UserPickerProviderImp(initInfo);
+		userPicker = (UserInStorageUserPicker) userPickerProvider.getUserPicker();
 	}
 
 	private void deleteFiles(String path) throws IOException {
@@ -80,11 +89,16 @@ public class UserPickerProviderTest {
 
 	@Test
 	public void testFactor() {
-		Map<String, String> initInfo = new HashMap<>();
-		initInfo.put("storageOnDiskBasePath", basePath);
-		UserPickerProvider userPickerProvider = new UserPickerProviderImp(initInfo);
-		UserPicker userPicker = userPickerProvider.getUserPicker();
 		assertTrue(userPicker instanceof UserInStorageUserPicker);
+		UserStorageImp userStorage = (UserStorageImp) userPicker.getUserStorage();
+		assertTrue(userStorage instanceof UserStorageImp);
+		Map<String, String> initInfoSentToStorage = userStorage.getInitInfo();
+		assertEquals(initInfoSentToStorage, initInfo);
+	}
+
+	@Test
+	public void testSettingGuestUserId() throws Exception {
+		assertEquals(userPicker.getCurrentGuestUserId(), "12345");
 	}
 
 	@Test(expectedExceptions = RuntimeException.class)

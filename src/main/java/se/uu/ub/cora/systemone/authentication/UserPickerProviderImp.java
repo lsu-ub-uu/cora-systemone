@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -29,11 +29,13 @@ import se.uu.ub.cora.userpicker.UserStorage;
 
 public final class UserPickerProviderImp implements UserPickerProvider {
 
+	private static final String SYTEMONE_GUEST_USERID = "12345";
 	private UserInStorageUserPicker userPicker;
 
 	public UserPickerProviderImp(Map<String, String> initInfo) {
 		UserStorage userStorage = new UserStorageImp(initInfo);
-		userPicker = UserInStorageUserPicker.usingUserStorage(userStorage);
+		userPicker = UserInStorageUserPicker.usingUserStorageAndGuestUserId(userStorage,
+				SYTEMONE_GUEST_USERID);
 	}
 
 	@Override
