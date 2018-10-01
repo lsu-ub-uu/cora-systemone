@@ -19,7 +19,7 @@
 	</parent>
 
 	<artifactId>systemone</artifactId>
-	<version>0.13-SNAPSHOT</version>
+	<version>0.14-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>System One</name>
@@ -29,8 +29,8 @@
 		<bookkeeper.version>0.10-SNAPSHOT</bookkeeper.version>
 		<beefeater.version>0.6-SNAPSHOT</beefeater.version>
 		<spider.version>0.14-SNAPSHOT</spider.version>
-		<basicstorage.version>0.5-SNAPSHOT</basicstorage.version>
-		<userpicker.version>0.2-SNAPSHOT</userpicker.version>
+		<basicstorage.version>0.6-SNAPSHOT</basicstorage.version>
+		<userpicker.version>0.3-SNAPSHOT</userpicker.version>
 		<gatekeeperclient.version>0.4-SNAPSHOT</gatekeeperclient.version>
 		<metacreator.version>0.1-SNAPSHOT</metacreator.version>
 		<solrsearch.version>0.1-SNAPSHOT</solrsearch.version>
