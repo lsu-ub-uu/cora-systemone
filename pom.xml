@@ -1,4 +1,4 @@
-<!-- ~ Copyright 2015 Uppsala University Library ~ ~ This file is part of 
+<!-- ~ Copyright 2015, 2018 Uppsala University Library ~ ~ This file is part of 
 	Cora. ~ ~ Cora is free software: you can redistribute it and/or modify ~ 
 	it under the terms of the GNU General Public License as published by ~ the 
 	Free Software Foundation, either version 3 of the License, or ~ (at your 
@@ -15,47 +15,33 @@
 	<parent>
 		<groupId>se.uu.ub.cora</groupId>
 		<artifactId>cora-parent</artifactId>
-		<version>0.6-SNAPSHOT</version>
+		<version>0.7-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>systemone</artifactId>
-	<version>0.14-SNAPSHOT</version>
+	<version>0.15-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>System One</name>
 
 	<properties>
-		<httphandler.version>0.3-SNAPSHOT</httphandler.version>
-		<bookkeeper.version>0.10-SNAPSHOT</bookkeeper.version>
-		<beefeater.version>0.6-SNAPSHOT</beefeater.version>
-		<spider.version>0.14-SNAPSHOT</spider.version>
-		<basicstorage.version>0.6-SNAPSHOT</basicstorage.version>
-		<userpicker.version>0.3-SNAPSHOT</userpicker.version>
-		<gatekeeperclient.version>0.4-SNAPSHOT</gatekeeperclient.version>
-		<metacreator.version>0.1-SNAPSHOT</metacreator.version>
-		<solrsearch.version>0.1-SNAPSHOT</solrsearch.version>
+		<httphandler.version>0.4-SNAPSHOT</httphandler.version>
+		<bookkeeper.version>0.12-SNAPSHOT</bookkeeper.version>
+		<beefeater.version>0.7-SNAPSHOT</beefeater.version>
+		<spider.version>0.15-SNAPSHOT</spider.version>
+		<basicstorage.version>0.7-SNAPSHOT</basicstorage.version>
+		<userpicker.version>0.4-SNAPSHOT</userpicker.version>
+		<gatekeeperclient.version>0.5-SNAPSHOT</gatekeeperclient.version>
+		<metacreator.version>0.2-SNAPSHOT</metacreator.version>
+		<solrsearch.version>0.2-SNAPSHOT</solrsearch.version>
 	</properties>
 
 	<scm>
-		<connection>scm:git:https://git.epc.ub.uu.se/epc/systemone.git</connection>
-		<developerConnection>scm:git:https://git.epc.ub.uu.se/epc/systemone.git</developerConnection>
-		<url>https://git.epc.ub.uu.se/epc/systemone.git</url>
+		<connection>scm:git:https://github.com/lsu-ub-uu/systemone.git</connection>
+		<developerConnection>scm:git:https://github.com/lsu-ub-uu/systemone.git</developerConnection>
+		<url>https://github.com/lsu-ub-uu/systemone.git</url>
 	</scm>
 
-	<repositories>
-		<repository>
-			<id>maven-public</id>
-			<name>LSU Nexus Repository</name>
-			<url>http://epc.ub.uu.se/nexus/repository/maven-public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<updatePolicy>daily</updatePolicy>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -117,7 +103,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -125,21 +111,9 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<!-- <minimizeJar>true</minimizeJar> -->
-							<!-- <createDependencyReducedPom>true</createDependencyReducedPom> -->
-							<!-- <dependencyReducedPomLocation> -->
-							<!-- ${java.io.tmpdir}/dependency-reduced-pom.xml -->
-							<!-- </dependencyReducedPomLocation> -->
-							<!-- <relocations> -->
-							<!-- <relocation> -->
-							<!-- <pattern>com.acme.coyote</pattern> -->
-							<!-- <shadedPattern>hidden.coyote</shadedPattern> -->
-							<!-- </relocation> -->
-							<!-- </relocations> -->
 							<artifactSet>
 								<excludes>
 									<exclude>org.glassfish*</exclude>
-									<!-- <exclude>se.uu.ub.cora.gatekeeper.UserPickerFactory*</exclude> -->
 								</excludes>
 							</artifactSet>
 						</configuration>
