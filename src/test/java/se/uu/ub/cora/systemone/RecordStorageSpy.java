@@ -5,6 +5,7 @@ import java.util.Collection;
 import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.searchstorage.SearchStorage;
+import se.uu.ub.cora.spider.data.SpiderReadResult;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class RecordStorageSpy implements RecordStorage, MetadataStorage, SearchStorage {
@@ -52,13 +53,13 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage, SearchS
 	}
 
 	@Override
-	public Collection<DataGroup> readList(String type, DataGroup filter) {
+	public SpiderReadResult readList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DataGroup> readAbstractList(String type, DataGroup filter) {
+	public SpiderReadResult readAbstractList(String type, DataGroup filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -82,7 +83,8 @@ public class RecordStorageSpy implements RecordStorage, MetadataStorage, SearchS
 	}
 
 	@Override
-	public boolean recordExistsForAbstractOrImplementingRecordTypeAndRecordId(String type, String id) {
+	public boolean recordExistsForAbstractOrImplementingRecordTypeAndRecordId(String type,
+			String id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
