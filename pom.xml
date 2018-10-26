@@ -29,7 +29,7 @@
 		<bookkeeper.version>0.12-SNAPSHOT</bookkeeper.version>
 		<beefeater.version>0.7-SNAPSHOT</beefeater.version>
 		<spider.version>0.15-SNAPSHOT</spider.version>
-		<basicstorage.version>0.7-SNAPSHOT</basicstorage.version>
+		<basicstorage.version>0.8-SNAPSHOT</basicstorage.version>
 		<userpicker.version>0.4-SNAPSHOT</userpicker.version>
 		<gatekeeperclient.version>0.5-SNAPSHOT</gatekeeperclient.version>
 		<metacreator.version>0.2-SNAPSHOT</metacreator.version>
