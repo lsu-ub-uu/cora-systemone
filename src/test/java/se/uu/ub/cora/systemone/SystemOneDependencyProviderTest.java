@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2017 Uppsala University Library
+ * Copyright 2015, 2017, 2018 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -147,8 +147,17 @@ public class SystemOneDependencyProviderTest {
 		Exception thrownException = callSystemOneDependencyProviderAndReturnResultingError();
 
 		assertTrue(thrownException instanceof RuntimeException);
-		assertEquals(thrownException.getMessage(),
-				"Error starting The Rest: " + "se.uu.ub.cora.systemone.RecordStorageNON");
+		assertEquals(thrownException.getMessage(), "Error starting SystemOneDependencyProvider: "
+				+ "se.uu.ub.cora.systemone.RecordStorageNON");
+	}
+
+	@Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = ""
+			+ "Error starting SystemOneDependencyProvider: "
+			+ "Invocation exception from RecordStorageErrorOnStartupSpy")
+	public void testHandlingAndGettingCorrectErrorMessageFromErrorsThrowsOnStartup() {
+		initInfo.put("storageOnDiskClassName",
+				"se.uu.ub.cora.systemone.RecordStorageInvocationErrorOnStartupSpy");
+		dependencyProvider = new SystemOneDependencyProvider(initInfo);
 	}
 
 	@Test

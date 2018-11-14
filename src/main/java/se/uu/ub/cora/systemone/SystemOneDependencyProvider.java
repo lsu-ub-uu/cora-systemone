@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016, 2017 Uppsala University Library
+ * Copyright 2015, 2016, 2017, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -57,9 +57,10 @@ import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
 
 /**
- * SystemOneDependencyProvider wires up the system for use in "production", as this is in SystemOne
- * production currently means using all in memory storage (stored on disk), so do NOT use this class
- * in production as it is written today. :)
+ * SystemOneDependencyProvider wires up the system for use in "production", as
+ * this is in SystemOne production currently means using all in memory storage
+ * (stored on disk), so do NOT use this class in production as it is written
+ * today. :)
  *
  */
 public class SystemOneDependencyProvider extends SpiderDependencyProvider {
@@ -78,15 +79,10 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 
 	public SystemOneDependencyProvider(Map<String, String> initInfo) {
 		super(initInfo);
-		readInitInfo();
-		try {
-			tryToInitialize();
-		} catch (Exception e) {
-			throw new RuntimeException("Error starting The Rest: " + e.getMessage());
-		}
 	}
 
-	private void readInitInfo() {
+	@Override
+	protected void readInitInfo() {
 		tryToSetGatekeeperUrl();
 		basePath = tryToGetStorageOnDiskBasePath();
 		storageOnDiskClassName = tryToGetStorageOnDiskClassName();
@@ -104,7 +100,8 @@ public class SystemOneDependencyProvider extends SpiderDependencyProvider {
 		}
 	}
 
-	private void tryToInitialize() throws NoSuchMethodException, ClassNotFoundException,
+	@Override
+	protected void tryToInitialize() throws NoSuchMethodException, ClassNotFoundException,
 			IllegalAccessException, InvocationTargetException {
 		recordStorage = tryToCreateRecordStorage(basePath);
 
