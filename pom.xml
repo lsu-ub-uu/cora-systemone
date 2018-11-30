@@ -15,22 +15,18 @@
 	<parent>
 		<groupId>se.uu.ub.cora</groupId>
 		<artifactId>cora-parent</artifactId>
-		<version>0.7-SNAPSHOT</version>
+		<version>0.8-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>systemone</artifactId>
-	<version>0.15-SNAPSHOT</version>
+	<version>0.16-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>System One</name>
 
 	<properties>
-		<httphandler.version>0.4-SNAPSHOT</httphandler.version>
-		<bookkeeper.version>0.12-SNAPSHOT</bookkeeper.version>
-		<beefeater.version>0.7-SNAPSHOT</beefeater.version>
 		<spider.version>0.15-SNAPSHOT</spider.version>
 		<basicstorage.version>0.8-SNAPSHOT</basicstorage.version>
-		<userpicker.version>0.4-SNAPSHOT</userpicker.version>
 		<gatekeeperclient.version>0.5-SNAPSHOT</gatekeeperclient.version>
 		<metacreator.version>0.2-SNAPSHOT</metacreator.version>
 		<solrsearch.version>0.2-SNAPSHOT</solrsearch.version>
@@ -46,22 +42,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>httphandler</artifactId>
-			<version>${httphandler.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>bookkeeper</artifactId>
-			<version>${bookkeeper.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>beefeater</artifactId>
-			<version>${beefeater.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>spider</artifactId>
 			<version>${spider.version}</version>
 		</dependency>
@@ -69,12 +49,6 @@
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>basicstorage</artifactId>
 			<version>${basicstorage.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>userpicker</artifactId>
-			<version>${userpicker.version}</version>
-			<!-- <scope>provided</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
