@@ -27,7 +27,7 @@
 	<properties>
 		<spider.version>0.15-SNAPSHOT</spider.version>
 		<basicstorage.version>0.8-SNAPSHOT</basicstorage.version>
-		<gatekeeperclient.version>0.5-SNAPSHOT</gatekeeperclient.version>
+		<gatekeeperclient.version>0.6-SNAPSHOT</gatekeeperclient.version>
 		<metacreator.version>0.2-SNAPSHOT</metacreator.version>
 		<solrsearch.version>0.2-SNAPSHOT</solrsearch.version>
 	</properties>
