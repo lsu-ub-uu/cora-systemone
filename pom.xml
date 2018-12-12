@@ -15,27 +15,27 @@
 	<parent>
 		<groupId>se.uu.ub.cora</groupId>
 		<artifactId>cora-parent</artifactId>
-		<version>0.8-SNAPSHOT</version>
+		<version>0.8.6</version>
 	</parent>
 
 	<artifactId>systemone</artifactId>
-	<version>0.16-SNAPSHOT</version>
+	<version>0.16.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>System One</name>
 
 	<properties>
-		<spider.version>0.15-SNAPSHOT</spider.version>
-		<basicstorage.version>0.8-SNAPSHOT</basicstorage.version>
-		<gatekeeperclient.version>0.6-SNAPSHOT</gatekeeperclient.version>
-		<metacreator.version>0.3-SNAPSHOT</metacreator.version>
-		<solrsearch.version>0.3-SNAPSHOT</solrsearch.version>
+		<spider.version>0.16.0</spider.version>
+		<basicstorage.version>0.9.0</basicstorage.version>
+		<gatekeeperclient.version>0.6.0</gatekeeperclient.version>
+		<metacreator.version>0.3.0</metacreator.version>
+		<solrsearch.version>0.3.0</solrsearch.version>
 	</properties>
 
 	<scm>
-		<connection>scm:git:https://github.com/lsu-ub-uu/systemone.git</connection>
-		<developerConnection>scm:git:https://github.com/lsu-ub-uu/systemone.git</developerConnection>
-		<url>https://github.com/lsu-ub-uu/systemone.git</url>
+		<connection>scm:git:https://github.com/lsu-ub-uu/cora-systemone.git</connection>
+		<developerConnection>scm:git:https://github.com/lsu-ub-uu/cora-systemone.git</developerConnection>
+		<url>https://github.com/lsu-ub-uu/cora-systemone.git</url>
 	</scm>
 
 
