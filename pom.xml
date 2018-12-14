@@ -24,11 +24,11 @@
 	<name>System One</name>
 
 	<properties>
-		<spider.version>0.16.0</spider.version>
-		<basicstorage.version>0.9.0</basicstorage.version>
+		<spider.version>0.17.0</spider.version>
+		<basicstorage.version>0.10.1</basicstorage.version>
 		<gatekeeperclient.version>0.6.0</gatekeeperclient.version>
-		<metacreator.version>0.3.0</metacreator.version>
-		<solrsearch.version>0.3.0</solrsearch.version>
+		<metacreator.version>0.4.0</metacreator.version>
+		<solrsearch.version>0.4.0</solrsearch.version>
 	</properties>
 
 	<scm>
