@@ -25,8 +25,8 @@
 
 	<properties>
 		<spider.version>0.20.0</spider.version>
-		<basicstorage.version>0.13.0</basicstorage.version>
-		<gatekeeperclient.version>0.8.0</gatekeeperclient.version>
+		<basicstorage.version>0.14-SNAPSHOT</basicstorage.version>
+		<gatekeeperclient.version>0.10-SNAPSHOT</gatekeeperclient.version>
 		<metacreator.version>0.8.0</metacreator.version>
 		<solrsearch.version>0.6.0</solrsearch.version>
 	</properties>
