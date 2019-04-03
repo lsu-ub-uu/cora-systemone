@@ -57,10 +57,9 @@ import se.uu.ub.cora.spider.stream.storage.StreamStorage;
 import se.uu.ub.cora.storage.StreamStorageOnDisk;
 
 /**
- * SystemOneDependencyProvider wires up the system for use in "production", as
- * this is in SystemOne production currently means using all in memory storage
- * (stored on disk), so do NOT use this class in production as it is written
- * today. :)
+ * SystemOneDependencyProvider wires up the system for use in "production", as this is in SystemOne
+ * production currently means using all in memory storage (stored on disk), so do NOT use this class
+ * in production as it is written today. :)
  *
  */
 public class SystemOneDependencyProvider extends SpiderDependencyProvider {
