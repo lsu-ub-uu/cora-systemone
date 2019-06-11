@@ -25,9 +25,8 @@
 
 	<properties>
 		<logger.version>1.0.0</logger.version>
-		<storage.version>1.0-SNAPSHOT</storage.version>
-		<spider.version>1.3-SNAPSHOT</spider.version>
-		<basicstorage.version>1.4-SNAPSHOT</basicstorage.version>
+		<storage.version>1.0.0</storage.version>
+		<spider.version>1.3.0</spider.version>
 		<gatekeeperclient.version>1.1.0</gatekeeperclient.version>
 		<metacreator.version>1.0.0</metacreator.version>
 		<solrsearch.version>1.1.0</solrsearch.version>
@@ -59,11 +58,6 @@
 			<artifactId>spider</artifactId>
 			<version>${spider.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>se.uu.ub.cora</groupId> -->
-<!-- 			<artifactId>basicstorage</artifactId> -->
-<!-- 			<version>${basicstorage.version}</version> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>gatekeeperclient</artifactId>
