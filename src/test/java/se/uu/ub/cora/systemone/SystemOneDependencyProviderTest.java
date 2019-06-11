@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2017, 2018 Uppsala University Library
+ * Copyright 2015, 2017, 2018, 2019 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -49,7 +49,6 @@ import se.uu.ub.cora.systemone.log.LoggerFactorySpy;
 
 public class SystemOneDependencyProviderTest {
 	private SystemOneDependencyProvider dependencyProvider;
-	private String basePath = "/tmp/recordStorageOnDiskTemp/";
 	private Map<String, String> initInfo;
 	private LoggerFactorySpy loggerFactorySpy;
 	private String testedBaseClassName = "SpiderDependencyProvider";
@@ -59,11 +58,8 @@ public class SystemOneDependencyProviderTest {
 		loggerFactorySpy = new LoggerFactorySpy();
 		LoggerProvider.setLoggerFactory(loggerFactorySpy);
 		try {
-			// makeSureBasePathExistsAndIsEmpty();
 			initInfo = new HashMap<>();
-			// initInfo.put("storageOnDiskClassName", "se.uu.ub.cora.systemone.RecordStorageSpy");
 			initInfo.put("gatekeeperURL", "http://localhost:8080/gatekeeper/");
-			// initInfo.put("storageOnDiskBasePath", basePath);
 			initInfo.put("solrURL", "http://localhost:8983/solr/stuff");
 			dependencyProvider = new SystemOneDependencyProvider(initInfo);
 			setPluggedInStorageNormallySetByTheRestModuleStarterImp();
@@ -84,36 +80,6 @@ public class SystemOneDependencyProviderTest {
 		dependencyProvider.setMetadataStorageProvider(metadataStorageProvider);
 	}
 
-	// public void makeSureBasePathExistsAndIsEmpty() throws IOException {
-	// File dir = new File(basePath);
-	// dir.mkdir();
-	// deleteFiles();
-	// }
-
-	// private void deleteFiles() throws IOException {
-	// Stream<Path> list;
-	// list = Files.list(Paths.get(basePath));
-	// list.forEach(p -> deleteFile(p));
-	// list.close();
-	// }
-	//
-	// private void deleteFile(Path path) {
-	// try {
-	// Files.delete(path);
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// }
-
-	// @AfterMethod
-	// public void removeTempFiles() throws IOException {
-	// if (Files.exists(Paths.get(basePath))) {
-	// deleteFiles();
-	// File dir = new File(basePath);
-	// dir.delete();
-	// }
-	// }
-
 	@Test
 	public void testInit() {
 		assertNotNull(dependencyProvider.getExtendedFunctionalityProvider());
@@ -121,9 +87,6 @@ public class SystemOneDependencyProviderTest {
 		assertTrue(dependencyProvider
 				.getExtendedFunctionalityProvider() instanceof MetacreatorExtendedFunctionalityProvider);
 		assertTrue(dependencyProvider.getRecordIndexer() instanceof SolrRecordIndexer);
-		// TODO: find other way to test
-		SolrRecordSearch solrRecordSearch = (SolrRecordSearch) dependencyProvider.getRecordSearch();
-		// assertTrue(solrRecordSearch.getSearchStorage() instanceof RecordStorageSpy);
 	}
 
 	private Exception callSystemOneDependencyProviderAndReturnResultingError() {
