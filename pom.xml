@@ -18,7 +18,7 @@
 	</parent>
 
 	<artifactId>systemone</artifactId>
-	<version>3.0.0</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>System One</name>
@@ -36,7 +36,7 @@
 		<connection>scm:git:https://github.com/lsu-ub-uu/cora-systemone.git</connection>
 		<developerConnection>scm:git:https://github.com/lsu-ub-uu/cora-systemone.git</developerConnection>
 		<url>https://github.com/lsu-ub-uu/cora-systemone.git</url>
-	  <tag>systemone-3.0.0</tag>
+	  <tag>release/3.0</tag>
   </scm>
 
 
